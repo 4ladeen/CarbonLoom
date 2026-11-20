@@ -195,7 +195,7 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
 
   const glyphsBlast = [">", "»", "@", "%", "8", "*", "!", "#"];
   const glyphsShimmer = ["~", "≈", "∫", "≀", "·", "~"];
-  const glyphsTelemetry = ["0", "1", "f", "a", "7", "x", "e", "●", "*"];
+  const glyphsTelemetry = ["●", "■", "▲", "◆", "*", "+", "·", "░"];
 
   // Draw Procedural Carbon Plumes
   const drawAsciiPlumes = (ctx: CanvasRenderingContext2D, time: number) => {
@@ -388,10 +388,12 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
       }
     }
 
-    // Steam Boiler Drum Labels in ASCII
-    const labelX = Math.floor(cols * 0.62) * charW;
-    ctx.fillStyle = "rgba(245, 158, 11, 0.55)";
-    ctx.fillText("[BOILER 01: 8.2 BAR]", labelX, (baseRow - 2) * charH);
+    // Pressure vessel inspection portholes & level indicator
+    const portholeStart = Math.floor(cols * 0.62);
+    for (let c = portholeStart; c < Math.min(cols - 2, portholeStart + 16); c += 4) {
+      ctx.fillStyle = "rgba(245, 158, 11, 0.45)";
+      ctx.fillText("▣", c * charW, (baseRow - 2) * charH);
+    }
 
     // Stacks (Flanks only: 0.02, 0.52, 0.94)
     stacks.forEach((s) => drawChimney(s, baseRow, time));
@@ -495,9 +497,11 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
       ctx.fillText(fanGlyphs[fanPhase], (startC + 4) * charW, (peakRow - 1) * charH);
     }
 
-    // Fabric Entry Slot Guide
-    ctx.fillStyle = "rgba(245, 158, 11, 0.65)";
-    ctx.fillText("═══[FABRIC FEED: 80m/min]═══", Math.floor(cols * 0.08) * charW, (baseRow - 1) * charH);
+    // Continuous fabric guide roller track
+    for (let c = Math.floor(cols * 0.08); c < Math.floor(cols * 0.40); c++) {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
+      ctx.fillText(c % 4 === 0 ? "o" : "═", c * charW, (baseRow - 1) * charH);
+    }
 
     // Conical Wet Venturi Scrubber Tower on Right (relX: 0.92)
     const scrubCol = Math.floor(cols * 0.92);
@@ -514,9 +518,9 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
       }
     }
 
-    // Scrubber recirculating wash pump
-    ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
-    ctx.fillText("(PUMP-04)", (scrubCol - 4) * charW, (baseRow - 2) * charH);
+    // Scrubber recirculating wash pump chassis
+    ctx.fillStyle = "rgba(56, 189, 248, 0.50)";
+    ctx.fillText("■■", (scrubCol - 3) * charW, (baseRow - 2) * charH);
 
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
@@ -550,16 +554,12 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
       ctx.fillText("║", fc * charW, pipeY + charH * 2);
     });
 
-    // Technical Schematic Labels
-    ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-    ctx.fillText("STEAM HEADER 04 [DIN EN 12952]", Math.floor(cols * 0.12) * charW, pipeY - charH);
-
-    // Live Pressure Gauge
+    // Analog Dial Pressure Gauge
     const gaugeCol = Math.floor(cols * 0.32);
-    ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.90)" : "rgba(239, 68, 68, 0.90)";
-    ctx.fillText(isRepaired ? "( P: 4.1 bar - NOMINAL )" : "( P: 8.2 bar - BLOW-BY ALERT )", gaugeCol * charW, pipeY - charH);
+    ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(239, 68, 68, 0.85)";
+    ctx.fillText(isRepaired ? "(○─)" : "(●↗)", gaugeCol * charW, pipeY - charH);
 
-    // Steam Trap #01 Assembly Orifice (relX: 0.58)
+    // Steam Trap Assembly Orifice (relX: 0.58)
     const trapCol = Math.floor(cols * 0.58);
     const trapRow = pipeRow + 3;
 
@@ -569,15 +569,14 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
     ctx.fillText("│", trapCol * charW, pipeY + charH * 4);
     ctx.fillText("⧖", trapCol * charW, pipeY + charH * 5); // Isolation valve
 
-    // Trap housing
+    // Trap housing body
     ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(245, 158, 11, 0.90)";
-    ctx.fillText(isRepaired ? "[TRAP-01: SEALED / REPAIRED]" : "[TRAP-01: 18.4 tCO2e/mo LEAK]", (trapCol - 10) * charW, (trapRow + 4) * charH);
+    ctx.fillText(isRepaired ? "[■]" : "[░]", trapCol * charW, (trapRow + 4) * charH);
 
-    // If leaking: violent horizontal blowout arrows
+    // If leaking: violent horizontal blowout steam arrows (no text)
     if (!isRepaired) {
-      const blastFlicker = Math.floor((time * 0.05) % 3);
-      ctx.fillStyle = "rgba(245, 158, 11, 0.95)";
-      ctx.fillText("»»»»» BLOWOUT »»»»»", (trapCol + 2) * charW, pipeY + charH * 3);
+      ctx.fillStyle = "rgba(245, 158, 11, 0.90)";
+      ctx.fillText("»»»»»»»»", (trapCol + 2) * charW, pipeY + charH * 3);
     }
 
     stacks.forEach((s) => drawChimney(s, baseRow, time));
@@ -619,10 +618,15 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
       }
     }
 
-    ctx.fillStyle = "rgba(56, 189, 248, 0.70)";
-    ctx.fillText("[LM2500 AERODERIVATIVE COGEN]", (turbStart + 4) * charW, (baseRow - 4) * charH);
-    ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
-    ctx.fillText("[ZK-TELEMETRY HARNESS: ONLINE]", (turbStart + 4) * charW, (baseRow - 2) * charH);
+    // Acoustic enclosure ventilation louver lines & LED telemetry bus (no text)
+    for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 2) {
+      ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+      ctx.fillText("≡", c * charW, (baseRow - 4) * charH);
+    }
+    for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 3) {
+      ctx.fillStyle = "rgba(16, 185, 129, 0.70)";
+      ctx.fillText("●", c * charW, (baseRow - 2) * charH);
+    }
 
     // Heat Recovery Steam Generator (HRSG) Transition Duct
     const hrsgStart = turbStart + turbWidth;
@@ -722,8 +726,11 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
           }
         }
       }
-      ctx.fillStyle = "rgba(56, 189, 248, 0.75)";
-      ctx.fillText(`[${rk.name}]`, (rk.col + 1) * charW, (baseRow - 4) * charH);
+      // Server rack chassis faceplate indicator slots (no text)
+      for (let c = rk.col + 2; c < rk.col + 12; c += 2) {
+        ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
+        ctx.fillText("■", c * charW, (baseRow - 4) * charH);
+      }
     });
 
     // Bus lines connecting racks
@@ -759,9 +766,6 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
         ctx.fillText(isWin ? "▣" : "█", c * charW, r * charH);
       }
     }
-
-    ctx.fillStyle = "rgba(16, 185, 129, 0.85)";
-    ctx.fillText("[ROOFTOP SOLAR PV: 1.2 MWp · ZERO CARBON EMISSION]", Math.floor(cols * 0.28) * charW, (baseRow - 2) * charH);
 
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };

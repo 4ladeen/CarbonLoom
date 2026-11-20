@@ -138,7 +138,7 @@ var CarbonAsciiSkyline = (() => {
     const glyphsSteamDrift = ["~", "\u2248", "\xB7", "\xB0", " "];
     const glyphsBlast = [">", "\xBB", "@", "%", "8", "*", "!", "#"];
     const glyphsShimmer = ["~", "\u2248", "\u222B", "\u2240", "\xB7", "~"];
-    const glyphsTelemetry = ["0", "1", "f", "a", "7", "x", "e", "\u25CF", "*"];
+    const glyphsTelemetry = ["\u25CF", "\u25A0", "\u25B2", "\u25C6", "*", "+", "\xB7", "\u2591"];
     const drawAsciiPlumes = (ctx2, time) => {
       if (!reducedMotion && particles.length < maxParticles) {
         for (let i = 0; i < stacks.length; i++) {
@@ -294,9 +294,11 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText(isHeader ? "\u2551" : "\u2588", c * charW, r * charH);
         }
       }
-      const labelX = Math.floor(cols * 0.62) * charW;
-      ctx.fillStyle = "rgba(245, 158, 11, 0.55)";
-      ctx.fillText("[BOILER 01: 8.2 BAR]", labelX, (baseRow - 2) * charH);
+      const portholeStart = Math.floor(cols * 0.62);
+      for (let c = portholeStart; c < Math.min(cols - 2, portholeStart + 16); c += 4) {
+        ctx.fillStyle = "rgba(245, 158, 11, 0.45)";
+        ctx.fillText("\u25A3", c * charW, (baseRow - 2) * charH);
+      }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawThreatScene = (baseRow, time) => {
@@ -371,8 +373,10 @@ var CarbonAsciiSkyline = (() => {
         ctx.fillStyle = "rgba(56, 189, 248, 0.75)";
         ctx.fillText(fanGlyphs[fanPhase], (startC + 4) * charW, (peakRow - 1) * charH);
       }
-      ctx.fillStyle = "rgba(245, 158, 11, 0.65)";
-      ctx.fillText("\u2550\u2550\u2550[FABRIC FEED: 80m/min]\u2550\u2550\u2550", Math.floor(cols * 0.08) * charW, (baseRow - 1) * charH);
+      for (let c = Math.floor(cols * 0.08); c < Math.floor(cols * 0.4); c++) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
+        ctx.fillText(c % 4 === 0 ? "o" : "\u2550", c * charW, (baseRow - 1) * charH);
+      }
       const scrubCol = Math.floor(cols * 0.92);
       const scrubH = 16;
       for (let dy = 0; dy < scrubH; dy++) {
@@ -386,8 +390,8 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText(dy % 3 === 0 ? "\u2592" : "\u2588", fillC * charW, r * charH);
         }
       }
-      ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
-      ctx.fillText("(PUMP-04)", (scrubCol - 4) * charW, (baseRow - 2) * charH);
+      ctx.fillStyle = "rgba(56, 189, 248, 0.50)";
+      ctx.fillText("\u25A0\u25A0", (scrubCol - 3) * charW, (baseRow - 2) * charH);
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawSteamLeakScene = (baseRow, time) => {
@@ -410,11 +414,9 @@ var CarbonAsciiSkyline = (() => {
         ctx.fillText("\u2551", fc * charW, pipeY + charH);
         ctx.fillText("\u2551", fc * charW, pipeY + charH * 2);
       });
-      ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-      ctx.fillText("STEAM HEADER 04 [DIN EN 12952]", Math.floor(cols * 0.12) * charW, pipeY - charH);
       const gaugeCol = Math.floor(cols * 0.32);
-      ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.90)" : "rgba(239, 68, 68, 0.90)";
-      ctx.fillText(isRepaired ? "( P: 4.1 bar - NOMINAL )" : "( P: 8.2 bar - BLOW-BY ALERT )", gaugeCol * charW, pipeY - charH);
+      ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(239, 68, 68, 0.85)";
+      ctx.fillText(isRepaired ? "(\u25CB\u2500)" : "(\u25CF\u2197)", gaugeCol * charW, pipeY - charH);
       const trapCol = Math.floor(cols * 0.58);
       const trapRow = pipeRow + 3;
       ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
@@ -422,11 +424,10 @@ var CarbonAsciiSkyline = (() => {
       ctx.fillText("\u2502", trapCol * charW, pipeY + charH * 4);
       ctx.fillText("\u29D6", trapCol * charW, pipeY + charH * 5);
       ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(245, 158, 11, 0.90)";
-      ctx.fillText(isRepaired ? "[TRAP-01: SEALED / REPAIRED]" : "[TRAP-01: 18.4 tCO2e/mo LEAK]", (trapCol - 10) * charW, (trapRow + 4) * charH);
+      ctx.fillText(isRepaired ? "[\u25A0]" : "[\u2591]", trapCol * charW, (trapRow + 4) * charH);
       if (!isRepaired) {
-        const blastFlicker = Math.floor(time * 0.05 % 3);
-        ctx.fillStyle = "rgba(245, 158, 11, 0.95)";
-        ctx.fillText("\xBB\xBB\xBB\xBB\xBB BLOWOUT \xBB\xBB\xBB\xBB\xBB", (trapCol + 2) * charW, pipeY + charH * 3);
+        ctx.fillStyle = "rgba(245, 158, 11, 0.90)";
+        ctx.fillText("\xBB\xBB\xBB\xBB\xBB\xBB\xBB\xBB", (trapCol + 2) * charW, pipeY + charH * 3);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
@@ -456,10 +457,14 @@ var CarbonAsciiSkyline = (() => {
           }
         }
       }
-      ctx.fillStyle = "rgba(56, 189, 248, 0.70)";
-      ctx.fillText("[LM2500 AERODERIVATIVE COGEN]", (turbStart + 4) * charW, (baseRow - 4) * charH);
-      ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
-      ctx.fillText("[ZK-TELEMETRY HARNESS: ONLINE]", (turbStart + 4) * charW, (baseRow - 2) * charH);
+      for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 2) {
+        ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+        ctx.fillText("\u2261", c * charW, (baseRow - 4) * charH);
+      }
+      for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 3) {
+        ctx.fillStyle = "rgba(16, 185, 129, 0.70)";
+        ctx.fillText("\u25CF", c * charW, (baseRow - 2) * charH);
+      }
       const hrsgStart = turbStart + turbWidth;
       const hrsgEnd = Math.floor(cols * 0.7);
       for (let c = hrsgStart; c < hrsgEnd; c++) {
@@ -535,8 +540,10 @@ var CarbonAsciiSkyline = (() => {
             }
           }
         }
-        ctx.fillStyle = "rgba(56, 189, 248, 0.75)";
-        ctx.fillText(`[${rk.name}]`, (rk.col + 1) * charW, (baseRow - 4) * charH);
+        for (let c = rk.col + 2; c < rk.col + 12; c += 2) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
+          ctx.fillText("\u25A0", c * charW, (baseRow - 4) * charH);
+        }
       });
       const busY = (baseRow - 3) * charH;
       ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
@@ -561,8 +568,6 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText(isWin ? "\u25A3" : "\u2588", c * charW, r * charH);
         }
       }
-      ctx.fillStyle = "rgba(16, 185, 129, 0.85)";
-      ctx.fillText("[ROOFTOP SOLAR PV: 1.2 MWp \xB7 ZERO CARBON EMISSION]", Math.floor(cols * 0.28) * charW, (baseRow - 2) * charH);
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawScene = (time) => {
