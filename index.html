@@ -72,12 +72,35 @@
       flex-wrap: wrap;
     }
 
+    .hero-editorial {
+      position: relative;
+      z-index: 2;
+    }
+
     .hero-metrics {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-6);
+      gap: var(--space-4);
       padding-top: var(--space-6);
-      border-top: 1px solid var(--color-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-metric-card {
+      background: rgba(11, 14, 20, 0.90);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius-card);
+      padding: 14px 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+      transition: border-color var(--duration-quick) var(--ease-standard), background var(--duration-quick) var(--ease-standard);
+    }
+
+    .hero-metric-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(15, 19, 27, 0.96);
     }
 
     .metric-value {
@@ -86,13 +109,13 @@
       font-family: var(--font-mono);
       font-variant-numeric: tabular-nums;
       color: var(--color-text-primary);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .metric-label {
       font-size: 11px;
       color: var(--color-text-muted);
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     /* Industrial Hardware Console HUD */
@@ -324,7 +347,7 @@
   <section class="hero-section">
     <div class="container hero-grid">
       <!-- Left Column: The Editorial Thesis -->
-      <div>
+      <div class="hero-editorial">
         <span class="hero-eyebrow reveal">Pilot Deployment &middot; Gazipur Cluster &middot; ISO 14064-1</span>
 
         <h1 class="hero-title reveal reveal-delay-1">
@@ -347,15 +370,15 @@
 
         <!-- 3 Invariants -->
         <div class="hero-metrics reveal reveal-delay-4">
-          <div>
+          <div class="hero-metric-card">
             <div class="metric-value">0.00%</div>
             <div class="metric-label">Arithmetic tolerance via deterministic Python</div>
           </div>
-          <div>
+          <div class="hero-metric-card">
             <div class="metric-value">142 ms</div>
             <div class="metric-label">Groth16 ZK proof verification in WASM</div>
           </div>
-          <div>
+          <div class="hero-metric-card">
             <div class="metric-value">100%</div>
             <div class="metric-label">Supplier trade secret concealment</div>
           </div>
@@ -1226,8 +1249,12 @@
       if (window.carbonSkylineInstance && typeof window.carbonSkylineInstance.setStackEmission === 'function') {
         window.carbonSkylineInstance.setStackEmission(0, !isTrapFixed);
       }
-      if (window.forensicsSkylineInstance && typeof window.forensicsSkylineInstance.setStackEmission === 'function') {
-        window.forensicsSkylineInstance.setStackEmission(1, !isTrapFixed);
+      if (window.forensicsSkylineInstance) {
+        if (typeof window.forensicsSkylineInstance.setRepaired === 'function') {
+          window.forensicsSkylineInstance.setRepaired(isTrapFixed);
+        } else if (typeof window.forensicsSkylineInstance.setStackEmission === 'function') {
+          window.forensicsSkylineInstance.setStackEmission(0, !isTrapFixed);
+        }
       }
     }
 
