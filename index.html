@@ -564,7 +564,7 @@
   <!-- ========================================================================
        Visual Section 2: End-to-End Cryptographic Execution Flow Diagram
        ======================================================================== -->
-  <section class="section" id="pipeline" style="background-color: var(--color-surface-deep);">
+  <section class="section" id="pipeline">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Architecture &middot; 4-Stage Closed Loop</span>
@@ -752,7 +752,7 @@
   <!-- ========================================================================
        Visual Section 4: Dual-Perspective Commercial Secrecy Shield Terminal
        ======================================================================== -->
-  <section class="section" id="secrecy" style="background-color: var(--color-surface-deep);">
+  <section class="section" id="secrecy">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Zero-Knowledge Governance &middot; Circom 2 Groth16</span>
@@ -875,7 +875,7 @@
   </section>
 
   <!-- Dedicated Module Directory -->
-  <section class="section" id="modules" style="background-color: var(--color-surface-deep);">
+  <section class="section" id="modules">
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">Architecture Directory</span>
@@ -1225,6 +1225,9 @@
       // Dynamic feedback: eliminate or restore Boiler 01 carbon plume in background skyline
       if (window.carbonSkylineInstance && typeof window.carbonSkylineInstance.setStackEmission === 'function') {
         window.carbonSkylineInstance.setStackEmission(0, !isTrapFixed);
+      }
+      if (window.forensicsSkylineInstance && typeof window.forensicsSkylineInstance.setStackEmission === 'function') {
+        window.forensicsSkylineInstance.setStackEmission(1, !isTrapFixed);
       }
     }
 

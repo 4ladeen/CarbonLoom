@@ -9,9 +9,16 @@
   <link rel="stylesheet" href="../../styles/app.css">
   <style>
     .auditor-shell {
+      position: relative;
+      overflow: hidden;
       max-width: 1040px;
       margin: 0 auto;
       padding: var(--space-8) var(--space-6) var(--space-20);
+    }
+
+    .auditor-shell > * {
+      position: relative;
+      z-index: 1;
     }
 
     .auditor-topbar {
@@ -131,6 +138,8 @@
 </head>
 <body>
   <div class="auditor-shell">
+    <!-- Dedicated CAD Industrial Factory Skyline & Carbon Plumes Backdrop -->
+    <div class="carbon-skyline-bg" data-skyline="cluster" style="position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0.65;"></div>
     <header class="auditor-topbar">
       <div>
         <a href="../../index.html" style="font-size: 12px; color: var(--color-text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-bottom: var(--space-2);">
@@ -352,5 +361,6 @@
       }, 3000);
     }
   </script>
+  <script src="../../js/carbon-skyline.js"></script>
 </body>
 </html>
