@@ -1,12 +1,13 @@
-import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
+"use client"
 
-export default function LiquidMetalButtonDemo() {
+import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer"
+
+export default function Demo() {
+  // w-full matters: 21st centres demos in a flex wrapper, and a flex item
+  // left at width:auto shrinks the canvas to 0px wide.
   return (
-    <div className="flex flex-col items-center justify-center gap-8 p-8">
-      <div className="flex items-center gap-8">
-        <LiquidMetalButton label="Get Started" />
-        <LiquidMetalButton viewMode="icon" />
-      </div>
+    <div className="w-full">
+      <HalftoneWordmarkFooter />
     </div>
-  );
+  )
 }

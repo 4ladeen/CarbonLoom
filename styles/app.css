@@ -443,11 +443,33 @@ body {
 /* ==========================================================================
    Architectural Footer (Quiet, Prestigious)
    ========================================================================== */
+/* ==========================================================================
+   Halftone Wordmark Interactive Footer
+   ========================================================================== */
 footer {
   padding: var(--space-20) 0 var(--space-12);
   border-top: 1px solid var(--color-border);
   background-color: var(--color-surface-deep);
   font-size: 13px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 480px;
+}
+
+footer canvas.hwf-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 0;
+}
+
+footer .container {
+  position: relative;
+  z-index: 1;
 }
 
 .footer-grid {
