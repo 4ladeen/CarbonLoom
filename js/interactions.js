@@ -57,10 +57,44 @@
     el.classList.add('telemetry-flash');
   };
 
+  // 3. Liquid Metal Button Micro-Interactions (Physical Inset & WebGL Waves)
+  function initLiquidMetalButtons() {
+    document.querySelectorAll('.btn, button, .inspect-btn, .switch-btn').forEach(btn => {
+      // Ensure button position is relative for contained ripple
+      if (getComputedStyle(btn).position === 'static') {
+        btn.style.position = 'relative';
+      }
+      btn.addEventListener('click', function (e) {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const ripple = document.createElement('span');
+        ripple.className = 'liquid-ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        btn.appendChild(ripple);
+        setTimeout(() => {
+          if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+        }, 600);
+      });
+    });
+
+    if (window.LiquidMetal && typeof window.LiquidMetal.mountLiquidMetalButton === 'function') {
+      document.querySelectorAll('[data-liquid-metal]').forEach(el => {
+        window.LiquidMetal.mountLiquidMetalButton(el);
+      });
+    }
+  }
+
   // Run on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSpotlightCards);
-  } else {
+  function initAll() {
     initSpotlightCards();
+    initLiquidMetalButtons();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
   }
 })();

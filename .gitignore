@@ -21,3 +21,4 @@ video/concat_list.txt
 .idea/
 .vscode/
 *.swp
+dist/
