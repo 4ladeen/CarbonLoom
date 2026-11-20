@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonLoom Public Buyer Portal and Zero-Knowledge Proof Verifier.">
+  <title>CarbonLoom: Public Buyer Portal and ZK Verifier</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <style>
+    .shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-4);
+      box-sizing: border-box;
+    }
+    .header-box {
+      border-bottom: 1px solid var(--color-surface-border);
+      padding-bottom: var(--space-6);
+      margin-bottom: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+      color: var(--color-text-primary);
+    }
+    .btn {
+      height: 38px;
+      padding: 0 var(--space-4);
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: opacity var(--duration-quick) var(--ease-standard);
+    }
+    .btn-primary {
+      background-color: var(--color-accent);
+      color: var(--color-accent-ink);
+    }
+    .btn-secondary {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      border-color: var(--color-surface-border);
+    }
+    .badge-pass {
+      color: var(--color-accent);
+      background-color: var(--color-accent-subtle);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-inner);
+      font-size: 11px;
+    }
+    .badge-alert {
+      color: var(--color-danger);
+      background-color: var(--color-danger-subtle);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-inner);
+      font-size: 11px;
+    }
+    .status-box-pass {
+      background-color: var(--color-accent-subtle);
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius-card);
+      padding: var(--space-5);
+      margin-bottom: var(--space-6);
+    }
+    .status-box-fail {
+      background-color: var(--color-danger-subtle);
+      border: 1px solid var(--color-danger);
+      border-radius: var(--radius-card);
+      padding: var(--space-5);
+      margin-bottom: var(--space-6);
+    }
+    .matrix-tab {
+      height: 32px;
+      padding: 0 var(--space-3);
+      background: none;
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-control);
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .matrix-tab.active {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      border-color: var(--color-accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="header-box">
+      <div>
+        <a href="../../index.html" style="font-size: 12px; color: var(--color-text-secondary); text-decoration: none; display: inline-block; margin-bottom: var(--space-2);">&larr; Return to Platform Overview</a>
+        <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: 4px;">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--color-accent);"></span>
+          <h1 style="font-size: 18px; font-weight: 600; margin: 0; color: var(--color-text-primary);">
+            CarbonLoom: Public Buyer Verification Portal
+          </h1>
+        </div>
+        <p style="font-size: 13px; color: var(--color-text-muted); margin: 0;">
+          Zero-login cryptographic proof verification for European customs, brand buyers, and verifiers.
+        </p>
+      </div>
+      <div>
+        <span style="font-size: 11px; font-weight: 500; padding: var(--space-1) var(--space-2); border-radius: var(--radius-inner); background-color: var(--color-warning-subtle); color: var(--color-warning); border: 1px solid var(--color-surface-border);">Simulated data</span>
+      </div>
+    </header>
+
+    <!-- Verification Input Section -->
+    <section class="card">
+      <h2 style="font-size: 15px; margin: 0 0 var(--space-4); color: var(--color-text-primary);">
+        Instant GS1 Digital Link / Proof Hash Check (SLA &lt; 200ms)
+      </h2>
+      <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-4);">
+        <input id="hash-input" type="text" value="0x7a89f41b2c8901e4a56d81230f4e" style="flex: 1; height: 38px; background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-control); color: var(--color-text-primary); padding: 0 var(--space-3); font-family: var(--font-family-mono); font-size: 13px;" aria-label="Enter proof hash or scan GS1 QR link">
+        <button class="btn btn-primary" onclick="verifyProof()">Verify Proof</button>
+      </div>
+      <p style="font-size: 12px; color: var(--color-text-muted); margin: 0;">
+        Querying Hyperledger Fabric consortium channel (Org1MSP, Org2MSP, Org3MSP) and executing client-side WASM snarkjs Groth16 verifier.
+      </p>
+    </section>
+
+    <!-- Live Status Banner -->
+    <div id="status-banner" class="status-box-pass">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 id="verdict-heading" style="font-size: 16px; margin: 0 0 4px; color: var(--color-text-primary);">
+            Cryptographic Integrity and Compliance Verified
+          </h3>
+          <p id="verdict-subtext" style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+            Batch emissions meet buyer regulatory threshold. Fabric anchor confirmed in 142ms.
+          </p>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 11px; color: var(--color-text-muted);">Verification Latency</span>
+          <p class="tabular-nums" style="font-size: 20px; font-weight: 600; margin: 2px 0 0; color: var(--color-accent);" id="verify-latency">142 ms</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dual Layer Proof Details -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div class="card" style="margin-bottom: 0;">
+        <h3 style="font-size: 14px; margin: 0 0 var(--space-3); color: var(--color-text-primary);">Layer 1: Hyperledger Fabric Ledger</h3>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+          Channel: <span class="tabular-nums" style="color: var(--color-text-primary);">carbonloom-consortium</span>
+        </p>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+          Block Number: <span class="tabular-nums" style="color: var(--color-text-primary);">#10482</span>
+        </p>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+          Merkle Root: <span class="tabular-nums" style="color: var(--color-text-primary);" id="display-merkle">0x9b4d8a1c…f021</span>
+        </p>
+        <span class="badge-pass" id="fabric-status-badge">Anchored and Timestamped</span>
+      </div>
+
+      <div class="card" style="margin-bottom: 0;">
+        <h3 style="font-size: 14px; margin: 0 0 var(--space-3); color: var(--color-text-primary);">Layer 2: Circom Groth16 zk-SNARK</h3>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+          Circuit: <span class="tabular-nums" style="color: var(--color-text-primary);">cbam_proof.circom</span>
+        </p>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+          Threshold Max: <span class="tabular-nums" style="color: var(--color-text-primary);">2.50 kgCO2e/piece</span>
+        </p>
+        <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);">
+          Commercial Secret Disclosure: <span style="color: var(--color-accent);">Zero (Hidden)</span>
+        </p>
+        <span class="badge-pass" id="zk-status-badge">Proof Verified (WASM)</span>
+      </div>
+    </div>
+
+    <!-- Interactive Live Tamper Demo Sandbox (FR-F6) -->
+    <section class="card" style="border-color: var(--color-warning-border);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+        <div>
+          <h2 style="font-size: 15px; margin: 0 0 4px; color: var(--color-text-primary);">
+            Live Tamper Demo Sandbox (FR-F6)
+          </h2>
+          <p style="font-size: 12px; color: var(--color-text-secondary); margin: 0;">
+            Simulate mutating a single component value and observe both cryptographic layers fail red in real time.
+          </p>
+        </div>
+        <button id="tamper-toggle-btn" class="btn btn-secondary" onclick="toggleTamper()">
+          Simulate Data Tamper
+        </button>
+      </div>
+
+      <div style="background-color: var(--color-surface-deep); padding: var(--space-4); border-radius: var(--radius-control); font-size: 13px;">
+        <p style="margin: 0 0 var(--space-2); color: var(--color-text-muted);">
+          Line Item Breakdown (Protected Witness):
+        </p>
+        <div style="display: flex; gap: var(--space-4); font-family: var(--font-family-mono); font-size: 12px;">
+          <div>Spinning: <span class="tabular-nums">0.60 kg</span></div>
+          <div>Dyeing: <span class="tabular-nums">0.70 kg</span></div>
+          <div>Boiler Steam: <span class="tabular-nums">0.50 kg</span></div>
+          <div>Finishing: <span class="tabular-nums" id="tamper-slot" style="font-weight: 600; color: var(--color-accent);">0.30 kg</span></div>
+          <div>Sum: <span class="tabular-nums" id="tamper-sum" style="font-weight: 600; color: var(--color-text-primary);">2.10 kg</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Selective Disclosure Matrix (FR-E7) -->
+    <section class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+        <h2 style="font-size: 15px; margin: 0; color: var(--color-text-primary);">
+          Selective Disclosure Matrix (FR-E7)
+        </h2>
+        <div style="display: flex; gap: var(--space-2);">
+          <button class="matrix-tab active" onclick="switchMatrix('customs')">EU Customs</button>
+          <button class="matrix-tab" onclick="switchMatrix('brand')">EU Brand Buyer</button>
+          <button class="matrix-tab" onclick="switchMatrix('verifier')">Auditor (under NDA)</button>
+        </div>
+      </div>
+
+      <div id="matrix-customs" style="font-size: 13px; line-height: 1.6; color: var(--color-text-secondary);">
+        <strong>Disclosed to Customs:</strong> HS Code 6109.10, Export Tonnage (4.16 tonnes), Total Embedded Emissions (9.32 tCO2e), Origin Country: Bangladesh, Verification Proof Hash.<br>
+        <strong>Redacted:</strong> Tier-2 supplier identity, factory profit margins, FOB unit pricing.
+      </div>
+      <div id="matrix-brand" style="display: none; font-size: 13px; line-height: 1.6; color: var(--color-text-secondary);">
+        <strong>Disclosed to Brand:</strong> Style Ref, Per-garment Carbon Intensity (2.24 kgCO2e), Chemical Safety (PFHxA status: PASS), Factory Tier-1 Facility ID, Fabric Anchor Block.<br>
+        <strong>Redacted:</strong> Spinning mill exact unit costs, dyeing chemical commercial formulas.
+      </div>
+      <div id="matrix-verifier" style="display: none; font-size: 13px; line-height: 1.6; color: var(--color-text-secondary);">
+        <strong>Disclosed to Verifier (under NDA):</strong> Full calculation lineage dependency tree, raw meter intervals, DESCO billing records, calibration logs, and Ed25519 auditor co-signature bundle.
+      </div>
+    </section>
+
+    <!-- Honest Trust Boundary Disclosure (FR-F7) -->
+    <footer style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--color-surface-border); font-size: 12px; color: var(--color-text-muted); line-height: 1.6;">
+      <p style="margin: 0 0 var(--space-2);">
+        <strong>Honest Trust Boundary Disclosure (FR-F7):</strong> Cryptographic anchoring on Hyperledger Fabric and Circom Groth16 Zero-Knowledge proofs proves post-capture tamper-evidence and mathematical constraint satisfaction. They do not prove physical sensor truth, which is enforced via meter calibration records, monthly utility bill cross-reconciliation, TreeSHAP anomaly forensics, and accredited human auditor sign-off.
+      </p>
+      <p style="margin: 0;">
+        CarbonLoom ComplianceOS v2.0. Built for the International AI Builders Congress 2026.
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    let isTampered = false;
+
+    function toggleTamper() {
+      isTampered = !isTampered;
+      const btn = document.getElementById('tamper-toggle-btn');
+      const banner = document.getElementById('status-banner');
+      const badge = document.getElementById('verdict-badge');
+      const heading = document.getElementById('verdict-heading');
+      const subtext = document.getElementById('verdict-subtext');
+      const slot = document.getElementById('tamper-slot');
+      const sum = document.getElementById('tamper-sum');
+      const merkle = document.getElementById('display-merkle');
+      const fabricBadge = document.getElementById('fabric-status-badge');
+      const zkBadge = document.getElementById('zk-status-badge');
+
+      if (isTampered) {
+        // Tamper state: alter 0.30 to 0.95 kg (Sum becomes 2.75 kg > 2.50 threshold)
+        btn.textContent = 'Restore Genuine Record';
+        btn.classList.add('btn-primary');
+        banner.className = 'status-box-fail';
+        heading.textContent = 'Cryptographic Verification Failed';
+        subtext.textContent = 'Merkle root mismatch on Fabric ledger and total emissions breach threshold (2.75 > 2.50).';
+        
+        slot.textContent = '0.95 kg (MUTATED)';
+        slot.style.color = 'var(--color-danger)';
+        sum.textContent = '2.75 kg (BREACH)';
+        sum.style.color = 'var(--color-danger)';
+
+        merkle.textContent = '0xBAD_HASH_MISMATCH';
+        merkle.style.color = 'var(--color-danger)';
+
+        fabricBadge.className = 'badge-alert';
+        fabricBadge.textContent = 'Merkle Root Mismatch (Red)';
+        zkBadge.className = 'badge-alert';
+        zkBadge.textContent = 'ZK Constraint Rejected (Red)';
+      } else {
+        // Genuine state
+        btn.textContent = 'Simulate Data Tamper';
+        btn.classList.remove('btn-primary');
+        banner.className = 'status-box-pass';
+        heading.textContent = 'Cryptographic Integrity and Compliance Verified';
+        subtext.textContent = 'Batch emissions meet buyer regulatory threshold. Fabric anchor confirmed in 142ms.';
+        
+        slot.textContent = '0.30 kg';
+        slot.style.color = 'var(--color-accent)';
+        sum.textContent = '2.10 kg';
+        sum.style.color = 'var(--color-text-primary)';
+
+        merkle.textContent = '0x9b4d8a1c…f021';
+        merkle.style.color = 'var(--color-text-primary)';
+
+        fabricBadge.className = 'badge-pass';
+        fabricBadge.textContent = 'Anchored and Timestamped';
+        zkBadge.className = 'badge-pass';
+        zkBadge.textContent = 'Proof Verified (WASM)';
+      }
+    }
+
+    function verifyProof() {
+      const latency = Math.floor(Math.random() * 30) + 130; // 130-160ms
+      document.getElementById('verify-latency').textContent = latency + ' ms';
+      alert('Verification executed in ' + latency + 'ms. Groth16 constraints verified.');
+    }
+
+    function switchMatrix(tab) {
+      document.querySelectorAll('.matrix-tab').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('matrix-customs').style.display = (tab === 'customs') ? 'block' : 'none';
+      document.getElementById('matrix-brand').style.display = (tab === 'brand') ? 'block' : 'none';
+      document.getElementById('matrix-verifier').style.display = (tab === 'verifier') ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>

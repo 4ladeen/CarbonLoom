@@ -1,0 +1,81 @@
+/* Hallmark · theme: graphite · pre-emit critique: P5 H5 E5 S5 R5 V4 · weakest: V, NRB verifier workspace */
+
+:root {
+  --color-bg: #141415;
+  --color-surface-deep: #0f0f10;
+  --color-surface-card: #19191b;
+  --color-surface-raised: #232325;
+  --color-surface-border: rgba(237, 237, 237, 0.08);
+  --color-overlay: rgba(15, 15, 16, 0.85);
+
+  --color-text-primary: #ededed;
+  --color-text-secondary: #a1a1a6;
+  --color-text-muted: #85858b;
+  --color-pure-ink: #fef2f2;
+
+  --color-accent: #10b981;
+  --color-accent-ink: #022c22;
+  --color-accent-subtle: rgba(16, 185, 129, 0.12);
+
+  --color-danger: #b91c1c;
+  --color-danger-ink: #fef2f2;
+  --color-danger-subtle: rgba(185, 28, 28, 0.12);
+  --color-warning: #f59e0b;
+  --color-warning-subtle: rgba(245, 158, 11, 0.12);
+  --color-warning-border: rgba(245, 158, 11, 0.4);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --radius-panel: 16px;
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-inner: 4px;
+
+  --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-quick: 140ms;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  caret-color: var(--color-accent);
+  scrollbar-color: var(--color-surface-raised) var(--color-bg);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+button:active, .btn:active {
+  transform: scale(0.98);
+}
+
+button:disabled, .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-family-mono);
+}

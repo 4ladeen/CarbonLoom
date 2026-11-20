@@ -1,0 +1,80 @@
+{
+  "desco_bill": {
+    "document_id": "BILL-DESCO-2026-01",
+    "tenant_id": "T-001",
+    "factory_id": "FAC-BD-DHK-001",
+    "utility_provider": "DESCO",
+    "utility_type": "electricity",
+    "billing_period": "2026-01",
+    "account_number": "92048571",
+    "account_number_bn": "৯২০৪৮৫৭১",
+    "meter_number": "DS-HT-99214",
+    "tariff_category": "HT-3 (Industrial 11kV)",
+    "tariff_category_bn": "এইচটি-৩ (শিল্প ১১কেভি)",
+    "consumption": {
+      "peak_kwh": 21986.454965999998,
+      "off_peak_kwh": 30362.247333999996,
+      "total_kwh": 52348.7023,
+      "total_kwh_bn": "৫২৩৪৮.৭০",
+      "power_factor": 0.92
+    },
+    "financials": {
+      "energy_charge_bdt": 591435.64,
+      "demand_charge_bdt": 135000.0,
+      "vat_bdt": 29571.78,
+      "total_bdt": 756007.42,
+      "total_bdt_bn": "৭৫৬০০৭.৪২"
+    },
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA",
+    "ocr_confidence": 0.96,
+    "raw_text_bn": "ঢাকা ইলেকট্রিক সাপ্লাই কোম্পানি লিমিটেড (ডেসকো)\nহিসাব নম্বর: ৯২০৪৮৫৭১\nবিল মাস: ১/২০২৬\nমোট বিদ্যুৎ ব্যবহার: ৫২৩৪৮.৭০ ইউনিট (kWh)\nমোট প্রদেয় টাকা: ৭৫৬০০৭.৪২/= ৳"
+  },
+  "titas_bill": {
+    "document_id": "BILL-TITAS-2026-01",
+    "tenant_id": "T-001",
+    "factory_id": "FAC-BD-DHK-001",
+    "utility_provider": "Titas Gas Transmission & Distribution Co. Ltd.",
+    "utility_type": "natural_gas",
+    "billing_period": "2026-01",
+    "customer_code": "8810423",
+    "customer_code_bn": "৮৮১০৪২৩",
+    "meter_number": "TG-IND-4091",
+    "consumption": {
+      "volume_m3": 5148.721866666667,
+      "volume_m3_bn": "৫১৪৮.৭২",
+      "rate_per_m3": 30.75
+    },
+    "financials": {
+      "gas_charge_bdt": 158323.2,
+      "meter_rent_bdt": 1500.0,
+      "vat_bdt": 7916.16,
+      "total_bdt": 167739.36,
+      "total_bdt_bn": "১৬৭৭৩৯.৩৬"
+    },
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA",
+    "ocr_confidence": 0.94,
+    "raw_text_bn": "তিতাস গ্যাস ট্রান্সমিশন অ্যান্ড ডিস্ট্রিবিউশন কোম্পানি লিমিটেড\nগ্রাহক কোড: ৮৮১০৪২৩\nব্যবহৃত গ্যাসের পরিমাণ: ৫১৪৮.৭২ ঘনমিটার (m³)\nমোট প্রদেয় বিল: ১৬৭৭৩৯.৩৬/= টাকা"
+  },
+  "diesel_challan": {
+    "document_id": "CHL-DSL-14131",
+    "tenant_id": "T-001",
+    "factory_id": "FAC-BD-DHK-001",
+    "delivery_date": "2026-01-15",
+    "supplier": "Meghna Petroleum Authorized Distributor (Joydebpur Depot)",
+    "vehicle_no": "Dhaka Metro-Ta 11-4829",
+    "fuel_type": "high_speed_diesel",
+    "stated_liters": 1200.0,
+    "stated_liters_bn": "১২০০.০০",
+    "actual_delivered_liters": 1600.0,
+    "falsified_flag": true,
+    "unit_price_bdt": 109.0,
+    "total_bdt": 130800.0,
+    "total_bdt_bn": "১৩০৮০০.০০",
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA",
+    "ocr_confidence": 0.88,
+    "raw_text_bn": "জ্বালানি তেল সরবরাহের চালান ও গেট পাস\nচালান নং: CHL-DSL-14131\nতারিখ: 2026-01-15\nতেলের পরিমাণ: ১২০০.০০ লিটার (HSD)\nদর: 109.0/= টাকা\nমোট মূল্য: ১৩০৮০০.০০/= টাকা"
+  }
+}

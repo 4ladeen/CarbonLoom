@@ -1,0 +1,23 @@
+# Dependencies & Environments
+node_modules/
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# OS and Temp Files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Video Temp Concat
+video/concat_list.txt
+
+# Local IDE
+.idea/
+.vscode/
+*.swp

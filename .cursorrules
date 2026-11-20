@@ -1,0 +1,21 @@
+# CarbonLoom — Cursor & Assistant Rules
+
+# Core Architectural Rule
+- All emissions calculations, energy accounting, allocations, and financial figures MUST be computed using deterministic Python code. Never let an LLM do math.
+- In documentation and UI, preliminary capabilities are tagged `[Designed]`, active features `[In progress]`, and tested CI-passing code `[Implemented]`.
+- All simulated factory data must be explicitly flagged with `data_quality: "simulated"` and have a `SIMULATED DATA` watermark.
+
+# Python & FastAPI Rules
+- Use Pydantic v2 `BaseModel` with field types and strict validation.
+- All database interactions must include `tenant_id` and respect PostgreSQL Row Level Security (RLS).
+- In tests, ensure exact match against hand-verified formulas (0.00% error margin).
+
+# Go MCP Gateway Rules
+- Single Policy Enforcement Point (PEP) for all agent tool calls.
+- Presidio redaction must run on all document payloads prior to LLM submission.
+- Write tools MUST check for a single-use human approval token (`approval_token_id`).
+- All tool calls must be appended to the SHA-256 hash-chained audit log.
+
+# Frontend & UI (Hallmark + Unslop)
+- Adhere strictly to Hallmark Floor rules: `:root` tokens for all colors/fonts, `overflow-x: clip`, focus-visible on all interactive elements.
+- Adhere strictly to Unslop principles: 4px grid rhythm, single neutral ramp (graphite), no emoji icons (use Lucide 16-18px), tabular figures for numbers, no purple/blue glows or arbitrary gradients.

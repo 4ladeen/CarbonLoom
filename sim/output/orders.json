@@ -1,0 +1,54 @@
+[
+  {
+    "order_id": "PO-EU-HM-2026-01",
+    "buyer": "H&M Group Sweden",
+    "style_ref": "STYLE-TSHIRT-CREW-100COTTON",
+    "garment_type": "Crewneck T-Shirt (Single Jersey)",
+    "pieces_ordered": 25000,
+    "pieces_produced": 25240,
+    "smv_minutes": 4.25,
+    "fabric_weight_kg_per_piece": 0.165,
+    "target_threshold_kgco2_per_piece": 2.1,
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA"
+  },
+  {
+    "order_id": "PO-EU-ZARA-2026-04",
+    "buyer": "Inditex (Zara) Spain",
+    "style_ref": "STYLE-HOODIE-FLEECE-BLEND",
+    "garment_type": "Brushed Fleece Pullover Hoodie",
+    "pieces_ordered": 12000,
+    "pieces_produced": 12080,
+    "smv_minutes": 11.5,
+    "fabric_weight_kg_per_piece": 0.48,
+    "target_threshold_kgco2_per_piece": 5.8,
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA"
+  },
+  {
+    "order_id": "PO-EU-MS-2026-09",
+    "buyer": "Marks & Spencer UK",
+    "style_ref": "STYLE-POLO-PIQUE-REGULAR",
+    "garment_type": "Cotton Pique Short-sleeve Polo",
+    "pieces_ordered": 18000,
+    "pieces_produced": 18150,
+    "smv_minutes": 7.8,
+    "fabric_weight_kg_per_piece": 0.24,
+    "target_threshold_kgco2_per_piece": 3.4,
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA"
+  },
+  {
+    "order_id": "PO-EU-PVH-2026-11",
+    "buyer": "PVH (Tommy Hilfiger)",
+    "style_ref": "STYLE-DENIM-CHINO-STRETCH",
+    "garment_type": "Stretch Twill Chino Trouser",
+    "pieces_ordered": 8000,
+    "pieces_produced": 8020,
+    "smv_minutes": 14.2,
+    "fabric_weight_kg_per_piece": 0.55,
+    "target_threshold_kgco2_per_piece": 6.9,
+    "data_quality": "simulated",
+    "simulated_watermark": "SIMULATED DATA"
+  }
+]

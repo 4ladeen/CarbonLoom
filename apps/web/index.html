@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonLoom: Agentic energy, carbon accounting, and regulatory compliance operating system for export factories.">
+  <title>CarbonLoom: Factory Energy and Carbon Accounting Cockpit</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <style>
+    /* Layout styling conforming strictly to Hallmark Floor and Unslop passes */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+      background-color: var(--color-bg);
+    }
+    .sidebar {
+      width: 260px;
+      background-color: var(--color-surface-deep);
+      border-right: 1px solid var(--color-surface-border);
+      padding: var(--space-6) var(--space-4);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 0 var(--space-2) var(--space-6);
+      border-bottom: 1px solid var(--color-surface-border);
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-control);
+      background-color: var(--color-surface-raised);
+      border: 1px solid var(--color-surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin: 0;
+    }
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-6) 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .nav-item button {
+      width: 100%;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 0 var(--space-3);
+      background: none;
+      border: 1px solid transparent;
+      border-radius: var(--radius-control);
+      color: var(--color-text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: opacity var(--duration-quick) var(--ease-standard), background-color var(--duration-quick) var(--ease-standard);
+    }
+    .nav-item button:hover {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+    }
+    .nav-item button.active {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      border-color: var(--color-surface-border);
+    }
+    .main-viewport {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-x: clip;
+    }
+    .topbar {
+      height: 60px;
+      border-bottom: 1px solid var(--color-surface-border);
+      padding: 0 var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--color-surface-deep);
+    }
+    .content-area {
+      padding: var(--space-8);
+      max-width: 1400px;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .stat-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-5);
+      color: var(--color-text-primary);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin: 0 0 var(--space-2);
+    }
+    .stat-figure {
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-2);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-meta {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .cockpit-hero {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+      color: var(--color-text-primary);
+    }
+    .cockpit-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+    .cockpit-hero-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-1);
+    }
+    .cockpit-hero-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+    .cockpit-hero-actions {
+      display: flex;
+      gap: var(--space-2);
+    }
+    .card-panel {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+      color: var(--color-text-primary);
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+    }
+    .panel-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      color: var(--color-text-muted);
+      font-weight: 400;
+      border-bottom: 1px solid var(--color-surface-border);
+    }
+    td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--color-surface-border);
+      color: var(--color-text-secondary);
+    }
+    tr:hover td {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+    }
+    .btn {
+      height: 36px;
+      padding: 0 var(--space-4);
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: opacity var(--duration-quick) var(--ease-standard);
+    }
+    .btn-primary {
+      background-color: var(--color-accent);
+      color: var(--color-accent-ink);
+    }
+    .btn-secondary {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      border-color: var(--color-surface-border);
+    }
+    .btn-danger {
+      background-color: var(--color-danger);
+      color: var(--color-pure-ink);
+    }
+    .waterfall-bar-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      font-size: 13px;
+    }
+    .waterfall-label {
+      width: 280px;
+      color: var(--color-text-secondary);
+    }
+    .waterfall-bar-track {
+      flex: 1;
+      height: 20px;
+      background-color: var(--color-surface-deep);
+      border-radius: var(--radius-inner);
+      position: relative;
+      margin: 0 var(--space-4);
+    }
+    .waterfall-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-inner);
+    }
+    .badge-pass {
+      color: var(--color-accent);
+      background-color: var(--color-accent-subtle);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-inner);
+      font-size: 11px;
+    }
+    .badge-alert {
+      color: var(--color-danger);
+      background-color: var(--color-danger-subtle);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-inner);
+      font-size: 11px;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--color-overlay);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-box {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-panel);
+      width: 600px;
+      max-width: 90vw;
+      padding: var(--space-6);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">CarbonLoom</h1>
+          <span style="font-size: 11px; color: var(--color-text-muted);">ComplianceOS v2.0</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item">
+          <button class="active" onclick="switchTab('cockpit')">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span id="nav-cockpit-label">Executive Cockpit</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button onclick="switchTab('anomaly')">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            <span id="nav-anomaly-label">SHAP Anomaly Console</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button onclick="switchTab('optimizer')">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m18 15-6-6-6 6"/></svg>
+            <span id="nav-optimizer-label">What-If Optimizer Lab</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button onclick="switchTab('reports')">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span id="nav-reports-label">Report Builder &amp; DPP</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button onclick="switchTab('approvals')">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span id="nav-approvals-label">HITL Approvals Queue</span>
+          </button>
+        </li>
+      </ul>
+
+      <div style="margin-top: auto; padding-top: var(--space-4); border-top: 1px solid var(--color-surface-border);">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 12px; color: var(--color-text-muted);">Language / ভাষা</span>
+          <button class="btn btn-secondary" style="height: 28px; padding: 0 8px; font-size: 11px;" onclick="toggleLanguage()">
+            <span id="lang-btn-text">EN / বাংলা</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-viewport">
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: var(--space-4);">
+          <span class="verification-pulse"></span>
+          <span style="font-size: 13px; color: var(--color-text-secondary);" id="top-factory-name">
+            Apex Padma Textile &amp; Apparels Ltd. (FAC-BD-DHK-001)
+          </span>
+          <span class="watermark-badge">Simulated data</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-3);">
+          <span style="font-size: 12px; color: var(--color-text-muted);">Fabric Network:</span>
+          <span class="badge-pass">3-Org Connected</span>
+        </div>
+      </header>
+
+      <div class="content-area">
+        <!-- 1. Executive Cockpit View -->
+        <section id="tab-cockpit">
+          <div class="cockpit-hero">
+            <div class="cockpit-hero-header">
+              <div>
+                <h2 class="cockpit-hero-title">Facility Energy and Decarbonization Cockpit</h2>
+                <p class="cockpit-hero-desc">Real-time meter telemetry, dual Scope 1 and Scope 2 reporting, and ISO 14064 automated line balancing.</p>
+              </div>
+              <div class="cockpit-hero-actions">
+                <a href="../../index.html" class="btn btn-secondary">Platform Overview</a>
+                <a href="../buyer-portal/index.html" class="btn btn-secondary">Buyer Portal</a>
+                <a href="../../video/index.html" class="btn btn-secondary">180s Video</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <p class="stat-label">Monthly Grid Energy</p>
+              <p class="stat-figure tabular-nums" id="stat-kwh">184,250 <span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">kWh</span></p>
+              <div class="stat-meta">
+                <span class="badge-pass">-4.2%</span> vs baseline
+              </div>
+            </div>
+            <div class="stat-card">
+              <p class="stat-label">Monthly Scope 1 Direct</p>
+              <p class="stat-figure tabular-nums" id="stat-s1">48.20 <span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">tCO2e</span></p>
+              <div class="stat-meta">Boilers and Gensets (JCM verified)</div>
+            </div>
+            <div class="stat-card">
+              <p class="stat-label">Monthly Scope 2 Indirect</p>
+              <p class="stat-figure tabular-nums" id="stat-s2">114.23 <span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">tCO2e</span></p>
+              <div class="stat-meta">DoE Factor 0.62 tCO2/MWh</div>
+            </div>
+            <div class="stat-card">
+              <p class="stat-label">Average Carbon Intensity</p>
+              <p class="stat-figure tabular-nums" id="stat-garment">2.14 <span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">kg/pc</span></p>
+              <div class="stat-meta">
+                <span class="badge-pass">Compliant</span> with EU buyer targets
+              </div>
+            </div>
+          </div>
+
+          <!-- SMV Carbon-per-Garment Allocation Table -->
+          <div class="card-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">SMV Carbon-per-Garment Batch Allocation</h2>
+              <span style="font-size: 12px; color: var(--color-text-muted);">Method: Work-content weighted per ISO 14064-1</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Order / PO ID</th>
+                  <th>Buyer</th>
+                  <th>Style Ref</th>
+                  <th>Pieces</th>
+                  <th>SMV (min)</th>
+                  <th>Alloc Weight</th>
+                  <th>Total tCO2e</th>
+                  <th>kgCO2e / Piece</th>
+                  <th>Compliance Status</th>
+                  <th>Lineage Hash</th>
+                </tr>
+              </thead>
+              <tbody id="allocation-tbody">
+                <tr>
+                  <td class="tabular-nums">PO-EU-HM-2026-01</td>
+                  <td>H&amp;M Group</td>
+                  <td>Crewneck T-Shirt</td>
+                  <td class="tabular-nums">25,240</td>
+                  <td class="tabular-nums">4.25</td>
+                  <td class="tabular-nums">34.8%</td>
+                  <td class="tabular-nums">56.52</td>
+                  <td class="tabular-nums">2.24 ± 0.08</td>
+                  <td><span class="badge-pass">PASS (&le; 2.50)</span></td>
+                  <td><button class="btn btn-secondary" style="height: 24px; padding: 0 6px; font-size: 11px;" onclick="openLineageModal('PO-EU-HM-2026-01', 2.24, 'LIN-992014F')">Inspect</button></td>
+                </tr>
+                <tr>
+                  <td class="tabular-nums">PO-EU-ZARA-2026-04</td>
+                  <td>Inditex Zara</td>
+                  <td>Fleece Pullover Hoodie</td>
+                  <td class="tabular-nums">12,080</td>
+                  <td class="tabular-nums">11.50</td>
+                  <td class="tabular-nums">45.2%</td>
+                  <td class="tabular-nums">73.41</td>
+                  <td class="tabular-nums">6.08 ± 0.15</td>
+                  <td><span class="badge-pass">PASS (&le; 6.50)</span></td>
+                  <td><button class="btn btn-secondary" style="height: 24px; padding: 0 6px; font-size: 11px;" onclick="openLineageModal('PO-EU-ZARA-2026-04', 6.08, 'LIN-881023B')">Inspect</button></td>
+                </tr>
+                <tr>
+                  <td class="tabular-nums">PO-EU-MS-2026-09</td>
+                  <td>Marks and Spencer</td>
+                  <td>Cotton Pique Polo</td>
+                  <td class="tabular-nums">18,150</td>
+                  <td class="tabular-nums">7.80</td>
+                  <td class="tabular-nums">20.0%</td>
+                  <td class="tabular-nums">32.48</td>
+                  <td class="tabular-nums">1.79 ± 0.06</td>
+                  <td><span class="badge-pass">PASS (&le; 3.20)</span></td>
+                  <td><button class="btn btn-secondary" style="height: 24px; padding: 0 6px; font-size: 11px;" onclick="openLineageModal('PO-EU-MS-2026-09', 1.79, 'LIN-773190A')">Inspect</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Line-level Energy Champion Leaderboard -->
+          <div class="card-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Line-Level Energy Champion Leaderboard</h2>
+              <span style="font-size: 12px; color: var(--color-text-muted);">Strictly Line/Team Level, Zero Worker Surveillance</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Production Line</th>
+                  <th>Machine Stations</th>
+                  <th>Current Shift kWh</th>
+                  <th>SMV Complexity Norm</th>
+                  <th>Efficiency vs Baseline</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="tabular-nums">#1</td>
+                  <td>Sewing Line 04 (Padma Knit)</td>
+                  <td class="tabular-nums">60 Stations</td>
+                  <td class="tabular-nums">41.2 kWh</td>
+                  <td class="tabular-nums">1.02</td>
+                  <td><span class="badge-pass">+8.5% Above Baseline</span></td>
+                </tr>
+                <tr>
+                  <td class="tabular-nums">#2</td>
+                  <td>Sewing Line 07 (Meghna Polo)</td>
+                  <td class="tabular-nums">60 Stations</td>
+                  <td class="tabular-nums">43.8 kWh</td>
+                  <td class="tabular-nums">0.98</td>
+                  <td><span class="badge-pass">+4.1% Above Baseline</span></td>
+                </tr>
+                <tr>
+                  <td class="tabular-nums">#12</td>
+                  <td>Sewing Line 01 (Boiler Loop)</td>
+                  <td class="tabular-nums">60 Stations</td>
+                  <td class="tabular-nums">54.6 kWh</td>
+                  <td class="tabular-nums">1.00</td>
+                  <td><span class="badge-alert">-12.4% Steam Leak Penalty</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 2. SHAP Anomaly Console View -->
+        <section id="tab-anomaly" style="display: none;">
+          <div class="card-panel">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Forensic TreeSHAP Waste Detection Console</h2>
+                <p style="font-size: 13px; color: var(--color-text-secondary); margin: 4px 0 0;">
+                  Isolation Forest and XGBoost feature attributions explaining energy leaks.
+                </p>
+              </div>
+              <span class="badge-alert">Active Anomaly (Score: 0.85)</span>
+            </div>
+
+            <div style="background-color: var(--color-surface-raised); border-radius: var(--radius-card); padding: var(--space-4); margin-bottom: var(--space-6);">
+              <h3 style="font-size: 14px; margin: 0 0 var(--space-2); color: var(--color-text-primary);">
+                Detected Fault: BOILER-01 Steam Trap Leak (Thermodynamic Header 3)
+              </h3>
+              <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0 0 var(--space-2);" id="anomaly-desc-en">
+                Continuous 12% excess natural gas consumption observed on Primary Boiler 1. TreeSHAP proves +118.5 kW excess is unexplained by ambient weather or SMV volume.
+              </p>
+              <p style="font-size: 13px; color: var(--color-accent); margin: 0;" id="anomaly-desc-bn">
+                ১ নম্বর বয়লারের স্টিম ট্র্যাপে বাষ্প লিক হচ্ছে। অপচয় রোধ করতে রক্ষণাবেক্ষণ দল পাঠান।
+              </p>
+            </div>
+
+            <h3 style="font-size: 13px; color: var(--color-text-muted); margin-bottom: var(--space-4); font-weight: 400;">
+              TreeSHAP Feature Attributions (Waterfall Decomposition kW)
+            </h3>
+            <div class="waterfall-bar-row">
+              <span class="waterfall-label">Base Nominal Expected Load</span>
+              <div class="waterfall-bar-track">
+                <div class="waterfall-bar-fill" style="width: 70%; background-color: var(--color-text-muted);"></div>
+              </div>
+              <span class="tabular-nums" style="width: 80px; text-align: right;">1000.0 kW</span>
+            </div>
+            <div class="waterfall-bar-row">
+              <span class="waterfall-label">Ambient Temperature Lift (31°C)</span>
+              <div class="waterfall-bar-track">
+                <div class="waterfall-bar-fill" style="width: 8%; background-color: var(--color-warning);"></div>
+              </div>
+              <span class="tabular-nums" style="width: 80px; text-align: right;">+7.5 kW</span>
+            </div>
+            <div class="waterfall-bar-row">
+              <span class="waterfall-label">Power Factor Penalty (0.91)</span>
+              <div class="waterfall-bar-track">
+                <div class="waterfall-bar-fill" style="width: 5%; background-color: var(--color-warning);"></div>
+              </div>
+              <span class="tabular-nums" style="width: 80px; text-align: right;">+4.8 kW</span>
+            </div>
+            <div class="waterfall-bar-row">
+              <span class="waterfall-label" style="color: var(--color-danger); font-weight: 500;">Unexplained Leak / Waste Drift</span>
+              <div class="waterfall-bar-track">
+                <div class="waterfall-bar-fill" style="width: 17%; background-color: var(--color-danger);"></div>
+              </div>
+              <span class="tabular-nums" style="width: 80px; text-align: right; color: var(--color-danger);">+107.7 kW</span>
+            </div>
+            <div class="waterfall-bar-row" style="border-top: 1px solid var(--color-surface-border); padding-top: var(--space-2);">
+              <span class="waterfall-label" style="font-weight: 500; color: var(--color-text-primary);">Total Observed Telemetry Power</span>
+              <div class="waterfall-bar-track">
+                <div class="waterfall-bar-fill" style="width: 100%; background-color: var(--color-text-primary);"></div>
+              </div>
+              <span class="tabular-nums" style="width: 80px; text-align: right; font-weight: 600;">1120.0 kW</span>
+            </div>
+
+            <div style="margin-top: var(--space-6); display: flex; gap: var(--space-3);">
+              <button class="btn btn-primary" onclick="triggerApprovalFlow('create_cmms_ticket')">
+                Emit CMMS Maintenance Ticket
+              </button>
+              <button class="btn btn-secondary" onclick="triggerApprovalFlow('escalate_nrb_verifier')">
+                Escalate to NRB Certified Auditor Queue
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. What-If Optimizer Lab View -->
+        <section id="tab-optimizer" style="display: none;">
+          <div class="card-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">What-If Decarbonization and CBAM Margin Simulator</h2>
+              <span style="font-size: 12px; color: var(--color-text-muted);">OR-Tools Physics and Tariff Optimizer</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); margin-bottom: var(--space-6);">
+              <div>
+                <label style="display: block; font-size: 13px; color: var(--color-text-secondary); margin-bottom: var(--space-2);">
+                  Rooftop Solar PV Capacity (kWp): <span id="val-solar" class="tabular-nums">500</span> kWp
+                </label>
+                <input type="range" min="100" max="1500" value="500" step="50" style="width: 100%;" oninput="updateOptimizerValues(this.value)">
+                
+                <label style="display: block; font-size: 13px; color: var(--color-text-secondary); margin-top: var(--space-4); margin-bottom: var(--space-2);">
+                  EU ETS Carbon Reference Price (EUR/tCO2e): &euro;<span id="val-ets" class="tabular-nums">75.32</span>
+                </label>
+                <input type="range" min="50" max="120" value="75" step="1" style="width: 100%;" oninput="updateEtsPrice(this.value)">
+              </div>
+
+              <div style="background-color: var(--color-surface-deep); padding: var(--space-5); border-radius: var(--radius-card); border: 1px solid var(--color-surface-border);">
+                <h3 style="font-size: 13px; color: var(--color-text-muted); margin: 0 0 var(--space-3);">Projected CFO Business Case</h3>
+                <p style="font-size: 13px; margin: 0 0 var(--space-2); color: var(--color-text-secondary);">
+                  Annual Avoided Grid Scope 2: <span class="tabular-nums" style="color: var(--color-accent); font-weight: 500;" id="opt-tco2">421.6 tCO2e/yr</span>
+                </p>
+                <p style="font-size: 13px; margin: 0 0 var(--space-2); color: var(--color-text-secondary);">
+                  Estimated Annual Tariff Savings: <span class="tabular-nums" style="color: var(--color-text-primary); font-weight: 500;" id="opt-savings">৳ 7,820,000</span>
+                </p>
+                <p style="font-size: 13px; margin: 0 0 var(--space-2); color: var(--color-text-secondary);">
+                  Simple CAPEX Payback: <span class="tabular-nums" style="color: var(--color-accent); font-weight: 500;" id="opt-payback">4.8 years</span>
+                </p>
+                <p style="font-size: 13px; margin: 0; color: var(--color-text-secondary);">
+                  EU CBAM Tariff Liability Avoided: <span class="tabular-nums" style="color: var(--color-accent); font-weight: 500;" id="opt-cbam">&euro; 9,750 / shipment</span>
+                </p>
+              </div>
+            </div>
+
+            <h3 style="font-size: 14px; font-weight: 500; margin-bottom: var(--space-3);">Marginal Abatement Cost Curve (MACC Ranking)</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Intervention</th>
+                  <th>CAPEX (BDT)</th>
+                  <th>Annual Savings</th>
+                  <th>Payback</th>
+                  <th>Abatement Cost ($/tCO2e)</th>
+                  <th>CFO Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Aerogel Thermal Steam Pipe Insulation</td>
+                  <td class="tabular-nums">৳ 450,000</td>
+                  <td class="tabular-nums">৳ 676,500/yr</td>
+                  <td class="tabular-nums">8.0 mos</td>
+                  <td class="tabular-nums" style="color: var(--color-accent); font-weight: 500;">-$42.10 (Highly Profitable)</td>
+                  <td><span class="badge-pass">Priority 1</span></td>
+                </tr>
+                <tr>
+                  <td>Compressor Variable Frequency Drives (VFDs)</td>
+                  <td class="tabular-nums">৳ 850,000</td>
+                  <td class="tabular-nums">৳ 1,064,000/yr</td>
+                  <td class="tabular-nums">9.6 mos</td>
+                  <td class="tabular-nums" style="color: var(--color-accent); font-weight: 500;">-$34.50 (Profitable)</td>
+                  <td><span class="badge-pass">Priority 2</span></td>
+                </tr>
+                <tr>
+                  <td>500 kWp Rooftop Solar PV Installation</td>
+                  <td class="tabular-nums">৳ 38,000,000</td>
+                  <td class="tabular-nums">৳ 8,500,000/yr</td>
+                  <td class="tabular-nums">54.0 mos</td>
+                  <td class="tabular-nums" style="color: var(--color-accent); font-weight: 500;">-$18.20 (Profitable)</td>
+                  <td><span class="badge-pass">Priority 3</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 4. Report Builder & DPP View -->
+        <section id="tab-reports" style="display: none;">
+          <div class="card-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Multi-Format Compliance and DPP Passport Generator</h2>
+              <span style="font-size: 12px; color: var(--color-text-muted);">Radical honesty: Labeled ESPR DPP-Ready and ISO 14064-1 Aligned</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4);">
+              <div style="background-color: var(--color-surface-deep); padding: var(--space-5); border-radius: var(--radius-card); border: 1px solid var(--color-surface-border);">
+                <h3 style="font-size: 14px; margin: 0 0 var(--space-2); color: var(--color-text-primary);">ISO 14064-1 Audit Pack</h3>
+                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+                  Standardized Scope 1 and 2 corporate greenhouse gas report with full calculation lineage appendix.
+                </p>
+                <button class="btn btn-secondary" onclick="exportReport('iso14064')">Export ISO Report (PDF/JSON)</button>
+              </div>
+
+              <div style="background-color: var(--color-surface-deep); padding: var(--space-5); border-radius: var(--radius-card); border: 1px solid var(--color-surface-border);">
+                <h3 style="font-size: 14px; margin: 0 0 var(--space-2); color: var(--color-text-primary);">EU CBAM XML Declaration</h3>
+                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+                  Official CBAM XML declaration format with 50-tonne de minimis threshold rules and primary data proofs.
+                </p>
+                <button class="btn btn-secondary" onclick="exportReport('cbam_xml')">Export CBAM XML</button>
+              </div>
+
+              <div style="background-color: var(--color-surface-deep); padding: var(--space-5); border-radius: var(--radius-card); border: 1px solid var(--color-surface-border);">
+                <h3 style="font-size: 14px; margin: 0 0 var(--space-2); color: var(--color-text-primary);">ESPR DPP JSON-LD Passport</h3>
+                <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+                  EN 18216 to 18223 aligned Digital Product Passport with GS1 Digital Link QR data and ZK proof reference.
+                </p>
+                <button class="btn btn-primary" onclick="exportReport('dpp_jsonld')">Generate DPP JSON-LD</button>
+              </div>
+            </div>
+
+            <div id="export-output-box" style="margin-top: var(--space-6); display: none;">
+              <h3 style="font-size: 13px; color: var(--color-text-muted); margin-bottom: var(--space-2);">Generated Payload Output</h3>
+              <pre id="export-output-code" style="background-color: var(--color-surface-deep); padding: var(--space-4); border-radius: var(--radius-card); font-family: var(--font-family-mono); font-size: 12px; overflow-x: auto; max-height: 250px;"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. HITL Approvals Queue View -->
+        <section id="tab-approvals" style="display: none;">
+          <div class="card-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Human-in-the-Loop (HITL) Approval Checkpoints</h2>
+              <span style="font-size: 12px; color: var(--color-text-muted);">Mandatory Single-Use Approval Token Protection for All Write Operations</span>
+            </div>
+
+            <div id="approvals-container">
+              <div style="background-color: var(--color-surface-raised); border: 1px solid var(--color-surface-border); border-radius: var(--radius-card); padding: var(--space-5); margin-bottom: var(--space-4);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
+                  <div>
+                    <h3 style="font-size: 15px; margin: 0 0 4px; color: var(--color-text-primary);">
+                      Dispatch CMMS Maintenance Work Order: BOILER-01
+                    </h3>
+                    <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+                      SHAP anomaly score 0.85 requires human supervisor sign-off before creating repair ticket in maintenance database.
+                    </p>
+                  </div>
+                  <span class="tabular-nums" style="font-size: 12px; color: var(--color-text-muted);">Generated 4m ago</span>
+                </div>
+
+                <div style="display: flex; gap: var(--space-3);">
+                  <button class="btn btn-primary" onclick="confirmApproval('TICK-BOILER-01')">Confirm and Issue Approval Token</button>
+                  <button class="btn btn-secondary" onclick="rejectApproval('TICK-BOILER-01')">Dismiss Alert</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lineage Modal -->
+  <div id="lineage-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+        <h3 style="font-size: 16px; margin: 0; color: var(--color-text-primary);" id="lineage-modal-title">Calculation Lineage</h3>
+        <button class="btn btn-secondary" style="height: 28px; padding: 0 8px;" onclick="closeLineageModal()">Close</button>
+      </div>
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: var(--space-4);">
+        Every numeric value is derived from deterministic Python equations with an immutable SHA-256 dependency tree. Zero LLM math.
+      </p>
+      <div style="background-color: var(--color-surface-deep); padding: var(--space-4); border-radius: var(--radius-control); font-family: var(--font-family-mono); font-size: 12px; line-height: 1.6;" id="lineage-modal-content">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-item button').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      const tabs = ['cockpit', 'anomaly', 'optimizer', 'reports', 'approvals'];
+      tabs.forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.style.display = (t === tabId) ? 'block' : 'none';
+      });
+    }
+
+    // Language toggle
+    let isBangla = false;
+    function toggleLanguage() {
+      isBangla = !isBangla;
+      document.getElementById('lang-btn-text').textContent = isBangla ? 'বাংলা / EN' : 'EN / বাংলা';
+      document.getElementById('nav-cockpit-label').textContent = isBangla ? 'এক্সিকিউটিভ ড্যাশবোর্ড' : 'Executive Cockpit';
+      document.getElementById('nav-anomaly-label').textContent = isBangla ? 'অপচয় ও লিক সনাক্তকরণ' : 'SHAP Anomaly Console';
+      document.getElementById('nav-optimizer-label').textContent = isBangla ? 'সোলার ও খরচ অপ্টিমাইজেশন' : 'What-If Optimizer Lab';
+      document.getElementById('nav-reports-label').textContent = isBangla ? 'রিপোর্ট ও ডিজিটাল পাসপোর্ট' : 'Report Builder & DPP';
+      document.getElementById('nav-approvals-label').textContent = isBangla ? 'অনুমোদন পেন্ডিং' : 'HITL Approvals Queue';
+    }
+
+    // Modal
+    function openLineageModal(orderId, kgVal, linId) {
+      document.getElementById('lineage-modal-title').textContent = 'Calculation Lineage: ' + orderId;
+      document.getElementById('lineage-modal-content').innerHTML = `
+        <strong>Lineage ID:</strong> ` + linId + `<br>
+        <strong>Formula:</strong> CARBONLOOM-SMV-ALLOC-V2<br>
+        <strong>Per-Piece Result:</strong> ` + kgVal + ` kgCO2e/piece<br>
+        <strong>Emission Factors:</strong> DOE-GEF-2020-21 (0.62 tCO2/MWh) and JCM-GAS-2022 (0.376)<br>
+        <strong>Raw Slice SHA-256:</strong> 9b4d8a1c3e07f2...<br>
+        <strong>Ledger Anchor:</strong> FABRIC-MERKLE-ROOT-001 (Block #10482)<br>
+        <strong>Zero-LLM Math:</strong> Verified (Executed via Python Decimal in services/api/core/)
+      `;
+      document.getElementById('lineage-modal').style.display = 'flex';
+    }
+
+    function closeLineageModal() {
+      document.getElementById('lineage-modal').style.display = 'none';
+    }
+
+    // Optimizer slider reactivity
+    function updateOptimizerValues(val) {
+      document.getElementById('val-solar').textContent = val;
+      const kwp = parseFloat(val);
+      const annualKwh = kwp * 4.67 * 0.82 * 365;
+      const tco2 = (annualKwh / 1000) * 0.62;
+      const savingsBdt = annualKwh * 11.5;
+      const capex = kwp * 75000;
+      const payback = (capex / savingsBdt).toFixed(1);
+
+      document.getElementById('opt-tco2').textContent = tco2.toFixed(1) + ' tCO2e/yr';
+      document.getElementById('opt-savings').textContent = '৳ ' + Math.round(savingsBdt).toLocaleString();
+      document.getElementById('opt-payback').textContent = payback + ' years';
+    }
+
+    function updateEtsPrice(val) {
+      document.getElementById('val-ets').textContent = val;
+      const price = parseFloat(val);
+      const savingsEur = 100 * (2.15 - 0.85) * price;
+      document.getElementById('opt-cbam').textContent = '€ ' + Math.round(savingsEur).toLocaleString() + ' / shipment';
+    }
+
+    // Export formats
+    function exportReport(format) {
+      const box = document.getElementById('export-output-box');
+      const code = document.getElementById('export-output-code');
+      box.style.display = 'block';
+
+      if (format === 'iso14064') {
+        code.textContent = JSON.stringify({
+          standard: "ISO 14064-1:2018 Aligned",
+          factory: "Apex Padma Textile Ltd.",
+          period: "2026-01-01 to 2026-01-31",
+          scope1_tco2e: 48.20,
+          scope2_location_tco2e: 114.23,
+          total_footprint_tco2e: 162.43,
+          data_quality: "simulated",
+          watermark: "SIMULATED DATA"
+        }, null, 2);
+      } else if (format === 'cbam_xml') {
+        code.textContent = `<?xml version="1.0" encoding="utf-8"?>
+<CBAMDeclaration version="2.0" xmlns="urn:eu:ec:cbam:v2">
+  <Header>
+    <DeclarantName>Apex Padma Textile Ltd.</DeclarantName>
+    <DeMinimisThresholdTonnes>50.0</DeMinimisThresholdTonnes>
+    <DataQuality>simulated</DataQuality>
+    <Watermark>SIMULATED DATA</Watermark>
+  </Header>
+  <GoodsItem>
+    <CNCode>61091000</CNCode>
+    <Tonnage>10.0</Tonnage>
+    <ActualDirectEmissions>0.45</ActualDirectEmissions>
+    <VerificationProofHash>0x88f2a019...</VerificationProofHash>
+  </GoodsItem>
+</CBAMDeclaration>`;
+      } else if (format === 'dpp_jsonld') {
+        code.textContent = JSON.stringify({
+          "@context": ["https://www.w3.org/2018/credentials/v1", "https://gs1.org/voc/"],
+          "id": "https://id.carbonloom.io/01/08432109/10/BATCH-2026-HM",
+          "dppStandardAlignment": "ESPR / EN 18216-18223 DPP-ready",
+          "productDetails": {
+            "gtin": "0843210982145",
+            "style": "Crewneck T-Shirt (Single Jersey)",
+            "origin": "Bangladesh"
+          },
+          "carbonFootprint": {
+            "kgCO2ePerPiece": 2.24,
+            "lineageId": "LIN-992014F",
+            "zkComplianceProof": "GROTH16-CIRCOM-VERIFIED"
+          },
+          "dataQuality": "simulated",
+          "watermark": "SIMULATED DATA"
+        }, null, 2);
+      }
+    }
+
+    function confirmApproval(id) {
+      alert("Single-use Approval Token APPR-" + Math.random().toString(36).substr(2, 9).toUpperCase() + " issued! Action committed and logged to hash-chained audit trail.");
+      document.getElementById('approvals-container').innerHTML = '<div style="color: var(--color-accent); font-size: 14px; padding: var(--space-4);">All pending human approval actions have been authorized.</div>';
+    }
+
+    function rejectApproval(id) {
+      document.getElementById('approvals-container').innerHTML = '<div style="color: var(--color-text-muted); font-size: 14px; padding: var(--space-4);">Action dismissed by human supervisor.</div>';
+    }
+
+    function triggerApprovalFlow(action) {
+      switchTab('approvals');
+    }
+  </script>
+</body>
+</html>

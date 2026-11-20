@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # 1. Mosquitto MQTT Broker (Edge Telemetry Ingestion)
+  # ---------------------------------------------------------------------------
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: carbonloom-edge-mqtt
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+  # ---------------------------------------------------------------------------
+  # 2. Local Edge Collector & Buffer
+  # ---------------------------------------------------------------------------
+  edge-collector:
+    build:
+      context: ../
+      dockerfile: edge/Dockerfile
+    container_name: carbonloom-edge-collector
+    restart: unless-stopped
+    environment:
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+      LOCAL_DB_PATH: /data/edge_buffer.db
+    volumes:
+      - edge_buffer_data:/data
+    depends_on:
+      - mosquitto
+
+  # ---------------------------------------------------------------------------
+  # 3. Local Ollama (Offline Fallback Qwen/Llama on Mini-PC)
+  # ---------------------------------------------------------------------------
+  ollama-edge:
+    image: ollama/ollama:latest
+    container_name: carbonloom-edge-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  edge_buffer_data:
+  ollama_models:

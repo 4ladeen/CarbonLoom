@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonLoom NRB Certified Auditor Workspace and HITL Queue.">
+  <title>CarbonLoom: NRB Certified Auditor Workspace</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <style>
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-4);
+      box-sizing: border-box;
+    }
+    .header-box {
+      border-bottom: 1px solid var(--color-surface-border);
+      padding-bottom: var(--space-6);
+      margin-bottom: var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+      color: var(--color-text-primary);
+    }
+    .btn {
+      height: 36px;
+      padding: 0 var(--space-4);
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: opacity var(--duration-quick) var(--ease-standard);
+    }
+    .btn-primary {
+      background-color: var(--color-accent);
+      color: var(--color-accent-ink);
+    }
+    .btn-secondary {
+      background-color: var(--color-surface-raised);
+      color: var(--color-text-primary);
+      border-color: var(--color-surface-border);
+    }
+    .badge-alert {
+      color: var(--color-danger);
+      background-color: var(--color-danger-subtle);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-inner);
+      font-size: 11px;
+    }
+    .badge-pass {
+      color: var(--color-accent);
+      background-color: var(--color-accent-subtle);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-inner);
+      font-size: 11px;
+    }
+    .chat-bubble-auditor {
+      background-color: var(--color-surface-raised);
+      border: 1px solid var(--color-surface-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-3) var(--space-4);
+      margin-bottom: var(--space-3);
+      max-width: 80%;
+      font-size: 13px;
+    }
+    .chat-bubble-factory {
+      background-color: var(--color-surface-deep);
+      border: 1px solid var(--color-accent);
+      border-radius: var(--radius-card);
+      padding: var(--space-3) var(--space-4);
+      margin-bottom: var(--space-3);
+      margin-left: auto;
+      max-width: 80%;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="header-box">
+      <div>
+        <a href="../../index.html" style="font-size: 12px; color: var(--color-text-secondary); text-decoration: none; display: inline-block; margin-bottom: var(--space-2);">&larr; Return to Platform Overview</a>
+        <h1 style="font-size: 18px; font-weight: 600; margin: 0 0 4px; color: var(--color-text-primary);">
+          NRB Certified Auditor Workspace (FR-F4)
+        </h1>
+        <p style="font-size: 13px; color: var(--color-text-muted); margin: 0;">
+          Non-Resident Bangladeshi sustainability engineers reviewing ISO 14064-1 lineage and co-signing Ed25519 attestations.
+        </p>
+      </div>
+      <div>
+        <span style="font-size: 11px; font-weight: 500; padding: var(--space-1) var(--space-2); border-radius: var(--radius-inner); background-color: var(--color-warning-subtle); color: var(--color-warning); border: 1px solid var(--color-surface-border);">Simulated data</span>
+      </div>
+    </header>
+
+    <!-- HITL Escalation Queue -->
+    <section class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+        <h2 style="font-size: 15px; margin: 0; color: var(--color-text-primary);">
+          Human-in-the-Loop Audit Escalation Queue
+        </h2>
+        <span style="font-size: 12px; color: var(--color-text-muted);">2 Items Pending Auditor Review</span>
+      </div>
+
+      <!-- Item 1: High SHAP Anomaly -->
+      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-card); padding: var(--space-5); margin-bottom: var(--space-4);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
+          <div>
+            <h3 style="font-size: 14px; margin: 0 0 4px; color: var(--color-text-primary);">
+              SHAP Anomaly Flag: BOILER-01 Steam Trap Leak
+            </h3>
+            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+              Anomaly score 0.85 (&gt; 0.70 threshold). Natural gas draw +12% above normalized SMV volume.
+            </p>
+          </div>
+          <span class="badge-alert">Score: 0.85</span>
+        </div>
+        <div style="display: flex; gap: var(--space-3);">
+          <button class="btn btn-secondary" onclick="openInspection('BOILER-01')">Inspect Telemetry Evidence</button>
+          <button class="btn btn-primary" onclick="signAttestation('BOILER-01')">Co-Sign Ed25519 Attestation</button>
+        </div>
+      </div>
+
+      <!-- Item 2: Low-Confidence OCR -->
+      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-card); padding: var(--space-5);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
+          <div>
+            <h3 style="font-size: 14px; margin: 0 0 4px; color: var(--color-text-primary);">
+              Low-Confidence OCR Bill: Diesel Delivery Challan #CHL-DSL-8921
+            </h3>
+            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+              Bangla numerical extraction confidence 0.88 (&lt; 0.90 threshold). Manual verification required.
+            </p>
+          </div>
+          <span class="badge-alert">Confidence: 0.88</span>
+        </div>
+        <div style="display: flex; gap: var(--space-3);">
+          <button class="btn btn-secondary" onclick="openInspection('CHL-DSL-8921')">Review Scanned Challan</button>
+          <button class="btn btn-primary" onclick="confirmOcrValue('CHL-DSL-8921')">Confirm 1,600 Liters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bilingual Clarification Chat -->
+    <section class="card">
+      <h2 style="font-size: 15px; margin: 0 0 var(--space-4); color: var(--color-text-primary);">
+        Bilingual Clarification Channel (Frankfurt Verifier &lt;&gt; Dhaka Floor)
+      </h2>
+      <div style="background-color: var(--color-surface-deep); border-radius: var(--radius-card); padding: var(--space-4); margin-bottom: var(--space-4); max-height: 240px; overflow-y: auto;">
+        <div class="chat-bubble-auditor">
+          <strong style="color: var(--color-accent);">Dr. Farhan Ahmed (NRB Verifier, Frankfurt):</strong><br>
+          We noticed Boiler 1 natural gas consumption increased 118 kW despite sewing line volume remaining flat. Could you confirm if steam trap #3 on the main header was inspected?
+        </div>
+        <div class="chat-bubble-factory">
+          <strong style="color: var(--color-text-primary);">Engr. Kabir Hossain (Utility Lead, Gazipur):</strong><br>
+          জি স্যার, আমরা ৩ নম্বর স্টিম ট্র্যাপ চেক করেছি। ট্র্যাপের ফ্লিন্ট আটকে বাষ্প লিক হচ্ছিল। আমরা আজ সকাল ১০টায় ট্র্যাপ রিপ্লেস করেছি। এখন গ্যাস প্রেসার স্বাভাবিক।
+        </div>
+        <div class="chat-bubble-auditor">
+          <strong style="color: var(--color-accent);">Dr. Farhan Ahmed (NRB Verifier, Frankfurt):</strong><br>
+          Thank you Kabir. The replacement log has been verified against telemetry drop. I am anchoring the Ed25519 attestation on Hyperledger Fabric now.
+        </div>
+      </div>
+
+      <div style="display: flex; gap: var(--space-3);">
+        <input type="text" placeholder="Type clarification message in English or বাংলা..." style="flex: 1; height: 38px; background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-control); color: var(--color-text-primary); padding: 0 var(--space-3); font-size: 13px;" aria-label="Type clarification message">
+        <button class="btn btn-secondary">Send Message</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function openInspection(id) {
+      alert("Opening redacted evidence dossier for " + id + " under ISO 14064-1 audit protocol.");
+    }
+
+    function signAttestation(id) {
+      alert("Ed25519 Private Key applied! Attestation committed to Hyperledger Fabric Org2MSP: 0xEd25519_SIG_VERIFIED_7710a");
+    }
+
+    function confirmOcrValue(id) {
+      alert("Challan value confirmed as 1,600.0 Liters. Field confidence elevated to 1.00 (Human Audited).");
+    }
+  </script>
+</body>
+</html>

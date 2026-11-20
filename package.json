@@ -1,0 +1,22 @@
+{
+  "name": "carbonloom",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Agentic Energy, Carbon Accounting & Compliance Operating System for Export Factories",
+  "workspaces": [
+    "apps/*",
+    "circuits",
+    "mcp/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "test:circuits": "npm run test --workspace=circuits"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  }
+}
