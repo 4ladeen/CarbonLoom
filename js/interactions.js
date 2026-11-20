@@ -86,10 +86,136 @@
     }
   }
 
+  // 4. Matrix Numeric Countdown & Odometer Ticker
+  function parseMetric(text) {
+    text = (text || '').trim();
+    // Handles formatted strings like "$348,000", "<142 ms", "1.412", "0.00%", "+0.420 kg ×", "2.4M", "€35,840"
+    const match = text.match(/^([^0-9.-]*)([0-9,.]+)(.*)$/);
+    if (!match) return null;
+    const prefix = match[1];
+    const numStr = match[2];
+    const suffix = match[3];
+    const hasCommas = numStr.includes(',');
+    const cleanNum = parseFloat(numStr.replace(/,/g, ''));
+    if (isNaN(cleanNum)) return null;
+    const dotIndex = numStr.indexOf('.');
+    const decimals = dotIndex !== -1 ? numStr.length - dotIndex - 1 : 0;
+    return { prefix, target: cleanNum, suffix, hasCommas, decimals };
+  }
+
+  function formatValue(val, config) {
+    const { prefix = '', suffix = '', decimals = 0, hasCommas = false } = config;
+    let str = Math.abs(val).toFixed(decimals);
+    if (hasCommas) {
+      const parts = str.split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      str = parts.join('.');
+    }
+    const sign = val < 0 && !prefix.includes('-') ? '-' : '';
+    return prefix + sign + str + suffix;
+  }
+
+  // Decelerating quintic/exponential easing for precision instrument feel
+  function easeOutExpo(t) {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  window.animateMetricValue = function (el, startVal, endVal, duration = 1200, customConfig = null) {
+    if (!el) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const parsed = customConfig || parseMetric(el.textContent);
+    if (!parsed) return;
+
+    if (reduced) {
+      el.textContent = formatValue(endVal, parsed);
+      return;
+    }
+
+    if (el._rafCountdownId) {
+      cancelAnimationFrame(el._rafCountdownId);
+    }
+
+    const start = (startVal !== null && startVal !== undefined && !isNaN(startVal)) ? startVal : 0;
+    const startTime = performance.now();
+    el.classList.add('matrix-ticking');
+
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutExpo(progress);
+      const current = start + (endVal - start) * eased;
+
+      el.textContent = formatValue(current, parsed);
+
+      if (progress < 1) {
+        el._rafCountdownId = requestAnimationFrame(step);
+      } else {
+        el.textContent = formatValue(endVal, parsed);
+        el.classList.remove('matrix-ticking');
+        el._rafCountdownId = null;
+      }
+    }
+
+    el._rafCountdownId = requestAnimationFrame(step);
+  };
+
+  function initCountdownMatrices() {
+    const matrixSelectors = [
+      '.hero-metrics .metric-value',
+      '.telemetry-reading',
+      '.kpi-figure',
+      '.comp-stat-number',
+      '.wf-val',
+      '.impact-figure',
+      '[data-countdown]'
+    ];
+
+    const elements = document.querySelectorAll(matrixSelectors.join(', '));
+    if (!elements.length) return;
+
+    elements.forEach(el => {
+      el.style.fontVariantNumeric = 'tabular-nums';
+    });
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        obs.unobserve(el);
+
+        const currentText = el.textContent.trim();
+        const parsed = parseMetric(currentText);
+        if (!parsed) return;
+
+        // Context-aware starting points for countdown vs countup effect
+        let startFrom = 0;
+        let duration = 1350;
+
+        if (parsed.target === 0 && parsed.decimals > 0) {
+          // e.g. "0.00%" tolerance countdown from 8.50% down to 0.00%
+          startFrom = 8.5;
+        } else if (parsed.suffix.includes('ms')) {
+          // e.g. "142 ms" or "<142 ms" latency countdown from 680 ms down to 142 ms
+          startFrom = 680;
+        } else if (el.hasAttribute('data-start-val')) {
+          startFrom = parseFloat(el.getAttribute('data-start-val'));
+        }
+
+        const delay = Math.random() * 120;
+        setTimeout(() => {
+          window.animateMetricValue(el, startFrom, parsed.target, duration, parsed);
+        }, delay);
+      });
+    }, { threshold: 0.15 });
+
+    elements.forEach(el => observer.observe(el));
+  }
+
   // Run on DOM ready
   function initAll() {
     initSpotlightCards();
     initLiquidMetalButtons();
+    initCountdownMatrices();
   }
 
   if (document.readyState === 'loading') {

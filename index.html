@@ -1003,7 +1003,7 @@
   <script src="js/halftone-footer.js"></script>
   <script src="js/interactions.js"></script>
   <script>
-    // 1. Hero HUD Garment Style Switcher
+    // 1. Hero HUD Garment Style Switcher with Animated Countdown/Countup
     function setGarmentStyle(style) {
       const btnCrewneck = document.getElementById('btn-crewneck');
       const btnHoodie = document.getElementById('btn-hoodie');
@@ -1014,26 +1014,44 @@
       const boiler = document.getElementById('hud-boiler');
       const power = document.getElementById('hud-power');
 
+      const prevCarbon = parseFloat(carbon.textContent) || (style === 'hoodie' ? 1.412 : 6.084);
+      const prevBoiler = parseFloat(boiler.textContent) || (style === 'hoodie' ? 8.4 : 9.1);
+      const prevPower = parseFloat(power.textContent) || (style === 'hoodie' ? 142.0 : 184.5);
+
       if (style === 'hoodie') {
         btnHoodie.classList.add('active');
         btnCrewneck.classList.remove('active');
-        carbon.textContent = '6.084';
         status.className = 'tag tag-accent';
         status.textContent = 'PASS (≤ 6.50 kg)';
         lineage.textContent = 'Lineage: LIN-881023B';
         zk.textContent = 'Groth16 BN254 · Valid';
-        boiler.textContent = '9.1 bar';
-        power.textContent = '184.5 kW';
+
+        if (window.animateMetricValue) {
+          window.animateMetricValue(carbon, prevCarbon, 6.084, 800, { decimals: 3 });
+          window.animateMetricValue(boiler, prevBoiler, 9.1, 700, { decimals: 1, suffix: ' bar' });
+          window.animateMetricValue(power, prevPower, 184.5, 800, { decimals: 1, suffix: ' kW' });
+        } else {
+          carbon.textContent = '6.084';
+          boiler.textContent = '9.1 bar';
+          power.textContent = '184.5 kW';
+        }
       } else {
         btnCrewneck.classList.add('active');
         btnHoodie.classList.remove('active');
-        carbon.textContent = '1.412';
         status.className = 'tag tag-accent';
         status.textContent = 'PASS (≤ 2.50 kg)';
         lineage.textContent = 'Lineage: LIN-992014F';
         zk.textContent = 'Groth16 BN254 · Valid';
-        boiler.textContent = '8.4 bar';
-        power.textContent = '142.0 kW';
+
+        if (window.animateMetricValue) {
+          window.animateMetricValue(carbon, prevCarbon, 1.412, 800, { decimals: 3 });
+          window.animateMetricValue(boiler, prevBoiler, 8.4, 700, { decimals: 1, suffix: ' bar' });
+          window.animateMetricValue(power, prevPower, 142.0, 800, { decimals: 1, suffix: ' kW' });
+        } else {
+          carbon.textContent = '1.412';
+          boiler.textContent = '8.4 bar';
+          power.textContent = '142.0 kW';
+        }
       }
 
       if (window.flashTelemetryCell) {
@@ -1043,7 +1061,7 @@
       }
     }
 
-    // 2. Comparative Macro Cliff Garment Selector
+    // 2. Comparative Macro Cliff Garment Selector with Smooth Numeric Rolling
     function setComparisonGarment(type) {
       const btnC = document.getElementById('comp-btn-crewneck');
       const btnH = document.getElementById('comp-btn-hoodie');
@@ -1067,13 +1085,19 @@
       const maxScale = document.getElementById('comp-max-scale');
       const maxScaleB = document.getElementById('comp-max-scale-b');
 
+      const prevTrad = parseFloat(tradVal.textContent) || 3.82;
+      const prevCl = parseFloat(clVal.textContent) || 1.412;
+
+      let nextTrad = 3.82;
+      let nextCl = 1.412;
+
       if (type === 'hoodie') {
         btnH.classList.add('active');
-        tradVal.textContent = '7.95';
+        nextTrad = 7.95;
         tradFill.style.width = '93.5%';
         tradWarning.textContent = '+22.3% above EU regulatory threshold';
         tradStatus.textContent = '€62.40/ton tariff liability';
-        clVal.textContent = '6.084';
+        nextCl = 6.084;
         clFill.style.width = '71.5%';
         clStatus.textContent = '-6.4% under EU regulatory ceiling';
         benchText.textContent = 'EU Benchmark: ≤ 6.50 kg';
@@ -1084,11 +1108,11 @@
         maxScaleB.textContent = '8.50 kg';
       } else if (type === 'chino') {
         btnCh.classList.add('active');
-        tradVal.textContent = '4.80';
+        nextTrad = 4.80;
         tradFill.style.width = '96.0%';
         tradWarning.textContent = '+37.1% above EU regulatory threshold';
         tradStatus.textContent = '€48.50/ton tariff liability';
-        clVal.textContent = '3.210';
+        nextCl = 3.210;
         clFill.style.width = '64.2%';
         clStatus.textContent = '-8.3% under EU regulatory ceiling';
         benchText.textContent = 'EU Benchmark: ≤ 3.50 kg';
@@ -1099,11 +1123,11 @@
         maxScaleB.textContent = '5.00 kg';
       } else {
         btnC.classList.add('active');
-        tradVal.textContent = '3.82';
+        nextTrad = 3.82;
         tradFill.style.width = '95.5%';
         tradWarning.textContent = '+52.8% above EU regulatory threshold';
         tradStatus.textContent = '€84.20/ton tariff liability';
-        clVal.textContent = '1.412';
+        nextCl = 1.412;
         clFill.style.width = '35.3%';
         clStatus.textContent = '-43.5% under EU regulatory ceiling';
         benchText.textContent = 'EU Benchmark: ≤ 2.50 kg';
@@ -1114,13 +1138,21 @@
         maxScaleB.textContent = '4.00 kg';
       }
 
+      if (window.animateMetricValue) {
+        window.animateMetricValue(tradVal, prevTrad, nextTrad, 800, { decimals: 2 });
+        window.animateMetricValue(clVal, prevCl, nextCl, 800, { decimals: 3 });
+      } else {
+        tradVal.textContent = nextTrad.toFixed(2);
+        clVal.textContent = nextCl.toFixed(3);
+      }
+
       if (window.flashTelemetryCell) {
         window.flashTelemetryCell('comp-trad-val');
         window.flashTelemetryCell('comp-cl-val');
       }
     }
 
-    // 3. TreeSHAP Thermodynamic Waste Interactive Repair Simulation
+    // 3. TreeSHAP Thermodynamic Waste Interactive Repair Simulation (Countdown to Repaired)
     let isTrapFixed = false;
     function toggleTrapFix() {
       isTrapFixed = !isTrapFixed;
@@ -1138,8 +1170,13 @@
         label.textContent = '3. Boiler 01 Trap (Repaired)';
         bar.style.width = '0%';
         val.style.color = 'var(--color-accent)';
-        val.textContent = '0.000 kg ✓';
-        net.textContent = '1.412 kgCO2e / pc';
+        if (window.animateMetricValue) {
+          window.animateMetricValue(val, 0.420, 0.000, 700, { decimals: 3, prefix: '', suffix: ' kg ✓' });
+          window.animateMetricValue(net, 1.832, 1.412, 800, { decimals: 3, suffix: ' kgCO2e / pc' });
+        } else {
+          val.textContent = '0.000 kg ✓';
+          net.textContent = '1.412 kgCO2e / pc';
+        }
         btn.innerHTML = '<span>✓ Steam Trap Orifice Repaired (Click to Revert)</span>';
         tag.className = 'tag tag-accent';
         tag.textContent = 'Maintenance Complete';
@@ -1150,8 +1187,13 @@
         label.textContent = '3. Boiler 01 Trap Blow-by';
         bar.style.width = '78%';
         val.style.color = 'var(--color-danger)';
-        val.textContent = '+0.420 kg ×';
-        net.textContent = '1.832 kgCO2e / pc';
+        if (window.animateMetricValue) {
+          window.animateMetricValue(val, 0.000, 0.420, 700, { decimals: 3, prefix: '+', suffix: ' kg ×' });
+          window.animateMetricValue(net, 1.412, 1.832, 800, { decimals: 3, suffix: ' kgCO2e / pc' });
+        } else {
+          val.textContent = '+0.420 kg ×';
+          net.textContent = '1.832 kgCO2e / pc';
+        }
         btn.innerHTML = '<span>⚡ Simulate Steam Trap Repair</span>';
         tag.className = 'tag tag-danger';
         tag.textContent = 'Critical Anomaly Detected';

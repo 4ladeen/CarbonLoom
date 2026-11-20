@@ -1084,9 +1084,15 @@ footer {
   font-size: 32px;
   font-weight: 700;
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   color: var(--color-text-primary);
   line-height: 1.1;
   margin-bottom: var(--space-2);
+}
+
+.matrix-ticking {
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
+  transition: text-shadow var(--duration-quick) var(--ease-standard);
 }
 
 .impact-caption {
