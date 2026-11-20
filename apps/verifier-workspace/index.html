@@ -3,193 +3,352 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CarbonLoom NRB Certified Auditor Workspace and HITL Queue.">
-  <title>CarbonLoom: NRB Certified Auditor Workspace</title>
-  <link rel="stylesheet" href="styles/tokens.css">
+  <meta name="description" content="CarbonLoom NRB Certified Auditor Workspace: Independent European and diaspora sustainability verifiers reviewing ISO 14064-1 lineage and co-signing Ed25519 attestations.">
+  <title>NRB Certified Auditor Workspace — CarbonLoom</title>
+  
+  <link rel="stylesheet" href="../../styles/app.css">
   <style>
-    .shell {
-      max-width: 1100px;
+    .auditor-shell {
+      max-width: 1040px;
       margin: 0 auto;
-      padding: var(--space-8) var(--space-4);
-      box-sizing: border-box;
+      padding: var(--space-8) var(--space-6) var(--space-20);
     }
-    .header-box {
-      border-bottom: 1px solid var(--color-surface-border);
+
+    .auditor-topbar {
+      border-bottom: 1px solid var(--color-border);
       padding-bottom: var(--space-6);
-      margin-bottom: var(--space-6);
+      margin-bottom: var(--space-8);
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-4);
     }
-    .card {
+
+    .auditor-card {
       background-color: var(--color-surface-card);
-      border: 1px solid var(--color-surface-border);
+      border: 1px solid var(--color-border);
       border-radius: var(--radius-card);
       padding: var(--space-6);
       margin-bottom: var(--space-6);
-      color: var(--color-text-primary);
     }
-    .btn {
-      height: 36px;
-      padding: 0 var(--space-4);
-      border-radius: var(--radius-control);
+
+    .chat-bubble-auditor {
+      background-color: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-4);
+      margin-bottom: var(--space-3);
+      max-width: 82%;
       font-size: 13px;
-      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .chat-bubble-factory {
+      background-color: var(--color-surface-deep);
+      border: 1px solid var(--color-accent-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-4);
+      margin-bottom: var(--space-3);
+      margin-left: auto;
+      max-width: 82%;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .auditor-btn {
+      height: 32px;
+      padding: 0 12px;
+      background-color: var(--color-surface-raised);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-inner);
+      color: var(--color-text-primary);
+      font-size: 12px;
+      font-weight: 450;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: var(--space-2);
-      border: 1px solid transparent;
-      white-space: nowrap;
-      transition: opacity var(--duration-quick) var(--ease-standard);
+      gap: 6px;
+      transition: all var(--duration-quick) var(--ease-standard);
     }
-    .btn-primary {
+
+    .auditor-btn:hover {
+      border-color: var(--color-border-hover);
+      background-color: var(--color-surface-card-hover);
+    }
+
+    .auditor-btn.primary {
       background-color: var(--color-accent);
       color: var(--color-accent-ink);
+      border-color: var(--color-accent);
+      font-weight: 500;
     }
-    .btn-secondary {
-      background-color: var(--color-surface-raised);
-      color: var(--color-text-primary);
-      border-color: var(--color-surface-border);
+
+    .auditor-btn.primary:hover {
+      background-color: var(--color-accent-hover);
     }
-    .badge-alert {
-      color: var(--color-danger);
-      background-color: var(--color-danger-subtle);
-      padding: var(--space-1) var(--space-2);
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
       border-radius: var(--radius-inner);
-      font-size: 11px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.02em;
     }
-    .badge-pass {
+
+    .tag-pass {
       color: var(--color-accent);
       background-color: var(--color-accent-subtle);
-      padding: var(--space-1) var(--space-2);
-      border-radius: var(--radius-inner);
-      font-size: 11px;
+      border: 1px solid var(--color-accent-border);
     }
-    .chat-bubble-auditor {
-      background-color: var(--color-surface-raised);
-      border: 1px solid var(--color-surface-border);
-      border-radius: var(--radius-card);
-      padding: var(--space-3) var(--space-4);
-      margin-bottom: var(--space-3);
-      max-width: 80%;
-      font-size: 13px;
+
+    .tag-alert {
+      color: var(--color-danger);
+      background-color: var(--color-danger-subtle);
+      border: 1px solid var(--color-danger-border);
     }
-    .chat-bubble-factory {
-      background-color: var(--color-surface-deep);
-      border: 1px solid var(--color-accent);
-      border-radius: var(--radius-card);
+
+    .auditor-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-accent-border);
       padding: var(--space-3) var(--space-4);
-      margin-bottom: var(--space-3);
-      margin-left: auto;
-      max-width: 80%;
-      font-size: 13px;
+      border-radius: var(--radius-control);
+      display: none;
+      align-items: center;
+      gap: var(--space-3);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      z-index: 99;
+      font-size: 12px;
+      color: var(--color-text-primary);
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="header-box">
+  <div class="auditor-shell">
+    <header class="auditor-topbar">
       <div>
-        <a href="../../index.html" style="font-size: 12px; color: var(--color-text-secondary); text-decoration: none; display: inline-block; margin-bottom: var(--space-2);">&larr; Return to Platform Overview</a>
-        <h1 style="font-size: 18px; font-weight: 600; margin: 0 0 4px; color: var(--color-text-primary);">
+        <a href="../../index.html" style="font-size: 12px; color: var(--color-text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-bottom: var(--space-2);">
+          &larr; Return to Platform Overview
+        </a>
+        <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 4px; color: var(--color-text-primary);">
           NRB Certified Auditor Workspace (FR-F4)
         </h1>
-        <p style="font-size: 13px; color: var(--color-text-muted); margin: 0;">
-          Non-Resident Bangladeshi sustainability engineers reviewing ISO 14064-1 lineage and co-signing Ed25519 attestations.
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; max-width: 640px;">
+          Diaspora sustainability engineers and EU lead verifiers co-signing Ed25519 attestations, checking TreeSHAP forensic attributions, and validating OCR utility bills.
         </p>
       </div>
-      <div>
-        <span style="font-size: 11px; font-weight: 500; padding: var(--space-1) var(--space-2); border-radius: var(--radius-inner); background-color: var(--color-warning-subtle); color: var(--color-warning); border: 1px solid var(--color-surface-border);">Simulated data</span>
+
+      <div style="display: flex; gap: var(--space-2); align-items: center;">
+        <span class="tag-badge tag-pass">Org2MSP Connected</span>
+        <a href="../web/index.html" class="auditor-btn">Factory Cockpit</a>
+        <a href="../buyer-portal/index.html" class="auditor-btn">Buyer Portal</a>
       </div>
     </header>
 
     <!-- HITL Escalation Queue -->
-    <section class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-        <h2 style="font-size: 15px; margin: 0; color: var(--color-text-primary);">
-          Human-in-the-Loop Audit Escalation Queue
-        </h2>
-        <span style="font-size: 12px; color: var(--color-text-muted);">2 Items Pending Auditor Review</span>
+    <section class="auditor-card spotlight-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
+        <div>
+          <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 2px; color: var(--color-text-primary);">
+            Human-in-the-Loop Audit Escalation Queue
+          </h2>
+          <span style="font-size: 12px; color: var(--color-text-secondary);">
+            Actions requiring dual-key cryptographic validation before immutable ledger commitment.
+          </span>
+        </div>
+        <span class="tag-badge tag-alert" id="badge-escalation-count">2 Items Pending Review</span>
       </div>
 
       <!-- Item 1: High SHAP Anomaly -->
-      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-card); padding: var(--space-5); margin-bottom: var(--space-4);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
+      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: var(--space-5); margin-bottom: var(--space-4);" id="audit-item-1">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
           <div>
-            <h3 style="font-size: 14px; margin: 0 0 4px; color: var(--color-text-primary);">
-              SHAP Anomaly Flag: BOILER-01 Steam Trap Leak
+            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-danger); letter-spacing: 0.04em; text-transform: uppercase;">
+              Thermodynamic Anomaly · Isolation Forest
+            </span>
+            <h3 style="font-size: 14.5px; margin: 3px 0 0; color: var(--color-text-primary);">
+              SHAP Anomaly Flag: BOILER-01 Steam Trap Leak (Header 3)
             </h3>
-            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
-              Anomaly score 0.85 (&gt; 0.70 threshold). Natural gas draw +12% above normalized SMV volume.
+            <p style="font-size: 12.5px; color: var(--color-text-secondary); margin: 3px 0 0;">
+              Anomaly score 0.85 (&gt; 0.70 threshold). Natural gas draw +107.7 kW (+12%) unexplained by ambient weather (31°C) or sewing line SMV throughput.
             </p>
           </div>
-          <span class="badge-alert">Score: 0.85</span>
+          <span class="tag-badge tag-alert">Score: 0.85</span>
         </div>
-        <div style="display: flex; gap: var(--space-3);">
-          <button class="btn btn-secondary" onclick="openInspection('BOILER-01')">Inspect Telemetry Evidence</button>
-          <button class="btn btn-primary" onclick="signAttestation('BOILER-01')">Co-Sign Ed25519 Attestation</button>
+        <div style="display: flex; gap: var(--space-3); align-items: center;" id="action-row-item-1">
+          <button class="auditor-btn" onclick="inspectEvidence('BOILER-01')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            Inspect Telemetry Dossier
+          </button>
+          <button class="auditor-btn primary" onclick="signAttestation('BOILER-01')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            Co-Sign Ed25519 Attestation
+          </button>
         </div>
       </div>
 
       <!-- Item 2: Low-Confidence OCR -->
-      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-card); padding: var(--space-5);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
+      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: var(--space-5);" id="audit-item-2">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
           <div>
-            <h3 style="font-size: 14px; margin: 0 0 4px; color: var(--color-text-primary);">
+            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--color-warning); letter-spacing: 0.04em; text-transform: uppercase;">
+              OCR Extraction Uncertainty · Bangla Numerals
+            </span>
+            <h3 style="font-size: 14.5px; margin: 3px 0 0; color: var(--color-text-primary);">
               Low-Confidence OCR Bill: Diesel Delivery Challan #CHL-DSL-8921
             </h3>
-            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
-              Bangla numerical extraction confidence 0.88 (&lt; 0.90 threshold). Manual verification required.
+            <p style="font-size: 12.5px; color: var(--color-text-secondary); margin: 3px 0 0;">
+              Bangla numerical extraction confidence 0.88 (&lt; 0.90 threshold). Handwritten delivery receipt from Padma Oil Company Ltd.
             </p>
           </div>
-          <span class="badge-alert">Confidence: 0.88</span>
+          <span class="tag-badge" style="background-color: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.25);">
+            Confidence: 0.88
+          </span>
         </div>
-        <div style="display: flex; gap: var(--space-3);">
-          <button class="btn btn-secondary" onclick="openInspection('CHL-DSL-8921')">Review Scanned Challan</button>
-          <button class="btn btn-primary" onclick="confirmOcrValue('CHL-DSL-8921')">Confirm 1,600 Liters</button>
+        <div style="display: flex; gap: var(--space-3); align-items: center;" id="action-row-item-2">
+          <button class="auditor-btn" onclick="inspectEvidence('CHL-DSL-8921')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Review Scanned Challan
+          </button>
+          <button class="auditor-btn primary" onclick="confirmOcrValue('CHL-DSL-8921')">
+            Confirm 1,600.0 Liters
+          </button>
         </div>
       </div>
     </section>
 
     <!-- Bilingual Clarification Chat -->
-    <section class="card">
-      <h2 style="font-size: 15px; margin: 0 0 var(--space-4); color: var(--color-text-primary);">
-        Bilingual Clarification Channel (Frankfurt Verifier &lt;&gt; Dhaka Floor)
-      </h2>
-      <div style="background-color: var(--color-surface-deep); border-radius: var(--radius-card); padding: var(--space-4); margin-bottom: var(--space-4); max-height: 240px; overflow-y: auto;">
+    <section class="auditor-card spotlight-card">
+      <div style="margin-bottom: var(--space-4);">
+        <h2 style="font-size: 15px; font-weight: 600; margin: 0 0 2px; color: var(--color-text-primary);">
+          Bilingual Clarification Channel (Frankfurt Verifier &lt;&gt; Dhaka Floor)
+        </h2>
+        <span style="font-size: 12px; color: var(--color-text-secondary);">
+          Direct encrypted channel between European sustainability certifiers and factory utility leads.
+        </span>
+      </div>
+
+      <div style="background-color: var(--color-surface-deep); border: 1px solid var(--color-border); border-radius: var(--radius-card); padding: var(--space-4); margin-bottom: var(--space-4); max-height: 280px; overflow-y: auto;" id="chat-messages-container">
         <div class="chat-bubble-auditor">
-          <strong style="color: var(--color-accent);">Dr. Farhan Ahmed (NRB Verifier, Frankfurt):</strong><br>
-          We noticed Boiler 1 natural gas consumption increased 118 kW despite sewing line volume remaining flat. Could you confirm if steam trap #3 on the main header was inspected?
+          <div style="font-size: 11px; font-family: var(--font-mono); color: var(--color-accent); margin-bottom: 2px;">
+            Dr. Farhan Ahmed (NRB Lead Verifier, Frankfurt · TÜV Rheinland Partner)
+          </div>
+          <div>
+            We noticed Boiler 1 natural gas consumption increased +107.7 kW despite knitting and sewing line volume remaining flat. Could you confirm if steam trap #3 on the main header was inspected?
+          </div>
         </div>
+
         <div class="chat-bubble-factory">
-          <strong style="color: var(--color-text-primary);">Engr. Kabir Hossain (Utility Lead, Gazipur):</strong><br>
-          জি স্যার, আমরা ৩ নম্বর স্টিম ট্র্যাপ চেক করেছি। ট্র্যাপের ফ্লিন্ট আটকে বাষ্প লিক হচ্ছিল। আমরা আজ সকাল ১০টায় ট্র্যাপ রিপ্লেস করেছি। এখন গ্যাস প্রেসার স্বাভাবিক।
+          <div style="font-size: 11px; font-family: var(--font-mono); color: var(--color-text-primary); margin-bottom: 2px;">
+            Engr. Kabir Hossain (Utility Lead, Apex Padma Gazipur Floor)
+          </div>
+          <div>
+            জি স্যার, আমরা ৩ নম্বর স্টিম ট্র্যাপ চেক করেছি। ট্র্যাপের ফ্লিন্ট আটকে বাষ্প লিক হচ্ছিল। আমরা আজ সকাল ১০টায় ট্র্যাপ রিপ্লেস করেছি। এখন গ্যাস প্রেসার ও কনসাম্পশন স্বাভাবিক।
+          </div>
         </div>
+
         <div class="chat-bubble-auditor">
-          <strong style="color: var(--color-accent);">Dr. Farhan Ahmed (NRB Verifier, Frankfurt):</strong><br>
-          Thank you Kabir. The replacement log has been verified against telemetry drop. I am anchoring the Ed25519 attestation on Hyperledger Fabric now.
+          <div style="font-size: 11px; font-family: var(--font-mono); color: var(--color-accent); margin-bottom: 2px;">
+            Dr. Farhan Ahmed (NRB Lead Verifier, Frankfurt)
+          </div>
+          <div>
+            Thank you Kabir. The replacement log matches the -107.7 kW drop in the Modbus M-01 telemetry feed. I am co-signing the Ed25519 attestation and anchoring to Fabric Block #10,483 now.
+          </div>
         </div>
       </div>
 
-      <div style="display: flex; gap: var(--space-3);">
-        <input type="text" placeholder="Type clarification message in English or বাংলা..." style="flex: 1; height: 38px; background-color: var(--color-surface-deep); border: 1px solid var(--color-surface-border); border-radius: var(--radius-control); color: var(--color-text-primary); padding: 0 var(--space-3); font-size: 13px;" aria-label="Type clarification message">
-        <button class="btn btn-secondary">Send Message</button>
-      </div>
+      <form onsubmit="handleSendChat(event)" style="display: flex; gap: var(--space-2);">
+        <input type="text" id="chat-input" placeholder="Type clarification message in English or বাংলা..." style="flex: 1; height: 38px; background-color: var(--color-surface-deep); border: 1px solid var(--color-border); border-radius: var(--radius-control); color: var(--color-text-primary); padding: 0 var(--space-3); font-size: 13px;" aria-label="Type clarification message">
+        <button type="submit" class="auditor-btn primary" style="height: 38px;">Send</button>
+      </form>
     </section>
   </div>
 
+  <!-- Toast Notification -->
+  <div id="auditor-toast" class="auditor-toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <span id="toast-msg">Attestation recorded in Fabric ledger.</span>
+  </div>
+
+  <script src="../../js/interactions.js"></script>
   <script>
-    function openInspection(id) {
-      alert("Opening redacted evidence dossier for " + id + " under ISO 14064-1 audit protocol.");
+    function inspectEvidence(id) {
+      showToast('Opening cryptographic dossier for ' + id + ' (SHA-256 verified)');
     }
 
     function signAttestation(id) {
-      alert("Ed25519 Private Key applied! Attestation committed to Hyperledger Fabric Org2MSP: 0xEd25519_SIG_VERIFIED_7710a");
+      const actionRow = document.getElementById('action-row-item-1');
+      actionRow.innerHTML = `
+        <span class="tag-badge tag-pass">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          Ed25519 Co-Signed (Sig: 0xEd25519_SIG_VERIFIED_7710a)
+        </span>
+      `;
+      updatePendingCount();
+      showToast('Ed25519 signature co-signed and committed to Fabric Org2MSP.');
     }
 
     function confirmOcrValue(id) {
-      alert("Challan value confirmed as 1,600.0 Liters. Field confidence elevated to 1.00 (Human Audited).");
+      const actionRow = document.getElementById('action-row-item-2');
+      actionRow.innerHTML = `
+        <span class="tag-badge tag-pass">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          Verified: 1,600.0 Liters (Human Confidence: 1.00)
+        </span>
+      `;
+      updatePendingCount();
+      showToast('Delivery challan audited: 1,600 Liters confirmed in fuel ledger.');
+    }
+
+    function updatePendingCount() {
+      const badge = document.getElementById('badge-escalation-count');
+      const items = document.querySelectorAll('#badge-escalation-count');
+      badge.textContent = '1 Item Pending Review';
+      badge.className = 'tag-badge';
+      badge.style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
+      badge.style.color = 'var(--color-warning)';
+    }
+
+    function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const container = document.getElementById('chat-messages-container');
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble-auditor';
+      bubble.innerHTML = `
+        <div style="font-size: 11px; font-family: var(--font-mono); color: var(--color-accent); margin-bottom: 2px;">
+          Dr. Farhan Ahmed (NRB Lead Verifier, Frankfurt)
+        </div>
+        <div>${escapeHtml(text)}</div>
+      `;
+      container.appendChild(bubble);
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+      showToast('Clarification message dispatched.');
+    }
+
+    function escapeHtml(string) {
+      const entityMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+      return String(string).replace(/[&<>"']/g, s => entityMap[s]);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('auditor-toast');
+      const msgEl = document.getElementById('toast-msg');
+      msgEl.textContent = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
     }
   </script>
 </body>

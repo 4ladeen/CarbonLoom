@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonLoom Architecture Briefing Video: Synchronized 172-second walkthrough of autonomous carbon accounting and zero-knowledge compliance verification.">
+  <title>Architecture Briefing — CarbonLoom</title>
+  
+  <link rel="stylesheet" href="styles/app.css">
+  <style>
+    .video-viewport {
+      background-color: var(--color-surface-deep);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-panel);
+      overflow: hidden;
+      margin-bottom: var(--space-6);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    .video-player-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #06070a;
+    }
+
+    .video-element {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .video-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-4) var(--space-6);
+      background-color: var(--color-surface-card);
+      border-top: 1px solid var(--color-border);
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .scenes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-12);
+    }
+
+    .scene-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: all var(--duration-quick) var(--ease-standard);
+    }
+
+    .scene-card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .scene-thumb-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: var(--color-surface-deep);
+      position: relative;
+    }
+
+    .scene-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .scene-timestamp-badge {
+      position: absolute;
+      bottom: var(--space-2);
+      right: var(--space-2);
+      background-color: rgba(7, 8, 10, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border);
+    }
+
+    .scene-content {
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .scene-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin: 0;
+    }
+
+    .scene-desc {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    @media (max-width: 992px) {
+      .scenes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand-group" aria-label="CarbonLoom Home">
+        <div class="brand-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 8h16M4 16h16M8 4v16M16 4v16"/>
+          </svg>
+        </div>
+        <span class="brand-title">CarbonLoom</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Overview</a></li>
+          <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+          <li><a href="playground.html" class="nav-link">Playground</a></li>
+          <li><a href="briefing.html" class="nav-link active">Briefing</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="apps/web/index.html" class="btn btn-primary">
+          <span>Factory Cockpit</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="apps/buyer-portal/index.html" class="btn btn-quiet">EU Buyer Portal</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="section" style="padding-top: var(--space-20); padding-bottom: var(--space-12);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">180-Second Video Demonstration</span>
+        <h1 class="section-title" style="font-size: 40px; line-height: 1.15;">
+          Architecture &amp; Proof Briefing
+        </h1>
+        <p class="section-sub">
+          A synchronized 172-second end-to-end demonstration covering the macroeconomic export threat, utility billing OCR, thermodynamic waste discovery, bilingual GraphRAG, and zero-knowledge tamper resistance.
+        </p>
+      </div>
+
+      <!-- Main Cinema Viewport -->
+      <div class="video-viewport spotlight-card reveal reveal-delay-1">
+        <div class="video-player-stage">
+          <video class="video-element" controls playsinline poster="video/frames/scene_01.png">
+            <source src="video/carbonloom_demo_180s.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-meta-bar">
+          <div style="display: flex; gap: var(--space-3); align-items: center;">
+            <span class="tag tag-accent">172.06 Seconds</span>
+            <span>1080p H.264 &middot; AAC Audio &middot; 7.68 MB</span>
+          </div>
+          <div style="display: flex; gap: var(--space-2);">
+            <a href="video/index.html" class="btn btn-secondary" style="height: 32px; font-size: 12px;">Interactive Scene Player</a>
+            <a href="video/carbonloom_demo_180s.mp4" download class="btn btn-quiet" style="height: 32px; font-size: 12px;">Download MP4</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Synchronized Scene Breakdown -->
+      <div class="section-header" style="margin-top: var(--space-16); margin-bottom: var(--space-6);">
+        <h2 style="font-size: 24px; font-weight: 700; margin: 0 0 var(--space-2);">
+          Synchronized Scene Breakdown
+        </h2>
+        <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0;">
+          The five core chapters of the CarbonLoom production briefing:
+        </p>
+      </div>
+
+      <div class="scenes-grid">
+        <!-- Scene 1 -->
+        <div class="scene-card spotlight-card">
+          <div class="scene-thumb-wrap">
+            <img src="video/frames/scene_01.png" alt="Scene 1 Thumbnail" class="scene-thumb-img">
+            <span class="scene-timestamp-badge">00:00 &ndash; 00:34</span>
+          </div>
+          <div class="scene-content">
+            <h3 class="scene-title">1. The Macroeconomic Export Threat</h3>
+            <p class="scene-desc">
+              Bangladesh EPB export dip analysis and EU CBAM/ESPR compliance requirements facing Gazipur textile clusters.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scene 2 -->
+        <div class="scene-card spotlight-card">
+          <div class="scene-thumb-wrap">
+            <img src="video/frames/scene_02.png" alt="Scene 2 Thumbnail" class="scene-thumb-img">
+            <span class="scene-timestamp-badge">00:34 &ndash; 01:08</span>
+          </div>
+          <div class="scene-content">
+            <h3 class="scene-title">2. Utility Billing Multi-Modal Ingestion</h3>
+            <p class="scene-desc">
+              Extracting Bengali utility invoices (DESCO electricity, Titas Gas) with character-level confidence and Go gateway defense.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="scene-card spotlight-card">
+          <div class="scene-thumb-wrap">
+            <img src="video/frames/scene_03.png" alt="Scene 3 Thumbnail" class="scene-thumb-img">
+            <span class="scene-timestamp-badge">01:08 &ndash; 01:42</span>
+          </div>
+          <div class="scene-content">
+            <h3 class="scene-title">3. Forensic TreeSHAP Waste Discovery</h3>
+            <p class="scene-desc">
+              Isolating Boiler 1 steam trap orifice blow-by and un-tuned compressor cycling from line speed using Isolation Forests.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scene 4 -->
+        <div class="scene-card spotlight-card">
+          <div class="scene-thumb-wrap">
+            <img src="video/frames/scene_04.png" alt="Scene 4 Thumbnail" class="scene-thumb-img">
+            <span class="scene-timestamp-badge">01:42 &ndash; 02:16</span>
+          </div>
+          <div class="scene-content">
+            <h3 class="scene-title">4. Grounded Bilingual GraphRAG</h3>
+            <p class="scene-desc">
+              Natural language regulatory queries in Bengali and English grounded to EU CBAM Regulation 2023/956 with CRAG refusal.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scene 5 -->
+        <div class="scene-card spotlight-card">
+          <div class="scene-thumb-wrap">
+            <img src="video/frames/scene_05.png" alt="Scene 5 Thumbnail" class="scene-thumb-img">
+            <span class="scene-timestamp-badge">02:16 &ndash; 02:52</span>
+          </div>
+          <div class="scene-content">
+            <h3 class="scene-title">5. Zero-Knowledge Proofs &amp; Tamper Defense</h3>
+            <p class="scene-desc">
+              Circom 2 Groth16 zk-SNARK verification in 142 ms and Hyperledger Fabric cryptographic rejection of mutated data.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Elevated Enterprise Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-top-strip">
+        <div class="footer-pilot-chip">
+          <span class="status-dot" style="color: var(--color-accent);"></span>
+          <span>Pilot Site: DBL Composite Knit &middot; Gazipur, Bangladesh</span>
+        </div>
+        <div style="display: flex; gap: var(--space-2);">
+          <a href="apps/web/index.html" class="btn btn-secondary" style="height: 32px; font-size: 12px;">Launch Factory Cockpit</a>
+          <a href="apps/buyer-portal/index.html" class="btn btn-primary" style="height: 32px; font-size: 12px;">Open EU Buyer Portal</a>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-group" style="margin-bottom: var(--space-4);">
+            <div class="brand-mark">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 8h16M4 16h16M8 4v16M16 4v16"/>
+              </svg>
+            </div>
+            <span class="brand-title">CarbonLoom</span>
+          </a>
+          <p style="font-size: 13px; line-height: 1.6; color: var(--color-text-secondary); max-width: 320px; margin: 0 0 var(--space-4);">
+            Enterprise decarbonization and regulatory compliance operating system for Bangladesh RMG and emerging market export apparel supply chains.
+          </p>
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--color-text-muted);">
+            Pilot Site: DBL Composite Knit &middot; Gazipur, Bangladesh
+          </span>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-list">
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="playground.html">Playground</a></li>
+            <li><a href="briefing.html">Video Briefing</a></li>
+            <li><a href="pricing.html">Deployment Tiers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Applications</h4>
+          <ul class="footer-list">
+            <li><a href="apps/web/index.html">Factory Cockpit</a></li>
+            <li><a href="apps/buyer-portal/index.html">EU Buyer Portal</a></li>
+            <li><a href="apps/verifier-workspace/index.html">Auditor Workspace</a></li>
+            <li><a href="video/index.html">180s Video Player</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Cryptography &amp; AI</h4>
+          <ul class="footer-list">
+            <li><a href="docs/zk-circuit-spec.md">Circom 2 ZK Circuit</a></li>
+            <li><a href="docs/eu-cbam-espr-ontology.md">EU CBAM Ontology</a></li>
+            <li><a href="docs/model-cards.md">Model Cards</a></li>
+            <li><a href="services/mcp-gateway-go/main.go">Go MCP Policy Gateway</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Standards</h4>
+          <ul class="footer-list">
+            <li><a href="CLAUDE.md">Zero-LLM Math Law</a></li>
+            <li><a href="docs/changelog.md">Changelog</a></li>
+            <li><a href="eval/test_all_evals.py">Test Suite (22/22)</a></li>
+            <li><a href="AGENTS.md">Agent Build Protocol</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          <span>&copy; 2026 CarbonLoom Consortium. All rights reserved.</span>
+        </div>
+        <div class="footer-standards-row">
+          <span>ISO 14064-1 Aligned</span>
+          <span>&middot;</span>
+          <span>EN 18216 DPP-Ready</span>
+          <span>&middot;</span>
+          <span>Simulated Pilot Data</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="js/interactions.js"></script>
+</body>
+</html>

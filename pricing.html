@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonLoom Deployment Tiers: Factory Cockpit, EU Buyer Portal, and Auditor Workspace pricing with ROI payback calculator.">
+  <title>Deployment Tiers &amp; Pricing — CarbonLoom</title>
+  
+  <link rel="stylesheet" href="styles/app.css">
+  <style>
+    .billing-toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-12);
+    }
+
+    .billing-btn {
+      background: none;
+      border: 1px solid transparent;
+      padding: 8px 18px;
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: all var(--duration-quick) var(--ease-standard);
+      font-family: var(--font-sans);
+    }
+
+    .billing-btn.active {
+      background-color: var(--color-surface-card);
+      color: var(--color-text-primary);
+      border-color: var(--color-border-hover);
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .grid-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-20);
+    }
+
+    .pricing-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-panel);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: all var(--duration-quick) var(--ease-standard);
+    }
+
+    .pricing-card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .pricing-card.recommended {
+      border-color: var(--color-accent-border);
+      background-color: #0f1618;
+      box-shadow: 0 16px 40px rgba(16, 185, 129, 0.1), inset 0 1px 0 rgba(16, 185, 129, 0.3);
+    }
+
+    .pricing-header {
+      margin-bottom: var(--space-6);
+    }
+
+    .pricing-tier {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-1);
+    }
+
+    .pricing-price {
+      font-size: 36px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      margin: var(--space-3) 0 2px;
+      color: var(--color-text-primary);
+      letter-spacing: -0.025em;
+    }
+
+    .pricing-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    .pricing-features {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-6) 0 var(--space-8);
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+
+    .pricing-features li {
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+
+    .feature-check {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    /* ROI Calculator Matrix */
+    .roi-panel {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-panel);
+      padding: var(--space-8);
+      margin-bottom: var(--space-20);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .roi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      align-items: center;
+    }
+
+    .roi-stats-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+
+    .roi-stat-cell {
+      background-color: var(--color-surface-deep);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-5);
+    }
+
+    .roi-stat-num {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--color-accent);
+      margin-bottom: 2px;
+      line-height: 1.1;
+    }
+
+    /* FAQ Grid */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+
+    .faq-card {
+      background-color: var(--color-surface-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: var(--space-6);
+    }
+
+    .faq-q {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin: 0 0 var(--space-2);
+    }
+
+    .faq-a {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    @media (max-width: 992px) {
+      .grid-three, .roi-grid, .faq-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand-group" aria-label="CarbonLoom Home">
+        <div class="brand-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 8h16M4 16h16M8 4v16M16 4v16"/>
+          </svg>
+        </div>
+        <span class="brand-title">CarbonLoom</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Overview</a></li>
+          <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+          <li><a href="playground.html" class="nav-link">Playground</a></li>
+          <li><a href="briefing.html" class="nav-link">Briefing</a></li>
+          <li><a href="pricing.html" class="nav-link active">Pricing</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="apps/web/index.html" class="btn btn-primary">
+          <span>Factory Cockpit</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="apps/buyer-portal/index.html" class="btn btn-quiet">EU Buyer Portal</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="section" style="padding-top: var(--space-20); padding-bottom: var(--space-12);">
+    <div class="container">
+      <div class="section-header reveal" style="text-align: center; margin-left: auto; margin-right: auto;">
+        <span class="section-eyebrow">Enterprise SaaS Economics</span>
+        <h1 class="section-title" style="font-size: 40px; line-height: 1.15;">
+          Deployment Tiers &amp; ROI
+        </h1>
+        <p class="section-sub">
+          Sustainable SaaS pricing aligning manufacturing energy cost reductions with European Union regulatory compliance.
+        </p>
+      </div>
+
+      <!-- Billing Frequency Toggle -->
+      <div class="billing-toggle-wrap reveal reveal-delay-1">
+        <button class="billing-btn active" id="btn-monthly" onclick="setBilling('monthly')">Monthly Billing</button>
+        <button class="billing-btn" id="btn-annual" onclick="setBilling('annual')">Annual Billing (20% Off)</button>
+      </div>
+
+      <!-- Pricing Cards -->
+      <div class="grid-three">
+        <!-- Tier 1 -->
+        <div class="pricing-card spotlight-card reveal reveal-delay-2">
+          <div class="pricing-header">
+            <h3 class="pricing-tier">Factory Cockpit</h3>
+            <div class="pricing-price" id="price-tier-1">$299<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/mo</span></div>
+            <div class="pricing-desc">Monthly per export manufacturing facility</div>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="feature-check">&check;</span> Digital Twin meter telemetry integration</li>
+            <li><span class="feature-check">&check;</span> Bengali utility bill OCR parsing (DESCO/Titas)</li>
+            <li><span class="feature-check">&check;</span> TreeSHAP forensic thermodynamic leak alerts</li>
+            <li><span class="feature-check">&check;</span> MACC decarbonization investment roadmap</li>
+            <li><span class="feature-check">&check;</span> SMV per-garment batch allocation tables</li>
+          </ul>
+          <a href="apps/web/index.html" class="btn btn-secondary" style="width: 100%;">Enter Factory Cockpit</a>
+        </div>
+
+        <!-- Tier 2 (Recommended) -->
+        <div class="pricing-card recommended spotlight-card reveal reveal-delay-3">
+          <div class="pricing-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 class="pricing-tier">EU Buyer Portal</h3>
+              <span class="tag tag-accent">Recommended</span>
+            </div>
+            <div class="pricing-price" id="price-tier-2">&euro;2,500<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/mo</span></div>
+            <div class="pricing-desc">Monthly per international apparel brand</div>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="feature-check">&check;</span> Zero-knowledge DPP passport check (&lt;142ms)</li>
+            <li><span class="feature-check">&check;</span> Automated EU CBAM XML declaration generator</li>
+            <li><span class="feature-check">&check;</span> Tier-2 commercial secrecy preservation</li>
+            <li><span class="feature-check">&check;</span> Supplier carbon benchmarking across Bangladesh</li>
+            <li><span class="feature-check">&check;</span> Hyperledger Fabric consortium anchoring</li>
+          </ul>
+          <a href="apps/buyer-portal/index.html" class="btn btn-primary" style="width: 100%;">Open Buyer Portal</a>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="pricing-card spotlight-card reveal reveal-delay-4">
+          <div class="pricing-header">
+            <h3 class="pricing-tier">Auditor Workspace</h3>
+            <div class="pricing-price" id="price-tier-3">$99<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/batch</span></div>
+            <div class="pricing-desc">Per certified batch verification review</div>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="feature-check">&check;</span> ISO 14064-1 HITL audit review dossier</li>
+            <li><span class="feature-check">&check;</span> Ed25519 cryptographic co-signing keys</li>
+            <li><span class="feature-check">&check;</span> Fabric ledger lineage dependency tree</li>
+            <li><span class="feature-check">&check;</span> Bilingual engineer clarification channel</li>
+            <li><span class="feature-check">&check;</span> Redacted supplier evidence vault</li>
+          </ul>
+          <a href="apps/verifier-workspace/index.html" class="btn btn-secondary" style="width: 100%;">Verifier Workspace</a>
+        </div>
+      </div>
+
+      <!-- ROI Payback Case Study -->
+      <div class="roi-panel">
+        <div class="roi-grid">
+          <div>
+            <span class="section-eyebrow">Manufacturing CFO Business Case</span>
+            <h2 style="font-size: 24px; font-weight: 700; margin: 0 0 var(--space-3); color: var(--color-text-primary);">
+              11.8x First-Year Operational Payback
+            </h2>
+            <p style="font-size: 14px; line-height: 1.6; color: var(--color-text-secondary); margin: 0 0 var(--space-4);">
+              For a 2,000-worker knit apparel facility exporting 500,000 garments/month, CarbonLoom’s TreeSHAP leak isolation and SMV balancing eliminates:
+            </p>
+            <ul class="clean-list" style="font-size: 13px;">
+              <li>&bull; 18.4 tCO2e/month in natural gas steam trap blow-by ($3,420/month payback)</li>
+              <li>&bull; ৳ 676,500/year avoided electrical peak charges via compressor scheduling</li>
+              <li>&bull; 100% of EU CBAM carbon default penalty markups (&euro;9,750 / shipment)</li>
+            </ul>
+          </div>
+
+          <div class="roi-stats-strip">
+            <div class="roi-stat-cell">
+              <div class="roi-stat-num">$42,500</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);">Annual Direct Energy Savings</div>
+            </div>
+            <div class="roi-stat-cell">
+              <div class="roi-stat-num">4.8 mos</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);">Simple Software Payback</div>
+            </div>
+            <div class="roi-stat-cell">
+              <div class="roi-stat-num">0.00%</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);">CBAM Fine Risk</div>
+            </div>
+            <div class="roi-stat-cell">
+              <div class="roi-stat-num">100%</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);">Supplier Price Secrecy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enterprise FAQ Section -->
+      <div class="section-header" style="margin-top: var(--space-12);">
+        <span class="section-eyebrow">Frequently Asked Questions</span>
+        <h2 class="section-title">Common Governance Questions</h2>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h3 class="faq-q">How does CarbonLoom protect supplier unit pricing?</h3>
+          <p class="faq-a">
+            CarbonLoom compiles emission equations into a Circom 2 arithmetic circuit. The EU buyer or customs authority receives a zero-knowledge Groth16 proof demonstrating that emissions satisfy the benchmark without disclosing raw unit costs or spinning mill names.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3 class="faq-q">Does CarbonLoom require replacing existing factory meters?</h3>
+          <p class="faq-a">
+            No. CarbonLoom interfaces via non-invasive split-core current transformer (CT) clamps (ESP32 SCT-013) and reads Modbus RS-485 outputs from existing steam, gas, and power meters without halting production.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3 class="faq-q">What is the Zero-LLM-Arithmetic Law?</h3>
+          <p class="faq-a">
+            Non-negotiable architectural invariant: No neural model or LLM is ever permitted to calculate greenhouse gas emissions, SMV fractions, or penalty tariffs. All math executes in deterministic Python with immutable SHA-256 lineage hash chaining.
+          </p>
+        </div>
+
+        <div class="faq-card">
+          <h3 class="faq-q">How are audits conducted across Frankfurt and Dhaka?</h3>
+          <p class="faq-a">
+            Non-Resident Bangladeshi (NRB) certified sustainability engineers review low-confidence document flags and high-SHAP anomalies in the Auditor Workspace, co-signing Ed25519 attestations on the Hyperledger Fabric ledger under NDA.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Elevated Enterprise Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-top-strip">
+        <div class="footer-pilot-chip">
+          <span class="status-dot" style="color: var(--color-accent);"></span>
+          <span>Pilot Site: DBL Composite Knit &middot; Gazipur, Bangladesh</span>
+        </div>
+        <div style="display: flex; gap: var(--space-2);">
+          <a href="apps/web/index.html" class="btn btn-secondary" style="height: 32px; font-size: 12px;">Launch Factory Cockpit</a>
+          <a href="apps/buyer-portal/index.html" class="btn btn-primary" style="height: 32px; font-size: 12px;">Open EU Buyer Portal</a>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-group" style="margin-bottom: var(--space-4);">
+            <div class="brand-mark">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 8h16M4 16h16M8 4v16M16 4v16"/>
+              </svg>
+            </div>
+            <span class="brand-title">CarbonLoom</span>
+          </a>
+          <p style="font-size: 13px; line-height: 1.6; color: var(--color-text-secondary); max-width: 340px; margin: 0 0 var(--space-4);">
+            Enterprise decarbonization and regulatory compliance operating system for Bangladesh RMG and emerging market export apparel supply chains.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-list">
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="playground.html">Playground</a></li>
+            <li><a href="briefing.html">Video Briefing</a></li>
+            <li><a href="pricing.html">Deployment Tiers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Applications</h4>
+          <ul class="footer-list">
+            <li><a href="apps/web/index.html">Factory Cockpit</a></li>
+            <li><a href="apps/buyer-portal/index.html">EU Buyer Portal</a></li>
+            <li><a href="apps/verifier-workspace/index.html">Auditor Workspace</a></li>
+            <li><a href="video/index.html">180s Video Player</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Cryptography &amp; AI</h4>
+          <ul class="footer-list">
+            <li><a href="docs/zk-circuit-spec.md">Circom 2 ZK Circuit</a></li>
+            <li><a href="docs/eu-cbam-espr-ontology.md">EU CBAM Ontology</a></li>
+            <li><a href="docs/model-cards.md">Model Cards</a></li>
+            <li><a href="services/mcp-gateway-go/main.go">Go MCP Policy Gateway</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Standards</h4>
+          <ul class="footer-list">
+            <li><a href="CLAUDE.md">Zero-LLM Math Law</a></li>
+            <li><a href="docs/changelog.md">Changelog</a></li>
+            <li><a href="eval/test_all_evals.py">Test Suite (22/22)</a></li>
+            <li><a href="AGENTS.md">Agent Build Protocol</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          <span>&copy; 2026 CarbonLoom Consortium. All rights reserved.</span>
+        </div>
+        <div class="footer-standards-row">
+          <span>ISO 14064-1 Aligned</span>
+          <span>&middot;</span>
+          <span>EN 18216 DPP-Ready</span>
+          <span>&middot;</span>
+          <span>Simulated Pilot Data</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/interactions.js"></script>
+  <script>
+    function setBilling(mode) {
+      const btnMonthly = document.getElementById('btn-monthly');
+      const btnAnnual = document.getElementById('btn-annual');
+      const tier1 = document.getElementById('price-tier-1');
+      const tier2 = document.getElementById('price-tier-2');
+
+      if (mode === 'annual') {
+        btnAnnual.classList.add('active');
+        btnMonthly.classList.remove('active');
+        tier1.innerHTML = '$239<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/mo (billed annually)</span>';
+        tier2.innerHTML = '&euro;2,000<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/mo (billed annually)</span>';
+      } else {
+        btnMonthly.classList.add('active');
+        btnAnnual.classList.remove('active');
+        tier1.innerHTML = '$299<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/mo</span>';
+        tier2.innerHTML = '&euro;2,500<span style="font-size: 14px; font-weight: 400; color: var(--color-text-muted);">/mo</span>';
+      }
+
+      if (window.flashTelemetryCell) {
+        window.flashTelemetryCell('price-tier-1');
+        window.flashTelemetryCell('price-tier-2');
+      }
+    }
+  </script>
+</body>
+</html>

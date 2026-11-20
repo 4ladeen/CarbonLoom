@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonLoom Interactive Playground: Live browser simulation of Bengali billing OCR, TreeSHAP forensic waste attribution, bilingual regulatory RAG, and zero-knowledge tamper resistance.">
+  <title>Production Playground — CarbonLoom</title>
+  
+  <link rel="stylesheet" href="styles/app.css">
+  <style>
+    .tabs-bar {
+      display: flex;
+      gap: var(--space-2);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-8);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      border-bottom: none;
+      padding: var(--space-3) var(--space-5);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      border-radius: var(--radius-control) var(--radius-control) 0 0;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--duration-quick) var(--ease-standard);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--color-text-primary);
+      background-color: var(--color-surface-card);
+    }
+
+    .tab-btn.active {
+      color: var(--color-text-primary);
+      background-color: var(--color-surface-card);
+      border-color: var(--color-border);
+      border-bottom: 2px solid var(--color-accent);
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: revealUp 320ms var(--ease-standard);
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+
+    .invoice-slip-mockup {
+      background-color: var(--color-surface-deep);
+      border: 1px dashed var(--color-border-hover);
+      border-radius: var(--radius-control);
+      padding: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-4);
+    }
+
+    .ocr-bounding-box {
+      border: 1px solid var(--color-accent);
+      background-color: var(--color-accent-subtle);
+      border-radius: 3px;
+      padding: 1px 4px;
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .waterfall-track-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      font-size: 12px;
+    }
+
+    .waterfall-label {
+      width: 210px;
+      color: var(--color-text-secondary);
+    }
+
+    .waterfall-bar-shell {
+      flex: 1;
+      height: 16px;
+      background-color: var(--color-surface-deep);
+      border-radius: var(--radius-inner);
+      margin: 0 var(--space-3);
+      overflow: hidden;
+    }
+
+    .waterfall-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-inner);
+    }
+
+    .waterfall-readout {
+      width: 80px;
+      text-align: right;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .tamper-result-box {
+      background-color: var(--color-danger-subtle);
+      border: 1px solid var(--color-danger-border);
+      border-radius: var(--radius-control);
+      padding: var(--space-4);
+      margin-top: var(--space-4);
+      display: none;
+    }
+
+    .tamper-result-box.active {
+      display: block;
+      animation: revealUp 320ms var(--ease-standard);
+    }
+
+    @media (max-width: 992px) {
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="site-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand-group" aria-label="CarbonLoom Home">
+        <div class="brand-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 8h16M4 16h16M8 4v16M16 4v16"/>
+          </svg>
+        </div>
+        <span class="brand-title">CarbonLoom</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link">Overview</a></li>
+          <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+          <li><a href="playground.html" class="nav-link active">Playground</a></li>
+          <li><a href="briefing.html" class="nav-link">Briefing</a></li>
+          <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="apps/web/index.html" class="btn btn-primary">
+          <span>Factory Cockpit</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="apps/buyer-portal/index.html" class="btn btn-quiet">EU Buyer Portal</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="section" style="padding-top: var(--space-20); padding-bottom: var(--space-12);">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">Interactive Verification Sandbox</span>
+        <h1 class="section-title" style="font-size: 40px; line-height: 1.15;">
+          Production Playground
+        </h1>
+        <p class="section-sub">
+          Inspect, evaluate, and test CarbonLoom's core sub-systems directly in your browser. All simulated calculations adhere to ISO 14064-1 and EN 18216 DPP specifications.
+        </p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="tabs-bar" role="tablist">
+        <button class="tab-btn active" data-tab="tab-ocr" role="tab" aria-selected="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          1. Billing Ingestion OCR
+        </button>
+        <button class="tab-btn" data-tab="tab-xai" role="tab" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+          2. Forensic XAI Waste
+        </button>
+        <button class="tab-btn" data-tab="tab-rag" role="tab" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          3. Bilingual Regulatory RAG
+        </button>
+        <button class="tab-btn" data-tab="tab-zk" role="tab" aria-selected="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          4. ZK Proof &amp; Live Tamper Test
+        </button>
+      </div>
+
+      <!-- Tab 1: Billing Ingestion -->
+      <div class="tab-pane active" id="tab-ocr" role="tabpanel">
+        <div class="grid-two">
+          <div class="card spotlight-card">
+            <h3 class="card-title">Bengali Utility Invoice Multi-Modal OCR</h3>
+            <p class="card-text">
+              Real Bengali electricity bill (DESCO) processed by <code>doc-vision-mcp</code> with character-level confidence scoring:
+            </p>
+            <div class="invoice-slip-mockup">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>ঢাকা ইলেকট্রিক সাপ্লাই কোম্পানি (DESCO)</span>
+                <span class="ocr-bounding-box">CONF: 0.985</span>
+              </div>
+              <div style="line-height: 1.8;">
+                মিটার নং: <span class="ocr-bounding-box">LT-E-904128</span><br>
+                বিলিং মাস: <span class="ocr-bounding-box">আগস্ট ২০২৪</span><br>
+                ব্যবহৃত ইউনিট: <span class="ocr-bounding-box">৪২,৫৫০ kWh</span><br>
+                মোট বিল: <span class="ocr-bounding-box">৳ ৩,৬১,৬৭৫.০০</span>
+              </div>
+            </div>
+            <div class="code-display">
+{
+  "utility": "DESCO",
+  "meter_id": "LT-E-904128",
+  "billing_month": "August 2024",
+  "consumption_kwh": 42550.0,
+  "amount_bdt": 361675.0,
+  "confidence": 0.985,
+  "status": "AUTO_APPROVED"
+}
+            </div>
+          </div>
+
+          <div class="card spotlight-card">
+            <h3 class="card-title">Zero-Trust Go Gateway Defense Pipeline</h3>
+            <p class="card-text">
+              Payloads pass through 6 strict security middleware layers before reaching calculation models:
+            </p>
+            <ul class="clean-list" style="margin-bottom: var(--space-6);">
+              <li><span>1.</span> Ed25519 token authentication with tenant claim validation</li>
+              <li><span>2.</span> Open Policy Agent (OPA) RBAC row-level tenant isolation</li>
+              <li><span>3.</span> Microsoft Presidio commercial secrecy and PII scrubbing</li>
+              <li><span>4.</span> Prompt injection and system jailbreak defensive boundary</li>
+              <li><span>5.</span> Single-use supervisor cryptographic approval token requirement</li>
+              <li><span>6.</span> Hash-chained SHA-256 audit ledger commitment</li>
+            </ul>
+            <div class="formula-chip" style="margin-top: auto;">
+              <span>Proxy Latency: 21.4 ms</span>
+              <span class="tag tag-accent">Passing All Layers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Forensic XAI Waste -->
+      <div class="tab-pane" id="tab-xai" role="tabpanel">
+        <div class="grid-two">
+          <div class="card spotlight-card">
+            <h3 class="card-title">Boiler 1 Steam-Trap Orifice Failure</h3>
+            <p class="card-text">
+              TreeSHAP feature attributions decomposing thermodynamic power leak on primary gas boiler:
+            </p>
+
+            <div class="waterfall-track-row">
+              <span class="waterfall-label">Nominal Base Load</span>
+              <div class="waterfall-bar-shell">
+                <div class="waterfall-bar-fill" style="width: 72%; background-color: var(--color-text-muted);"></div>
+              </div>
+              <span class="waterfall-readout">1000.0 kW</span>
+            </div>
+            <div class="waterfall-track-row">
+              <span class="waterfall-label">Ambient Temp (31&deg;C)</span>
+              <div class="waterfall-bar-shell">
+                <div class="waterfall-bar-fill" style="width: 8%; background-color: var(--color-warning);"></div>
+              </div>
+              <span class="waterfall-readout">+7.5 kW</span>
+            </div>
+            <div class="waterfall-track-row">
+              <span class="waterfall-label">Power Factor Penalty</span>
+              <div class="waterfall-bar-shell">
+                <div class="waterfall-bar-fill" style="width: 5%; background-color: var(--color-warning);"></div>
+              </div>
+              <span class="waterfall-readout">+4.8 kW</span>
+            </div>
+            <div class="waterfall-track-row">
+              <span class="waterfall-label" style="color: var(--color-danger); font-weight: 600;">Unexplained Leak Drift</span>
+              <div class="waterfall-bar-shell">
+                <div class="waterfall-bar-fill" style="width: 15%; background-color: var(--color-danger);"></div>
+              </div>
+              <span class="waterfall-readout" style="color: var(--color-danger);">+107.7 kW</span>
+            </div>
+
+            <div style="margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--color-border); font-size: 12px; color: var(--color-text-secondary); display: flex; justify-content: space-between;">
+              <span>Total Observed: 1120.0 kW</span>
+              <span style="color: var(--color-danger); font-weight: 600;">Net Excess: 18.4 tCO2e/mo</span>
+            </div>
+          </div>
+
+          <div class="card spotlight-card">
+            <h3 class="card-title">Human-in-the-Loop Maintenance Approval</h3>
+            <p class="card-text">
+              Work order WO-2024-0891 proposes replacing steam trap #ST-402 ($3,420 monthly payback):
+            </p>
+            <button class="btn btn-primary" id="demoApproveBtn" style="width: 100%; height: 40px;">
+              Issue Single-Use Approval Token
+            </button>
+            <div id="demoTokenOutput" style="display: none; margin-top: var(--space-4); font-family: var(--font-mono); font-size: 12px; color: var(--color-accent); background-color: var(--color-surface-deep); padding: var(--space-4); border-radius: var(--radius-inner); border: 1px solid var(--color-accent-border);">
+              &check; Token authorized: APP-TKN-8921-OK (Ed25519 single-use signed)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Bilingual Regulatory RAG -->
+      <div class="tab-pane" id="tab-rag" role="tabpanel">
+        <div class="grid-two">
+          <div class="card spotlight-card">
+            <h3 class="card-title">Grounded Bengali Regulatory Query</h3>
+            <p class="card-text" style="color: var(--color-text-primary); font-size: 14px;">
+              Q: আমাদের রফতানি করা সুতি টি-শার্টের জন্য ইউরোপীয় ইউনিয়নের সিবিএএম রিপোর্ট কীভাবে তৈরি করব?
+            </p>
+            <div style="font-size: 12px; font-family: var(--font-mono); color: var(--color-accent); margin-bottom: var(--space-3); padding: var(--space-3); background-color: var(--color-surface-deep); border-radius: var(--radius-inner); border: 1px solid var(--color-accent-border);">
+              Grounding Citation: EU CBAM Regulation 2023/956, Annex IV Section 3.1, p. 44 (Confidence: 0.96)
+            </div>
+            <p class="card-text">
+              Direct and indirect emissions are deterministically allocated using standard minute values (SMV) per garment batch.
+            </p>
+          </div>
+
+          <div class="card spotlight-card">
+            <h3 class="card-title">Corrective RAG (CRAG) Speculative Refusal</h3>
+            <p class="card-text" style="color: var(--color-text-primary); font-size: 14px;">
+              Q: What will the EU CBAM allowance price be in December 2035?
+            </p>
+            <div style="font-size: 12px; font-family: var(--font-mono); color: var(--color-danger); margin-bottom: var(--space-3); padding: var(--space-3); background-color: var(--color-surface-deep); border-radius: var(--radius-inner); border: 1px solid var(--color-danger-border);">
+              Refusal Triggered: Confidence 0.32 below 0.70 legal certainty threshold
+            </div>
+            <p class="card-text">
+              তথ্য অপর্যাপ্ত: কার্বনলুম অনুমানমূলক মূল্য পূর্বাভাস বা আইনগত ভিত্তিহীন তথ্য প্রদান থেকে বিরত থাকে।
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: ZK Proof & Live Tamper Sandbox -->
+      <div class="tab-pane" id="tab-zk" role="tabpanel">
+        <div class="grid-two">
+          <div class="card spotlight-card">
+            <h3 class="card-title">Honest Per-Garment Allocation</h3>
+            <p class="card-text">
+              Standard Minute Value (SMV) allocation for 100% Organic Cotton Crewneck (Batch #8921):
+            </p>
+            <div style="font-size: 28px; font-weight: 700; color: var(--color-accent); font-family: var(--font-mono); margin-bottom: var(--space-2);">
+              1.412 kgCO2e / pc
+            </div>
+            <p class="card-text">
+              Groth16 proof verified in 142 ms with Tier-2 yarn pricing and supplier identities concealed.
+            </p>
+            <div class="formula-chip" style="margin-top: auto;">
+              <span>Proof Check: Valid (BN254 Pairing OK)</span>
+              <span class="tag tag-accent">Passing</span>
+            </div>
+          </div>
+
+          <div class="card spotlight-card">
+            <h3 class="card-title">Live Adversarial Tamper Demonstration</h3>
+            <p class="card-text">
+              Simulate an adversary modifying one digit of emission in witness vector (1.412 &rarr; 1.112 kg):
+            </p>
+            <div style="display: flex; gap: var(--space-2); margin-bottom: var(--space-3);">
+              <button class="btn btn-secondary" id="demoTamperBtn" style="flex: 1; color: var(--color-danger); border-color: var(--color-danger-border);">
+                Mutate 1 Digit in Witness
+              </button>
+              <button class="btn btn-quiet" id="demoResetBtn" style="display: none;">
+                Reset
+              </button>
+            </div>
+            <div class="tamper-result-box" id="demoTamperBox">
+              <strong style="color: var(--color-danger); display: block; font-size: 13px; margin-bottom: var(--space-2);">
+                Dual-Layer Cryptographic Rejection
+              </strong>
+              <ul class="clean-list" style="font-family: var(--font-mono); font-size: 11px; color: var(--color-danger-ink);">
+                <li>&times; Layer 1: Fabric SHA-256 Merkle root mismatch &mdash; Transaction rejected</li>
+                <li>&times; Layer 2: Groth16 BN254 elliptic curve pairing check failed &mdash; Proof invalid</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Elevated Enterprise Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-top-strip">
+        <div class="footer-pilot-chip">
+          <span class="status-dot" style="color: var(--color-accent);"></span>
+          <span>Pilot Site: DBL Composite Knit &middot; Gazipur, Bangladesh</span>
+        </div>
+        <div style="display: flex; gap: var(--space-2);">
+          <a href="apps/web/index.html" class="btn btn-secondary" style="height: 32px; font-size: 12px;">Launch Factory Cockpit</a>
+          <a href="apps/buyer-portal/index.html" class="btn btn-primary" style="height: 32px; font-size: 12px;">Open EU Buyer Portal</a>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-group" style="margin-bottom: var(--space-4);">
+            <div class="brand-mark">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 8h16M4 16h16M8 4v16M16 4v16"/>
+              </svg>
+            </div>
+            <span class="brand-title">CarbonLoom</span>
+          </a>
+          <p style="font-size: 13px; line-height: 1.6; color: var(--color-text-secondary); max-width: 320px; margin: 0 0 var(--space-4);">
+            Enterprise decarbonization and regulatory compliance operating system for Bangladesh RMG and emerging market export apparel supply chains.
+          </p>
+          <span style="font-size: 11px; font-family: var(--font-mono); color: var(--color-text-muted);">
+            Pilot Site: DBL Composite Knit &middot; Gazipur, Bangladesh
+          </span>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-list">
+            <li><a href="index.html">Overview</a></li>
+            <li><a href="architecture.html">Architecture</a></li>
+            <li><a href="playground.html">Playground</a></li>
+            <li><a href="briefing.html">Video Briefing</a></li>
+            <li><a href="pricing.html">Deployment Tiers</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Applications</h4>
+          <ul class="footer-list">
+            <li><a href="apps/web/index.html">Factory Cockpit</a></li>
+            <li><a href="apps/buyer-portal/index.html">EU Buyer Portal</a></li>
+            <li><a href="apps/verifier-workspace/index.html">Auditor Workspace</a></li>
+            <li><a href="video/index.html">180s Video Player</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Cryptography &amp; AI</h4>
+          <ul class="footer-list">
+            <li><a href="docs/zk-circuit-spec.md">Circom 2 ZK Circuit</a></li>
+            <li><a href="docs/eu-cbam-espr-ontology.md">EU CBAM Ontology</a></li>
+            <li><a href="docs/model-cards.md">Model Cards</a></li>
+            <li><a href="services/mcp-gateway-go/main.go">Go MCP Policy Gateway</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Standards</h4>
+          <ul class="footer-list">
+            <li><a href="CLAUDE.md">Zero-LLM Math Law</a></li>
+            <li><a href="docs/changelog.md">Changelog</a></li>
+            <li><a href="eval/test_all_evals.py">Test Suite (22/22)</a></li>
+            <li><a href="AGENTS.md">Agent Build Protocol</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          <span>&copy; 2026 CarbonLoom Consortium. All rights reserved.</span>
+        </div>
+        <div class="footer-standards-row">
+          <span>ISO 14064-1 Aligned</span>
+          <span>&middot;</span>
+          <span>EN 18216 DPP-Ready</span>
+          <span>&middot;</span>
+          <span>Simulated Pilot Data</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/interactions.js"></script>
+  <script>
+    // Tab switching logic
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanes.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetId = btn.getAttribute('data-tab');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.classList.add('active');
+      });
+    });
+
+    // Demo approval action
+    const approveBtn = document.getElementById('demoApproveBtn');
+    if (approveBtn) {
+      approveBtn.addEventListener('click', () => {
+        const output = document.getElementById('demoTokenOutput');
+        output.style.display = 'block';
+        approveBtn.disabled = true;
+        approveBtn.textContent = '✓ Token Issued: APP-TKN-8921-OK';
+      });
+    }
+
+    // Demo tamper action
+    const tamperBtn = document.getElementById('demoTamperBtn');
+    const resetBtn = document.getElementById('demoResetBtn');
+    const tamperBox = document.getElementById('demoTamperBox');
+
+    if (tamperBtn && tamperBox && resetBtn) {
+      tamperBtn.addEventListener('click', () => {
+        tamperBox.classList.add('active');
+        tamperBtn.textContent = 'Witness Mutated (1.412 → 1.112 kg): Rejection Verified';
+        tamperBtn.disabled = true;
+        resetBtn.style.display = 'inline-flex';
+      });
+
+      resetBtn.addEventListener('click', () => {
+        tamperBox.classList.remove('active');
+        tamperBtn.textContent = 'Mutate 1 Digit in Witness';
+        tamperBtn.disabled = false;
+        resetBtn.style.display = 'none';
+      });
+    }
+  </script>
+</body>
+</html>
