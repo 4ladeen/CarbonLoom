@@ -274,15 +274,16 @@ export function createHalftoneEngine(container: HTMLElement, canvas: HTMLCanvasE
   };
 }
 
-// Auto-initialize on footer element if canvas is present
+// Auto-initialize on footer wordmark stage element
 if (typeof window !== "undefined") {
   (window as any).createHalftoneEngine = createHalftoneEngine;
 
   document.addEventListener("DOMContentLoaded", () => {
-    const footer = document.querySelector(".site-footer, .hwf-root, footer") as HTMLElement;
-    if (!footer) return;
+    const stage = document.querySelector(".footer-wordmark-stage") as HTMLElement;
+    const targetContainer = stage || (document.querySelector(".site-footer, .hwf-root, footer") as HTMLElement);
+    if (!targetContainer) return;
 
-    let canvas = footer.querySelector("canvas.hwf-canvas") as HTMLCanvasElement;
+    let canvas = targetContainer.querySelector("canvas.hwf-canvas") as HTMLCanvasElement;
     if (!canvas) {
       canvas = document.createElement("canvas");
       canvas.className = "hwf-canvas";
@@ -292,22 +293,20 @@ if (typeof window !== "undefined") {
       canvas.style.width = "100%";
       canvas.style.height = "100%";
       canvas.style.display = "block";
-      canvas.style.pointerEvents = "none";
-      canvas.style.zIndex = "0";
-      footer.style.position = "relative";
-      footer.style.overflow = "hidden";
-      footer.insertBefore(canvas, footer.firstChild);
+      targetContainer.style.position = "relative";
+      targetContainer.style.overflow = "hidden";
+      targetContainer.appendChild(canvas);
     }
 
-    createHalftoneEngine(footer, canvas, {
+    createHalftoneEngine(targetContainer, canvas, {
       wordmark: "carbonloom",
       dotGap: 6,
-      radius: 85,
-      crop: 0.18,
-      grain: 0.4,
+      radius: 90,
+      crop: 0.16,
+      grain: 0.45,
       palette: {
-        background: "#070709",
-        ink: "rgba(244, 244, 246, 0.45)",
+        background: "#0c0d10",
+        ink: "rgba(244, 244, 246, 0.48)",
         warm: "#10b981"
       }
     });

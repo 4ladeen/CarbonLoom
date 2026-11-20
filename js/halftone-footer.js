@@ -812,9 +812,10 @@ var HalftoneFooter = (() => {
   if (typeof window !== "undefined") {
     window.createHalftoneEngine = createHalftoneEngine;
     document.addEventListener("DOMContentLoaded", () => {
-      const footer = document.querySelector(".site-footer, .hwf-root, footer");
-      if (!footer) return;
-      let canvas = footer.querySelector("canvas.hwf-canvas");
+      const stage = document.querySelector(".footer-wordmark-stage");
+      const targetContainer = stage || document.querySelector(".site-footer, .hwf-root, footer");
+      if (!targetContainer) return;
+      let canvas = targetContainer.querySelector("canvas.hwf-canvas");
       if (!canvas) {
         canvas = document.createElement("canvas");
         canvas.className = "hwf-canvas";
@@ -824,21 +825,19 @@ var HalftoneFooter = (() => {
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.display = "block";
-        canvas.style.pointerEvents = "none";
-        canvas.style.zIndex = "0";
-        footer.style.position = "relative";
-        footer.style.overflow = "hidden";
-        footer.insertBefore(canvas, footer.firstChild);
+        targetContainer.style.position = "relative";
+        targetContainer.style.overflow = "hidden";
+        targetContainer.appendChild(canvas);
       }
-      createHalftoneEngine(footer, canvas, {
+      createHalftoneEngine(targetContainer, canvas, {
         wordmark: "carbonloom",
         dotGap: 6,
-        radius: 85,
-        crop: 0.18,
-        grain: 0.4,
+        radius: 90,
+        crop: 0.16,
+        grain: 0.45,
         palette: {
-          background: "#070709",
-          ink: "rgba(244, 244, 246, 0.45)",
+          background: "#0c0d10",
+          ink: "rgba(244, 244, 246, 0.48)",
           warm: "#10b981"
         }
       });
