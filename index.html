@@ -8,9 +8,25 @@
   
   <link rel="stylesheet" href="styles/app.css">
   <style>
-    /* Hero Typography & Layout */
+    /* Hero Typography & Layout & Carbon Skyline Canvas */
     .hero-section {
+      position: relative;
+      overflow: hidden;
       padding: var(--space-20) 0 var(--space-20);
+    }
+
+    .hero-section .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .carbon-skyline-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hero-grid {
@@ -1001,6 +1017,7 @@
 
   <script src="js/liquid-metal.js"></script>
   <script src="js/halftone-footer.js"></script>
+  <script src="js/carbon-skyline.js"></script>
   <script src="js/interactions.js"></script>
   <script>
     // 1. Hero HUD Garment Style Switcher with Animated Countdown/Countup
@@ -1203,6 +1220,11 @@
 
       if (window.flashTelemetryCell) {
         window.flashTelemetryCell('wf-net-figure');
+      }
+
+      // Dynamic feedback: eliminate or restore Boiler 01 carbon plume in background skyline
+      if (window.carbonSkylineInstance && typeof window.carbonSkylineInstance.setStackEmission === 'function') {
+        window.carbonSkylineInstance.setStackEmission(0, !isTrapFixed);
       }
     }
 
