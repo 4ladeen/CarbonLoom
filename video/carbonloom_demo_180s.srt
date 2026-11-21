@@ -1,0 +1,51 @@
+1
+00:00:00,000 --> 00:00:15,000
+Bangladesh ready-made garment exporters face an urgent double squeeze: EU apparel shipments declined 11.9%, while domestic gas tariffs surged over 200%.
+
+2
+00:00:15,000 --> 00:00:27,500
+At our pilot facility in Gazipur, 18 Modbus RTU meters continuously monitor thermal boilers, stenters, and rooftop solar under strict European buyer caps.
+
+3
+00:00:27,500 --> 00:00:39,000
+CarbonLoom's vision ingestion extracts consumption, meter identifiers, and tariffs from bilingual Bengali DESCO electricity invoices with 98.5% confidence into auditable JSON.
+
+4
+00:00:39,000 --> 00:00:53,700
+All telemetry and utility records flow through an eight-server zero-trust Go gateway, enforcing tenant isolation, Modbus CRC verification, and blocking prompt injection in under 25 milliseconds.
+
+5
+00:00:53,700 --> 00:01:07,500
+Our digital twin factory simulator tracks live wattage and gas enthalpy. When an uncharacteristic spike occurs, an Isolation Forest model flags a critical anomaly score of 0.84.
+
+6
+00:01:07,500 --> 00:01:20,000
+TreeSHAP feature attribution pinpoints 84% of excess waste directly to a steam-trap leak on Boiler 1, automatically proposing a CMMS repair ticket gated by a supervisor token.
+
+7
+00:01:20,000 --> 00:01:32,500
+Bilingual GraphRAG grounds factory queries in official European Union directives, linking EU CBAM Annex IV and ESPR Article 7 directly to factory equipment.
+
+8
+00:01:32,500 --> 00:01:45,000
+When presented with speculative queries such as ten-year carbon price forecasts, corrective RAG triggers strict refusal, guaranteeing zero mathematical or regulatory hallucinations.
+
+9
+00:01:45,000 --> 00:02:01,100
+Using deterministic standard minute value allocation, we calculate exactly 1.412 kilograms of CO2e per garment, co-signed by an ISO 14064 lead auditor on Hyperledger Fabric.
+
+10
+00:02:01,100 --> 00:02:14,500
+In the Public Buyer Portal, global customs and brand buyers verify Groth16 zero-knowledge proofs in under 142 milliseconds via WebAssembly, shielding factory trade secrets.
+
+11
+00:02:14,500 --> 00:02:27,800
+If an adversary attempts to modify the carbon figure from 1.412 to 1.112 kg, both the Fabric Merkle root and Groth16 elliptic pairing checks immediately fail red with tamper alarms.
+
+12
+00:02:27,800 --> 00:02:40,300
+With three enterprise tiers from Factory Starter to Buyer Enterprise, CarbonLoom pays for itself in under 4.2 months through avoided utility waste and CBAM tariff penalties.
+
+13
+00:02:40,300 --> 00:02:54,000
+Backed by verifiable provenance audit trails, 22 passing test suites, and zero prompt math, CarbonLoom delivers industrial decarbonization from concept to production.
