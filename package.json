@@ -11,9 +11,14 @@
   "scripts": {
     "dev": "npm run dev --workspaces",
     "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
+    "build:skyline": "esbuild scripts/carbon-ascii.ts --bundle --outfile=js/carbon-skyline.js --format=iife --global-name=CarbonAsciiSkyline",
+    "test": "npm run test:python",
+    "test:workspaces": "npm run test --workspaces",
+    "test:python": "pytest sim/ circuits/ fabric/ eval/ services/",
+    "test:circuits": "npm run test --workspace=circuits",
     "lint": "npm run lint --workspaces",
-    "test:circuits": "npm run test --workspace=circuits"
+    "serve": "python3 -m http.server 8080",
+    "sim": "python3 -m sim.data_generator"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
