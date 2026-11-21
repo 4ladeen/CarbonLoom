@@ -3,7 +3,6 @@ package middleware
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"sync"
 	"time"
@@ -51,7 +50,7 @@ func (l *HashChainAuditLogger) Append(
 	l.currentIndex++
 	now := time.Now().UTC()
 
-	payload := fmt.Sprintf("%d|%s|%s|%s|%s|%s|%s|%d|%d|%s|%s",
+	payload := fmt.Sprintf("%d|%s|%s|%s|%s|%s|%s|%s|%d|%s|%s",
 		l.currentIndex, traceID, tenantID, callerAgent, server, tool, argsHash,
 		tokenID, latencyMS, now.Format(time.RFC3339Nano), l.lastHash,
 	)

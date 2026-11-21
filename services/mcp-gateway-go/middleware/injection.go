@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"regexp"
-	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )

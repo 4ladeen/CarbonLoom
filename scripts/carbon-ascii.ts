@@ -725,23 +725,18 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
         drawThreatScene(baseRow, time);
         break;
       case "stenter":
-      case "dyeing":
         drawStenterScene(baseRow, time);
         break;
       case "steam-leak":
-      case "boiler":
         drawSteamLeakScene(baseRow, time);
         break;
       case "cogen":
-      case "power":
-      case "spinning":
         drawCogenScene(baseRow, time);
         break;
       case "cluster":
         drawClusterScene(baseRow, time);
         break;
       case "scada":
-      case "terminal":
         drawScadaScene(baseRow, time);
         break;
       case "solar-clean":
