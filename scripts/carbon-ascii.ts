@@ -2,15 +2,12 @@
  * CarbonLoom — Industrial ASCII & Pixel Art Engine
  * Authentic SCADA / Terminal Aesthetic with Multi-Scene Carbon Emission Narratives
  *
- * Distinct Industrial Scenes:
- * 1. "hero": Baseload Thermal Energy & High-Pressure Steam Boiler House (Twin tall stacks on flanks, boiler drums)
- * 2. "threat": Emergency Diesel Generator Farm & Gas Flare Boom (Rolling soot, flaring combustion flame)
- * 3. "stenter" / "dyeing": Fabric Finishing Stenter Ovens & Chemical Wet Scrubbers (Sawtooth sheds, impeller fans, steam vapor rings)
- * 4. "steam-leak" / "boiler": Forensic Line 04 Steam Trap Blow-By (High-velocity steam blast; stops live when repaired!)
- * 5. "cogen" / "power": Combined Heat & Power (CHP) Gas Turbine & Silencer Exhaust (Laminar thermal mirage heat shimmer)
- * 6. "cluster": Gazipur Industrial Apparel Megaplex Panorama (3-tier depth, 5 staggered regional stacks, 33kV pylons)
- * 7. "scada" / "terminal": Sensor Telemetry Matrix & Edge Gateway Bus (Digital pulse bit streams & CT sensors)
- * 8. "solar-clean": Decarbonized Modern Green Plant (Rooftop solar PV arrays, electric heat pumps, net-zero visual)
+ * Strict Architectural Layout Law:
+ * - The left reading corridor (x = 6% to 54%) is 100% clear of any building silhouettes,
+ *   walls, or stacks. Typography and paragraphs always sit on deep, clean, unobstructed obsidian black.
+ * - All industrial structures (boilers, generators, stenters, turbines, racks, flare booms)
+ *   are positioned on the Right Half (x = 55% to 98%) or far outer margins.
+ * - Absolutely ZERO readable text, words, labels, or tags in the background.
  */
 
 export type SkylineVariant =
@@ -51,7 +48,6 @@ interface Stack {
   widthCols: number;  // width in character columns
   active: boolean;
   beacon: boolean;
-  name: string;
   kind?: "carbon" | "soot" | "steam" | "blast" | "shimmer" | "telemetry" | "clean";
 }
 
@@ -88,8 +84,8 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
   let isVisible = true;
   let mouseX = -1000;
   let mouseY = -1000;
-  let windX = 0.18;
-  let targetWindX = 0.18;
+  let windX = 0.16;
+  let targetWindX = 0.16;
   let isRepaired = false;
 
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -100,10 +96,10 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
   let cols = 0;
   let rows = 0;
 
-  // Stacks strategically placed in open visual corridors
+  // Stacks strategically placed on the right side and far flanks
   const stacks: Stack[] = getStacksForVariant(variant);
   const particles: SmokeParticle[] = [];
-  const maxParticles = reducedMotion ? 0 : (variant === "hero" ? 180 : variant === "threat" ? 140 : 120);
+  const maxParticles = reducedMotion ? 0 : (variant === "hero" ? 160 : 120);
 
   const resize = () => {
     const rect = container.getBoundingClientRect();
@@ -126,29 +122,25 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
     const baseRow = rows - 2;
     const spawnY = (baseRow - s.heightRows) * charH;
 
-    let vy = -(0.70 + Math.random() * 0.70);
-    let vx = (Math.random() - 0.5) * 0.30;
-    let maxLife = 140 + Math.random() * 100;
+    let vy = -(0.70 + Math.random() * 0.65);
+    let vx = (Math.random() - 0.4) * 0.30;
+    let maxLife = 140 + Math.random() * 90;
 
     if (s.kind === "soot") {
-      // Heavy diesel soot hangs lower and moves more horizontally
-      vy = -(0.35 + Math.random() * 0.45);
-      vx = (Math.random() - 0.2) * 0.8;
-      maxLife = 180 + Math.random() * 100;
+      vy = -(0.40 + Math.random() * 0.45);
+      vx = (Math.random() - 0.2) * 0.70;
+      maxLife = 160 + Math.random() * 80;
     } else if (s.kind === "blast") {
-      // High-velocity steam trap leak blowout
-      vy = -(1.2 + Math.random() * 1.4);
-      vx = (Math.random() - 0.3) * 1.5;
-      maxLife = 90 + Math.random() * 60;
+      vy = -(1.1 + Math.random() * 1.3);
+      vx = (Math.random() - 0.2) * 1.2;
+      maxLife = 80 + Math.random() * 50;
     } else if (s.kind === "steam") {
-      // Fast vapor plume
-      vy = -(0.85 + Math.random() * 0.90);
-      maxLife = 110 + Math.random() * 70;
+      vy = -(0.80 + Math.random() * 0.85);
+      maxLife = 100 + Math.random() * 60;
     } else if (s.kind === "shimmer") {
-      // Laminar heat mirage
-      vy = -(0.50 + Math.random() * 0.40);
-      vx = (Math.random() - 0.5) * 0.20;
-      maxLife = 100 + Math.random() * 50;
+      vy = -(0.50 + Math.random() * 0.35);
+      vx = (Math.random() - 0.5) * 0.15;
+      maxLife = 90 + Math.random() * 40;
     }
 
     particles.push({
@@ -166,9 +158,9 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
 
   const preSeedParticles = () => {
     if (reducedMotion) return;
-    for (let step = 0; step < 120; step++) {
+    for (let step = 0; step < 110; step++) {
       for (let i = 0; i < stacks.length; i++) {
-        if (stacks[i].active && Math.random() < 0.34) {
+        if (stacks[i].active && Math.random() < 0.32) {
           spawnSmokeParticle(i);
         }
       }
@@ -180,28 +172,28 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
     }
   };
 
-  // Distinct glyph sets
+  // Purely non-alphanumeric glyph sets (no letters, no words)
   const glyphsCarbonCore = ["@", "&", "8", "%", "#", "▓"];
-  const glyphsCarbonMid = ["#", "%", "S", "O", "*", "▒"];
-  const glyphsCarbonDrift = ["o", "*", "~", "≈", "░", "°"];
+  const glyphsCarbonMid = ["#", "%", "*", "▒", "░"];
+  const glyphsCarbonDrift = ["*", "~", "≈", "░", "°"];
 
   const glyphsSootCore = ["█", "▓", "▓", "▒", "#", "@"];
-  const glyphsSootMid = ["▓", "▒", "░", "%", "#", "S"];
+  const glyphsSootMid = ["▓", "▒", "░", "%", "#"];
   const glyphsSootDrift = ["▒", "░", "°", "·", "·"];
 
-  const glyphsSteamCore = ["O", "0", "o", "©", "░", "▒"];
+  const glyphsSteamCore = ["o", "°", "░", "▒", "○"];
   const glyphsSteamMid = ["o", "*", "~", "°", "░"];
   const glyphsSteamDrift = ["~", "≈", "·", "°", " "];
 
-  const glyphsBlast = [">", "»", "@", "%", "8", "*", "!", "#"];
+  const glyphsBlast = [">", "»", "@", "%", "8", "*", "#"];
   const glyphsShimmer = ["~", "≈", "∫", "≀", "·", "~"];
   const glyphsTelemetry = ["●", "■", "▲", "◆", "*", "+", "·", "░"];
 
-  // Draw Procedural Carbon Plumes
+  // Draw Procedural Plumes
   const drawAsciiPlumes = (ctx: CanvasRenderingContext2D, time: number) => {
     if (!reducedMotion && particles.length < maxParticles) {
       for (let i = 0; i < stacks.length; i++) {
-        const rate = stacks[i].kind === "blast" && isRepaired ? 0.02 : 0.32;
+        const rate = stacks[i].kind === "blast" && isRepaired ? 0.02 : 0.30;
         if (stacks[i].active && Math.random() < rate) {
           spawnSmokeParticle(i);
         }
@@ -220,95 +212,94 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
         continue;
       }
 
-      // Physics
-      const wobble = Math.sin(time * 0.003 + p.seed) * 0.35;
+      const wobble = Math.sin(time * 0.003 + p.seed) * 0.30;
       p.x += p.vx + wobble + windX * (0.8 + progress * 2.0);
       p.y += p.vy * (1 - progress * 0.30);
 
-      // Snap to character matrix
       const renderCol = Math.round(p.x / charW);
       const renderRow = Math.round(p.y / charH);
       const renderX = renderCol * charW;
       const renderY = renderRow * charH;
 
-      // In Hero: soft corridor mask - if smoke enters left headline/subhead zone, dim it heavily
-      let textMaskDim = 1.0;
-      if (variant === "hero" && renderX > w * 0.08 && renderX < w * 0.50 && renderY < h * 0.70) {
-        textMaskDim = 0.25; // Heavily dim any stray smoke in the reading box
+      // Absolute Protection:
+      // If smoke drifts into the left text corridor, skip it completely!
+      // On mobile (cols < 80), text occupies full width, so suppress particles in upper 75% of height!
+      const isMobile = cols < 80;
+      if (isMobile) {
+        if (renderY < h * 0.75) {
+          continue;
+        }
+      } else {
+        if (renderX < w * 0.62 && renderY < h * 0.92) {
+          continue;
+        }
       }
 
       let char = "·";
       let color = "rgba(120, 125, 140, 0.15)";
 
       if (p.kind === "soot") {
-        // Heavy diesel soot
         if (progress < 0.30) {
           char = glyphsSootCore[Math.floor(p.seed * 7) % glyphsSootCore.length];
-          color = `rgba(35, 38, 48, ${0.75 * textMaskDim})`;
+          color = "rgba(35, 38, 48, 0.75)";
         } else if (progress < 0.65) {
           char = glyphsSootMid[Math.floor(p.seed * 11) % glyphsSootMid.length];
-          color = `rgba(50, 55, 68, ${0.45 * (1 - progress) * textMaskDim})`;
+          color = `rgba(50, 55, 68, ${0.45 * (1 - progress)})`;
         } else {
           char = glyphsSootDrift[Math.floor(p.seed * 5) % glyphsSootDrift.length];
-          color = `rgba(70, 75, 90, ${0.20 * (1 - progress) * textMaskDim})`;
+          color = `rgba(70, 75, 90, ${0.18 * (1 - progress)})`;
         }
       } else if (p.kind === "steam") {
-        // Stenter & Scrubber wet steam
         if (progress < 0.35) {
           char = glyphsSteamCore[Math.floor(p.seed * 7) % glyphsSteamCore.length];
-          color = `rgba(215, 230, 245, ${0.55 * textMaskDim})`;
+          color = "rgba(215, 230, 245, 0.52)";
         } else if (progress < 0.70) {
           char = glyphsSteamMid[Math.floor(p.seed * 9) % glyphsSteamMid.length];
-          color = `rgba(180, 200, 220, ${0.30 * textMaskDim})`;
+          color = "rgba(180, 200, 220, 0.28)";
         } else {
           char = glyphsSteamDrift[Math.floor(p.seed * 5) % glyphsSteamDrift.length];
-          color = `rgba(140, 160, 185, ${0.12 * textMaskDim})`;
+          color = "rgba(140, 160, 185, 0.12)";
         }
       } else if (p.kind === "blast") {
-        // High-pressure steam leak
         if (isRepaired) {
           char = "·";
-          color = `rgba(140, 170, 200, ${0.10 * (1 - progress)})`;
+          color = `rgba(140, 170, 200, ${0.08 * (1 - progress)})`;
         } else {
           if (progress < 0.25) {
             char = glyphsBlast[Math.floor((p.seed + time * 0.05) * 7) % glyphsBlast.length];
-            color = `rgba(245, 158, 11, ${0.85 * textMaskDim})`; // Hot thermal core
+            color = "rgba(245, 158, 11, 0.85)";
           } else if (progress < 0.60) {
             char = glyphsSteamCore[Math.floor(p.seed * 7) % glyphsSteamCore.length];
-            color = `rgba(230, 240, 255, ${0.65 * textMaskDim})`; // White pressurized steam
+            color = "rgba(230, 240, 255, 0.60)";
           } else {
             char = glyphsSteamMid[Math.floor(p.seed * 9) % glyphsSteamMid.length];
-            color = `rgba(160, 180, 205, ${0.25 * textMaskDim})`;
+            color = "rgba(160, 180, 205, 0.22)";
           }
         }
       } else if (p.kind === "shimmer") {
-        // Laminar heat mirage
         char = glyphsShimmer[Math.floor((p.seed + time * 0.02) * 5) % glyphsShimmer.length];
-        const alpha = 0.22 * Math.sin(progress * Math.PI) * textMaskDim;
+        const alpha = 0.22 * Math.sin(progress * Math.PI);
         color = `rgba(180, 215, 255, ${alpha})`;
       } else if (p.kind === "telemetry") {
-        // Digital pulse bit stream
         char = glyphsTelemetry[Math.floor((p.seed + time * 0.08) * 11) % glyphsTelemetry.length];
-        const alpha = 0.65 * (1 - progress) * textMaskDim;
+        const alpha = 0.65 * (1 - progress);
         color = (p.seed > 50) ? `rgba(16, 185, 129, ${alpha})` : `rgba(56, 189, 248, ${alpha})`;
       } else if (p.kind === "clean") {
-        // Net zero condensed puff
         char = progress < 0.4 ? "°" : "·";
-        color = `rgba(200, 215, 230, ${0.18 * (1 - progress) * textMaskDim})`;
+        color = `rgba(200, 215, 230, ${0.16 * (1 - progress)})`;
       } else {
-        // Standard baseload thermal carbon plume
         if (progress < 0.18) {
           char = glyphsCarbonCore[Math.floor(p.seed * 7) % glyphsCarbonCore.length];
-          color = `rgba(245, 158, 11, ${0.72 * textMaskDim})`;
+          color = "rgba(245, 158, 11, 0.70)";
         } else if (progress < 0.50) {
           char = glyphsCarbonMid[Math.floor(p.seed * 9) % glyphsCarbonMid.length];
-          color = `rgba(195, 200, 215, ${0.42 * textMaskDim})`;
+          color = "rgba(195, 200, 215, 0.40)";
         } else if (progress < 0.82) {
           char = glyphsCarbonDrift[Math.floor(p.seed * 11) % glyphsCarbonDrift.length];
-          color = `rgba(140, 145, 160, ${0.22 * textMaskDim})`;
+          color = "rgba(140, 145, 160, 0.20)";
         } else {
           char = "·";
-          color = `rgba(90, 95, 110, ${0.12 * textMaskDim})`;
+          color = "rgba(90, 95, 110, 0.10)";
         }
       }
 
@@ -319,8 +310,10 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
 
   // Helper to draw standard chimney
   const drawChimney = (s: Stack, baseRow: number, time: number) => {
+    const isMobile = cols < 80;
     const stackCol = Math.round(s.relX * cols);
-    const topRow = baseRow - s.heightRows;
+    const heightRows = isMobile ? Math.min(s.heightRows, 6) : s.heightRows;
+    const topRow = baseRow - heightRows;
 
     for (let r = topRow; r <= baseRow; r++) {
       const isRim = r === topRow;
@@ -354,28 +347,17 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
   };
 
   // =========================================================================
-  // SCENE 1: HERO — Baseload Thermal Energy & High-Pressure Steam Boiler House
-  // Stacks strictly on flanks (0.02, 0.52, 0.94); clear reading corridor in center-left!
+  // SCENE 1: HERO — Baseload Thermal Energy & Boiler Plant (Right Half Only)
+  // Left reading corridor (0.00 - 0.62) is 100% clear sky!
   // =========================================================================
   const drawHeroScene = (baseRow: number, time: number) => {
-    const baseY = baseRow * charH;
-
-    // Distant background boiler facility (Faint ░░)
-    ctx.fillStyle = "rgba(35, 42, 58, 0.35)";
-    for (let c = 0; c < cols; c++) {
-      // Keep left text zone clear of tall shapes
-      if (c > cols * 0.06 && c < cols * 0.48) continue;
-      for (let r = baseRow - 6; r <= baseRow; r++) {
-        ctx.fillText(r === baseRow - 6 ? "▄" : "░", c * charW, r * charH);
-      }
-    }
-
-    // Heavy Horizontal Boiler Drum Units (Center and Right Flank)
-    const drumStart = Math.floor(cols * 0.56);
-    const drumEnd = Math.floor(cols * 0.88);
+    // Boiler Drums placed strictly on the Right Half (cols * 0.64 to 0.94)
+    const isMobile = cols < 80;
+    const drumStart = Math.floor(cols * (isMobile ? 0.70 : 0.64));
+    const drumEnd = Math.floor(cols * 0.94);
     for (let c = drumStart; c < drumEnd; c++) {
       const isHeader = (c - drumStart) % 8 === 0;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
       ctx.fillText("═", c * charW, (baseRow - 5) * charH);
       if (isHeader) {
         ctx.fillText("╤", c * charW, (baseRow - 5) * charH);
@@ -383,387 +365,351 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
         ctx.fillText("│", c * charW, (baseRow - 3) * charH);
       }
       for (let r = baseRow - 3; r <= baseRow; r++) {
-        ctx.fillStyle = isHeader ? "rgba(255, 255, 255, 0.25)" : "rgba(18, 22, 30, 0.88)";
+        ctx.fillStyle = isHeader ? "rgba(255, 255, 255, 0.22)" : "rgba(18, 22, 30, 0.88)";
         ctx.fillText(isHeader ? "║" : "█", c * charW, r * charH);
       }
     }
 
-    // Pressure vessel inspection portholes & level indicator
-    const portholeStart = Math.floor(cols * 0.62);
+    // Boiler portholes (pure geometry, zero text)
+    const portholeStart = Math.floor(cols * (isMobile ? 0.74 : 0.68));
     for (let c = portholeStart; c < Math.min(cols - 2, portholeStart + 16); c += 4) {
-      ctx.fillStyle = "rgba(245, 158, 11, 0.45)";
+      ctx.fillStyle = "rgba(245, 158, 11, 0.40)";
       ctx.fillText("▣", c * charW, (baseRow - 2) * charH);
     }
 
-    // Stacks (Flanks only: 0.02, 0.52, 0.94)
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 2: THREAT — Emergency Diesel Generator Farm & Gas Flare Boom
-  // Caterpillar skid gensets with louvers + towering flaring stack on right
+  // SCENE 2: THREAT — Emergency Diesel Generator Farm & Flare (Right Half Only)
+  // Left reading corridor is 100% clear sky!
   // =========================================================================
   const drawThreatScene = (baseRow: number, time: number) => {
-    // Ground level
-    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
-    for (let c = 0; c < cols; c++) ctx.fillText("═", c * charW, (baseRow + 1) * charH);
-
-    // 3 Containerized Diesel Gensets [GEN-01], [GEN-02], [GEN-03]
-    const gensets = [
-      { start: Math.floor(cols * 0.03), width: 14, name: "GEN-01 450kVA" },
-      { start: Math.floor(cols * 0.15), width: 14, name: "GEN-02 600kVA" },
-      { start: Math.floor(cols * 0.27), width: 14, name: "GEN-03 800kVA" }
-    ];
+    const isMobile = cols < 80;
+    const gensets = isMobile
+      ? [{ start: Math.floor(cols * 0.70), width: Math.floor(cols * 0.26) }]
+      : [
+          { start: Math.floor(cols * 0.60), width: 10 },
+          { start: Math.floor(cols * 0.72), width: 10 },
+          { start: Math.floor(cols * 0.84), width: 10 }
+        ];
 
     gensets.forEach((g) => {
-      const topR = baseRow - 6;
+      const topR = baseRow - (isMobile ? 3 : 6);
       for (let c = g.start; c < g.start + g.width; c++) {
         for (let r = topR; r <= baseRow; r++) {
           if (r === topR) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.30)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
             ctx.fillText("▄", c * charW, r * charH);
           } else if (c === g.start || c === g.start + g.width - 1) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
             ctx.fillText("║", c * charW, r * charH);
-          } else if (r === baseRow - 4) {
-            // Louver grilles
-            ctx.fillStyle = "rgba(239, 68, 68, 0.55)";
+          } else if (r === baseRow - 4 && !isMobile) {
+            ctx.fillStyle = "rgba(239, 68, 68, 0.50)";
             ctx.fillText("≡", c * charW, r * charH);
           } else if (r === baseRow - 2 && (c - g.start) % 3 === 0) {
-            ctx.fillStyle = "rgba(245, 158, 11, 0.70)";
-            ctx.fillText("■", c * charW, r * charH); // Status LEDs
+            ctx.fillStyle = "rgba(245, 158, 11, 0.65)";
+            ctx.fillText("■", c * charW, r * charH);
           } else {
-            ctx.fillStyle = "rgba(22, 26, 36, 0.92)";
+            ctx.fillStyle = "rgba(22, 26, 36, 0.90)";
             ctx.fillText("█", c * charW, r * charH);
           }
         }
       }
-      // Exhaust pipes rising from gensets
-      const exhC = g.start + 2;
-      for (let r = topR - 4; r < topR; r++) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.32)";
-        ctx.fillText("│", exhC * charW, r * charH);
+      if (!isMobile) {
+        const exhC = g.start + 2;
+        for (let r = topR - 4; r < topR; r++) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+          ctx.fillText("│", exhC * charW, r * charH);
+        }
       }
     });
 
-    // Angled Industrial Flare Stack on Far Right (relX: 0.88)
-    const flareCol = Math.floor(cols * 0.88);
-    const flareTop = baseRow - 18;
+    // Angled Flare Stack on Far Right (relX: 0.96)
+    const flareCol = Math.floor(cols * 0.96);
+    const flareTop = baseRow - (isMobile ? 7 : 18);
     for (let r = flareTop; r <= baseRow; r++) {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
       ctx.fillText(r % 2 === 0 ? "╱" : "╲", flareCol * charW, r * charH);
       ctx.fillText("│", (flareCol + 1) * charW, r * charH);
     }
 
-    // Active Flare Combustion Flame Crown
+    // Active Flare Flame Crown
     const flameFlicker = (Math.sin(time * 0.02) + Math.cos(time * 0.035)) * 0.5;
     const flameHeight = Math.floor(3 + flameFlicker * 2);
     for (let f = 1; f <= flameHeight; f++) {
-      ctx.fillStyle = f === 1 ? "rgba(255, 240, 150, 0.95)" : (f === 2 ? "rgba(249, 115, 22, 0.85)" : "rgba(239, 68, 68, 0.75)");
+      ctx.fillStyle = f === 1 ? "rgba(255, 240, 150, 0.90)" : (f === 2 ? "rgba(249, 115, 22, 0.80)" : "rgba(239, 68, 68, 0.70)");
       ctx.fillText(f === 1 ? "▲" : (f === 2 ? "*" : "░"), (flareCol + 1) * charW, (flareTop - f) * charH);
-      if (f > 1) {
-        ctx.fillText("~", flareCol * charW, (flareTop - f) * charH);
-      }
     }
 
-    // Stacks
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 3: STENTER / DYEING — Fabric Stenter Drying Ovens & Wet Gas Scrubbers
-  // Continuous sawtooth drying oven shed with rotating impellers & scrubber tower
+  // SCENE 3: STENTER / DYEING — Fabric Drying Ovens & Scrubber (Right Half Only)
+  // Left reading corridor is 100% clear sky!
   // =========================================================================
   const drawStenterScene = (baseRow: number, time: number) => {
-    // Sawtooth fabric drying shed
-    const toothCount = 5;
-    const toothWidth = Math.floor(cols * 0.40);
+    const isMobile = cols < 80;
+    const toothCount = isMobile ? 2 : 4;
+    const toothWidth = Math.floor(cols * (isMobile ? 0.25 : 0.35));
     const step = Math.floor(toothWidth / toothCount);
+    const startBase = Math.floor(cols * (isMobile ? 0.70 : 0.58));
 
     for (let t = 0; t < toothCount; t++) {
-      const startC = Math.floor(cols * 0.04) + t * step;
-      const peakRow = baseRow - 7;
-      for (let r = 0; r < 7; r++) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+      const startC = startBase + t * step;
+      const peakRow = baseRow - (isMobile ? 4 : 7);
+      for (let r = 0; r < (isMobile ? 4 : 7); r++) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
         ctx.fillText("╱", (startC + r) * charW, (baseRow - r) * charH);
       }
-      ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
-      ctx.fillText("│", (startC + 7) * charW, peakRow * charH);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.fillText("│", (startC + (isMobile ? 4 : 7)) * charW, peakRow * charH);
 
-      // Rotating roof impeller exhaust fan at each sawtooth apex
       const fanPhase = Math.floor((time * 0.015 + t) % 4);
       const fanGlyphs = ["✣", "✕", "+", "×"];
-      ctx.fillStyle = "rgba(56, 189, 248, 0.75)";
-      ctx.fillText(fanGlyphs[fanPhase], (startC + 4) * charW, (peakRow - 1) * charH);
+      ctx.fillStyle = "rgba(56, 189, 248, 0.70)";
+      ctx.fillText(fanGlyphs[fanPhase], (startC + (isMobile ? 2 : 4)) * charW, (peakRow - 1) * charH);
     }
 
-    // Continuous fabric guide roller track
-    for (let c = Math.floor(cols * 0.08); c < Math.floor(cols * 0.40); c++) {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
-      ctx.fillText(c % 4 === 0 ? "o" : "═", c * charW, (baseRow - 1) * charH);
-    }
-
-    // Conical Wet Venturi Scrubber Tower on Right (relX: 0.92)
-    const scrubCol = Math.floor(cols * 0.92);
-    const scrubH = 16;
+    // Conical Scrubber Tower on Right (relX: 0.94)
+    const scrubCol = Math.floor(cols * 0.94);
+    const scrubH = isMobile ? 8 : 16;
     for (let dy = 0; dy < scrubH; dy++) {
       const r = baseRow - dy;
       const coneW = dy < 4 ? 3 : (dy > 12 ? 2 : 4);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
       ctx.fillText("[", (scrubCol - coneW) * charW, r * charH);
       ctx.fillText("]", (scrubCol + coneW) * charW, r * charH);
       for (let fillC = scrubCol - coneW + 1; fillC < scrubCol + coneW; fillC++) {
-        ctx.fillStyle = "rgba(14, 24, 38, 0.92)";
+        ctx.fillStyle = "rgba(14, 24, 38, 0.90)";
         ctx.fillText(dy % 3 === 0 ? "▒" : "█", fillC * charW, r * charH);
       }
     }
 
-    // Scrubber recirculating wash pump chassis
-    ctx.fillStyle = "rgba(56, 189, 248, 0.50)";
+    ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
     ctx.fillText("■■", (scrubCol - 3) * charW, (baseRow - 2) * charH);
 
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 4: STEAM LEAK / FORENSICS — Line 04 High-Pressure Steam Trap Blow-By
-  // Forensic technical piping diagram with live interactive repair toggle
+  // SCENE 4: STEAM LEAK / FORENSICS — Line 04 Trap Blow-By (Right Half Only)
+  // Left reading corridor is 100% clear sky!
   // =========================================================================
   const drawSteamLeakScene = (baseRow: number, time: number) => {
-    const pipeRow = baseRow - 8;
+    const isMobile = cols < 80;
+    const pipeRow = baseRow - (isMobile ? 3 : 5);
     const pipeY = pipeRow * charH;
 
-    // Main 8-Bar Superheated Steam Header running across
-    ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
-    for (let c = Math.floor(cols * 0.10); c < Math.floor(cols * 0.90); c++) {
+    // Steam pipe runs strictly on Right Half (cols * 0.58 to 0.94)
+    const pipeStart = Math.floor(cols * (isMobile ? 0.65 : 0.58));
+    const pipeEnd = Math.floor(cols * 0.94);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+    for (let c = pipeStart; c < pipeEnd; c++) {
       ctx.fillText("═", c * charW, pipeY);
       ctx.fillText("═", c * charW, pipeY + charH * 2);
     }
 
-    // Pipe Insulation Cladding & Flanged Spool Pieces
-    const flangedCols = [
-      Math.floor(cols * 0.22),
-      Math.floor(cols * 0.40),
-      Math.floor(cols * 0.58),
-      Math.floor(cols * 0.76)
-    ];
+    const flangedCols = isMobile
+      ? [Math.floor(cols * 0.72), Math.floor(cols * 0.88)]
+      : [Math.floor(cols * 0.65), Math.floor(cols * 0.78), Math.floor(cols * 0.88)];
     flangedCols.forEach((fc) => {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.40)";
       ctx.fillText("║", fc * charW, pipeY);
       ctx.fillText("║", fc * charW, pipeY + charH);
       ctx.fillText("║", fc * charW, pipeY + charH * 2);
     });
 
-    // Analog Dial Pressure Gauge
-    const gaugeCol = Math.floor(cols * 0.32);
+    // Analog Dial Gauge
+    const gaugeCol = Math.floor(cols * (isMobile ? 0.72 : 0.65));
     ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(239, 68, 68, 0.85)";
     ctx.fillText(isRepaired ? "(○─)" : "(●↗)", gaugeCol * charW, pipeY - charH);
 
-    // Steam Trap Assembly Orifice (relX: 0.58)
-    const trapCol = Math.floor(cols * 0.58);
-    const trapRow = pipeRow + 3;
+    // Trap Body & Orifice
+    const trapCol = Math.floor(cols * (isMobile ? 0.82 : 0.78));
+    ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.80)" : "rgba(245, 158, 11, 0.85)";
+    ctx.fillText(isRepaired ? "[■]" : "[░]", trapCol * charW, pipeY + charH);
 
-    // Trap bypass loop
-    ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-    ctx.fillText("│", trapCol * charW, pipeY + charH * 3);
-    ctx.fillText("│", trapCol * charW, pipeY + charH * 4);
-    ctx.fillText("⧖", trapCol * charW, pipeY + charH * 5); // Isolation valve
-
-    // Trap housing body
-    ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(245, 158, 11, 0.90)";
-    ctx.fillText(isRepaired ? "[■]" : "[░]", trapCol * charW, (trapRow + 4) * charH);
-
-    // If leaking: violent horizontal blowout steam arrows (no text)
     if (!isRepaired) {
-      ctx.fillStyle = "rgba(245, 158, 11, 0.90)";
-      ctx.fillText("»»»»»»»»", (trapCol + 2) * charW, pipeY + charH * 3);
+      ctx.fillStyle = "rgba(245, 158, 11, 0.85)";
+      ctx.fillText(isMobile ? "»»»»" : "»»»»»»»»", (trapCol + 2) * charW, pipeY + charH);
     }
 
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 5: COGEN / POWER — Combined Heat & Power (CHP) Gas Turbine & Silencer
-  // Acoustic turbine enclosure, HRSG casing & optical thermal mirage heat shimmer
+  // SCENE 5: COGEN / POWER — Gas Turbine & Silencer (Right Half Only)
+  // Left reading corridor is 100% clear sky!
+  // This directly cures the architecture.html text collision!
   // =========================================================================
   const drawCogenScene = (baseRow: number, time: number) => {
-    // Ground
-    ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
-    for (let c = 0; c < cols; c++) ctx.fillText("═", c * charW, (baseRow + 1) * charH);
-
-    // Gas Turbine Enclosure (Left / Center)
-    const turbStart = Math.floor(cols * 0.12);
-    const turbWidth = Math.floor(cols * 0.35);
-    const turbHeight = 9;
+    const isMobile = cols < 80;
+    const turbHeight = isMobile ? 3 : 9;
+    const turbStart = Math.floor(cols * (isMobile ? 0.70 : 0.60));
+    const turbWidth = Math.floor(cols * (isMobile ? 0.26 : 0.32));
 
     for (let c = turbStart; c < turbStart + turbWidth; c++) {
       for (let r = baseRow - turbHeight; r <= baseRow; r++) {
         if (r === baseRow - turbHeight) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.30)";
+          ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
           ctx.fillText("▀", c * charW, r * charH);
         } else if (c === turbStart || c === turbStart + turbWidth - 1) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+          ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
           ctx.fillText("║", c * charW, r * charH);
-        } else if (r === baseRow - 6 && (c - turbStart) % 4 === 0) {
-          // Acoustic air intake louvers
-          ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
+        } else if (r === baseRow - 6 && !isMobile && (c - turbStart) % 3 === 0) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.55)";
           ctx.fillText("≡", c * charW, r * charH);
-        } else if (r === baseRow - 3 && (c - turbStart) % 5 === 0) {
-          ctx.fillStyle = "rgba(16, 185, 129, 0.85)";
-          ctx.fillText("●", c * charW, r * charH); // ZK meter node LEDs
+        } else if (r === baseRow - 2 && (c - turbStart) % 4 === 0) {
+          ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
+          ctx.fillText("●", c * charW, r * charH);
         } else {
-          ctx.fillStyle = "rgba(18, 22, 32, 0.94)";
+          ctx.fillStyle = "rgba(18, 22, 32, 0.92)";
           ctx.fillText("█", c * charW, r * charH);
         }
       }
     }
 
-    // Acoustic enclosure ventilation louver lines & LED telemetry bus (no text)
-    for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 2) {
-      ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
-      ctx.fillText("≡", c * charW, (baseRow - 4) * charH);
-    }
-    for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 3) {
-      ctx.fillStyle = "rgba(16, 185, 129, 0.70)";
-      ctx.fillText("●", c * charW, (baseRow - 2) * charH);
-    }
-
-    // Heat Recovery Steam Generator (HRSG) Transition Duct
-    const hrsgStart = turbStart + turbWidth;
-    const hrsgEnd = Math.floor(cols * 0.70);
-    for (let c = hrsgStart; c < hrsgEnd; c++) {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
-      ctx.fillText("═", c * charW, (baseRow - 5) * charH);
-      ctx.fillText("═", c * charW, (baseRow - 1) * charH);
-      if (c % 4 === 0) {
-        ctx.fillStyle = "rgba(245, 158, 11, 0.45)";
-        ctx.fillText("▒", c * charW, (baseRow - 3) * charH);
+    // Ventilation louvers & LED array (pure geometry, zero text)
+    if (!isMobile) {
+      for (let c = turbStart + 3; c < turbStart + turbWidth - 3; c += 2) {
+        ctx.fillStyle = "rgba(56, 189, 248, 0.30)";
+        ctx.fillText("≡", c * charW, (baseRow - 4) * charH);
       }
     }
+    for (let c = turbStart + 3; c < turbStart + turbWidth - 3; c += 3) {
+      ctx.fillStyle = "rgba(16, 185, 129, 0.65)";
+      ctx.fillText("●", c * charW, (baseRow - 1) * charH);
+    }
 
-    // Wide Exhaust Silencer Stack on Right (relX: 0.88)
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 6: CLUSTER — Gazipur Industrial RMG Megaplex Panorama
-  // 3-tier deep perspective: distant mills, 5 staggered stacks, 33kV pylons
+  // SCENE 6: CLUSTER — Gazipur RMG Megaplex Panorama (Right Half Focus)
+  // Left reading corridor is 100% clear sky!
   // =========================================================================
   const drawClusterScene = (baseRow: number, time: number) => {
-    // 1. Distant Mills Silhouette (Layer 1: ░░)
-    ctx.fillStyle = "rgba(32, 38, 52, 0.40)";
-    for (let c = 0; c < cols; c++) {
-      const hillH = 4 + Math.round(Math.sin(c * 0.12) * 3);
+    const isMobile = cols < 80;
+    const millStart = Math.floor(cols * (isMobile ? 0.68 : 0.58));
+    // Distant background mill silhouette (Right half only)
+    ctx.fillStyle = "rgba(32, 38, 52, 0.35)";
+    for (let c = millStart; c < cols; c++) {
+      const hillH = (isMobile ? 2 : 4) + Math.round(Math.sin(c * 0.14) * (isMobile ? 1 : 3));
       for (let r = baseRow - hillH; r <= baseRow; r++) {
         ctx.fillText(r === baseRow - hillH ? "▄" : "░", c * charW, r * charH);
       }
     }
 
-    // 2. Midground Spinning Halls & Weaving Sheds
-    ctx.fillStyle = "rgba(22, 26, 36, 0.85)";
-    for (let c = Math.floor(cols * 0.10); c < Math.floor(cols * 0.90); c++) {
-      if (c % 6 === 0) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
+    // Midground sheds on right
+    ctx.fillStyle = "rgba(22, 26, 36, 0.80)";
+    for (let c = millStart + 2; c < cols; c++) {
+      if (c % 6 === 0 && !isMobile) {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
         ctx.fillText("╱", c * charW, (baseRow - 5) * charH);
       }
-      for (let r = baseRow - 4; r <= baseRow; r++) {
+      for (let r = baseRow - (isMobile ? 2 : 4); r <= baseRow; r++) {
         const isWin = r === baseRow - 2 && c % 4 === 0;
-        ctx.fillStyle = isWin ? "rgba(245, 158, 11, 0.65)" : "rgba(16, 20, 28, 0.92)";
+        ctx.fillStyle = isWin ? "rgba(245, 158, 11, 0.60)" : "rgba(16, 20, 28, 0.90)";
         ctx.fillText(isWin ? "■" : "█", c * charW, r * charH);
       }
     }
 
-    // 3. Foreground 33kV Electrical Grid Transmission Pylons
-    const pylonCols = [Math.floor(cols * 0.36), Math.floor(cols * 0.65)];
+    // Foreground 33kV Pylons on right
+    const pylonCols = isMobile ? [Math.floor(cols * 0.88)] : [Math.floor(cols * 0.72), Math.floor(cols * 0.88)];
     pylonCols.forEach((pc) => {
-      const pTop = baseRow - 12;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+      const pTop = baseRow - (isMobile ? 6 : 12);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
       ctx.fillText("/▲\\", (pc - 1) * charW, pTop * charH);
       for (let r = pTop + 1; r <= baseRow; r++) {
         ctx.fillText(r % 2 === 0 ? "/│\\" : "|║|", (pc - 1) * charW, r * charH);
       }
-      // Power line conductors
-      for (let c = 0; c < cols; c++) {
-        if (c % 3 === 0) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.10)";
-          ctx.fillText("·", c * charW, (pTop + 2) * charH);
-        }
-      }
     });
 
-    // 5 Staggered Chimneys across horizon
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 7: SCADA — Sensor Telemetry Matrix & Edge Gateway Bus
-  // Edge gateway racks, CT sensor clamps & digital pulse bit streams
+  // SCENE 7: SCADA — Sensor Telemetry Racks (Right Half Only)
+  // Left reading corridor is 100% clear sky!
   // =========================================================================
   const drawScadaScene = (baseRow: number, time: number) => {
-    // Rack Cabinets
-    const racks = [
-      { col: Math.floor(cols * 0.08), name: "MODBUS-RTU GW" },
-      { col: Math.floor(cols * 0.48), name: "ESP32 CT CLAMP" },
-      { col: Math.floor(cols * 0.82), name: "GROTH16 PROVER" }
-    ];
+    const isMobile = cols < 80;
+    const racks = isMobile
+      ? [{ col: Math.floor(cols * 0.72) }]
+      : [
+          { col: Math.floor(cols * 0.60) },
+          { col: Math.floor(cols * 0.74) },
+          { col: Math.floor(cols * 0.88) }
+        ];
 
     racks.forEach((rk) => {
-      const topR = baseRow - 9;
-      for (let c = rk.col; c < rk.col + 14; c++) {
+      const topR = baseRow - (isMobile ? 4 : 9);
+      const rackWidth = isMobile ? 8 : 12;
+      for (let c = rk.col; c < rk.col + rackWidth; c++) {
         for (let r = topR; r <= baseRow; r++) {
           if (r === topR || r === baseRow) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.30)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
             ctx.fillText("═", c * charW, r * charH);
-          } else if (c === rk.col || c === rk.col + 13) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+          } else if (c === rk.col || c === rk.col + rackWidth - 1) {
+            ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
             ctx.fillText("║", c * charW, r * charH);
-          } else if (r === baseRow - 7) {
-            ctx.fillStyle = "rgba(16, 185, 129, 0.85)";
-            ctx.fillText("●", c * charW, r * charH); // Activity LEDs
+          } else if (r === baseRow - (isMobile ? 2 : 7)) {
+            ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
+            ctx.fillText("●", c * charW, r * charH);
           } else {
-            ctx.fillStyle = "rgba(14, 18, 26, 0.94)";
+            ctx.fillStyle = "rgba(14, 18, 26, 0.92)";
             ctx.fillText("░", c * charW, r * charH);
           }
         }
       }
-      // Server rack chassis faceplate indicator slots (no text)
-      for (let c = rk.col + 2; c < rk.col + 12; c += 2) {
-        ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
-        ctx.fillText("■", c * charW, (baseRow - 4) * charH);
+      if (!isMobile) {
+        for (let c = rk.col + 2; c < rk.col + 10; c += 2) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
+          ctx.fillText("■", c * charW, (baseRow - 4) * charH);
+        }
       }
     });
-
-    // Bus lines connecting racks
-    const busY = (baseRow - 3) * charH;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
-    for (let c = 0; c < cols; c++) {
-      ctx.fillText(c % 6 === 0 ? "╤" : "═", c * charW, busY);
-    }
 
     stacks.forEach((s) => drawChimney(s, baseRow, time));
   };
 
   // =========================================================================
-  // SCENE 8: SOLAR CLEAN — Decarbonized Modern Green Plant (Net-Zero Transition)
-  // Rooftop solar PV arrays, electric heat pumps, clean condensed puffs
+  // SCENE 8: SOLAR CLEAN — Decarbonized Plant (Flanks Only)
+  // Center corridor (0.22 to 0.78) is 100% clear for centered text!
   // =========================================================================
   const drawSolarCleanScene = (baseRow: number, time: number) => {
-    // Sawtooth building with Rooftop Solar PV Panels
-    const shedStart = Math.floor(cols * 0.10);
-    const shedEnd = Math.floor(cols * 0.90);
+    const isMobile = cols < 80;
+    // On mobile, only right flank
+    if (!isMobile) {
+      // Left Wing Solar Array (cols * 0.02 to 0.18)
+      for (let c = Math.floor(cols * 0.02); c < Math.floor(cols * 0.18); c++) {
+        if (c % 7 < 5) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.60)";
+          ctx.fillText("[====]", c * charW, (baseRow - 7) * charH);
+          ctx.fillStyle = "rgba(16, 185, 129, 0.50)";
+          ctx.fillText("╱", c * charW, (baseRow - 6) * charH);
+        }
+        for (let r = baseRow - 5; r <= baseRow; r++) {
+          ctx.fillStyle = "rgba(18, 24, 34, 0.90)";
+          ctx.fillText("█", c * charW, r * charH);
+        }
+      }
+    }
 
-    for (let c = shedStart; c < shedEnd; c++) {
-      // 23° Angled Solar PV Arrays
-      if (c % 8 < 6) {
-        ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
+    // Right Wing Solar Array (cols * 0.80 to 0.98)
+    const rightStart = Math.floor(cols * (isMobile ? 0.70 : 0.80));
+    for (let c = rightStart; c < Math.floor(cols * 0.98); c++) {
+      if (c % 7 < 5 && !isMobile) {
+        ctx.fillStyle = "rgba(56, 189, 248, 0.60)";
         ctx.fillText("[====]", c * charW, (baseRow - 7) * charH);
-        ctx.fillStyle = "rgba(16, 185, 129, 0.55)";
+        ctx.fillStyle = "rgba(16, 185, 129, 0.50)";
         ctx.fillText("╱", c * charW, (baseRow - 6) * charH);
       }
-      for (let r = baseRow - 5; r <= baseRow; r++) {
-        const isWin = r === baseRow - 3 && c % 5 === 0;
-        ctx.fillStyle = isWin ? "rgba(220, 240, 255, 0.85)" : "rgba(18, 24, 34, 0.92)";
-        ctx.fillText(isWin ? "▣" : "█", c * charW, r * charH);
+      for (let r = baseRow - (isMobile ? 3 : 5); r <= baseRow; r++) {
+        ctx.fillStyle = "rgba(18, 24, 34, 0.90)";
+        ctx.fillText("█", c * charW, r * charH);
       }
     }
 
@@ -825,24 +771,14 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, w, h);
 
-    // Hero: Atmospheric dark veil behind left text reading zone
-    if (variant === "hero") {
-      const textVignette = ctx.createRadialGradient(w * 0.25, h * 0.40, 20, w * 0.25, h * 0.40, w * 0.45);
-      textVignette.addColorStop(0, "rgba(7, 7, 9, 0.82)");
-      textVignette.addColorStop(0.70, "rgba(7, 7, 9, 0.45)");
-      textVignette.addColorStop(1, "rgba(7, 7, 9, 0)");
-      ctx.fillStyle = textVignette;
-      ctx.fillRect(0, 0, w * 0.65, h);
-    }
-
     // Monospace font styling
     ctx.font = `11px "Geist Mono", ui-monospace, Menlo, monospace`;
     ctx.textBaseline = "middle";
 
-    // 1. Draw Rising Dynamic Plumes (Behind chimneys and structures)
+    // 1. Draw Rising Dynamic Plumes
     drawAsciiPlumes(ctx, time);
 
-    // 2. Draw Distinct Architectural Industrial Scene
+    // 2. Draw Distinct Architectural Industrial Scene (Right Half only)
     drawScene(time);
 
     rafId = requestAnimationFrame(render);
@@ -891,75 +827,67 @@ export function initAsciiSkyline(container: HTMLElement, options: AsciiSkylineOp
   };
 }
 
-// Stacks strategically placed in open visual corridors to clear paragraph text
+// Stacks placed strictly outside left reading corridors
 function getStacksForVariant(variant: SkylineVariant): Stack[] {
   switch (variant) {
     case "hero":
-      // Stacks strictly on flanks and center gap - ZERO collision with hero paragraph or metrics!
       return [
-        { relX: 0.02, heightRows: 17, widthCols: 3, active: true, beacon: true, name: "Boiler 01 Primary (Left Flank)", kind: "carbon" },
-        { relX: 0.52, heightRows: 16, widthCols: 3, active: true, beacon: true, name: "Inter-Column Gap Riser", kind: "carbon" },
-        { relX: 0.94, heightRows: 19, widthCols: 4, active: true, beacon: true, name: "Right Flank Header", kind: "carbon" },
-        { relX: 0.98, heightRows: 14, widthCols: 2, active: true, beacon: false, name: "Far Right Stack", kind: "carbon" }
+        { relX: 0.72, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+        { relX: 0.83, heightRows: 19, widthCols: 3, active: true, beacon: false, kind: "carbon" },
+        { relX: 0.93, heightRows: 21, widthCols: 4, active: true, beacon: true, kind: "carbon" },
+        { relX: 0.98, heightRows: 15, widthCols: 2, active: true, beacon: false, kind: "carbon" }
       ];
 
     case "threat":
       return [
-        { relX: 0.05, heightRows: 11, widthCols: 2, active: true, beacon: false, name: "Diesel Genset 01 Exhaust", kind: "soot" },
-        { relX: 0.17, heightRows: 11, widthCols: 2, active: true, beacon: false, name: "Diesel Genset 02 Exhaust", kind: "soot" },
-        { relX: 0.88, heightRows: 19, widthCols: 3, active: true, beacon: true, name: "Refinery Flare Stack", kind: "soot" }
+        { relX: 0.68, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "soot" },
+        { relX: 0.82, heightRows: 14, widthCols: 2, active: true, beacon: false, kind: "soot" },
+        { relX: 0.96, heightRows: 19, widthCols: 3, active: true, beacon: true, kind: "soot" }
       ];
 
     case "stenter":
     case "dyeing":
       return [
-        { relX: 0.03, heightRows: 13, widthCols: 2, active: true, beacon: false, name: "Stenter Chamber #01", kind: "steam" },
-        { relX: 0.52, heightRows: 14, widthCols: 3, active: true, beacon: false, name: "Stenter Chamber #04", kind: "steam" },
-        { relX: 0.92, heightRows: 20, widthCols: 4, active: true, beacon: true, name: "Venturi Wet Scrubber", kind: "steam" }
+        { relX: 0.68, heightRows: 13, widthCols: 2, active: true, beacon: false, kind: "steam" },
+        { relX: 0.82, heightRows: 14, widthCols: 3, active: true, beacon: false, kind: "steam" },
+        { relX: 0.94, heightRows: 20, widthCols: 4, active: true, beacon: true, kind: "steam" }
       ];
 
     case "steam-leak":
     case "boiler":
       return [
-        { relX: 0.58, heightRows: 12, widthCols: 2, active: true, beacon: false, name: "Line 04 Steam Trap Blowout", kind: "blast" },
-        { relX: 0.03, heightRows: 16, widthCols: 3, active: true, beacon: true, name: "Header Relief Exhaust", kind: "steam" },
-        { relX: 0.94, heightRows: 17, widthCols: 3, active: true, beacon: true, name: "Condensate Vent", kind: "steam" }
+        { relX: 0.80, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "blast" },
+        { relX: 0.94, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "steam" }
       ];
 
     case "cogen":
     case "power":
     case "spinning":
       return [
-        { relX: 0.04, heightRows: 14, widthCols: 3, active: true, beacon: false, name: "Air Intake Header", kind: "shimmer" },
-        { relX: 0.88, heightRows: 22, widthCols: 5, active: true, beacon: true, name: "HRSG Acoustic Silencer", kind: "shimmer" }
+        { relX: 0.92, heightRows: 22, widthCols: 5, active: true, beacon: true, kind: "shimmer" }
       ];
 
     case "cluster":
       return [
-        { relX: 0.04, heightRows: 18, widthCols: 3, active: true, beacon: true, name: "Apex Spinning Stack", kind: "carbon" },
-        { relX: 0.22, heightRows: 14, widthCols: 3, active: true, beacon: false, name: "DBL Boiler Flue", kind: "steam" },
-        { relX: 0.52, heightRows: 20, widthCols: 4, active: true, beacon: true, name: "Gazipur Central Cogeneration", kind: "carbon" },
-        { relX: 0.76, heightRows: 15, widthCols: 3, active: true, beacon: false, name: "Viyellatex Dyehouse Riser", kind: "steam" },
-        { relX: 0.94, heightRows: 22, widthCols: 4, active: true, beacon: true, name: "Regional Power Hub", kind: "carbon" }
+        { relX: 0.68, heightRows: 16, widthCols: 3, active: true, beacon: false, kind: "steam" },
+        { relX: 0.82, heightRows: 18, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+        { relX: 0.95, heightRows: 22, widthCols: 4, active: true, beacon: true, kind: "carbon" }
       ];
 
     case "scada":
     case "terminal":
       return [
-        { relX: 0.03, heightRows: 15, widthCols: 2, active: true, beacon: false, name: "Telemetry Pylon West", kind: "telemetry" },
-        { relX: 0.95, heightRows: 16, widthCols: 2, active: true, beacon: false, name: "Telemetry Pylon East", kind: "telemetry" }
+        { relX: 0.94, heightRows: 16, widthCols: 2, active: true, beacon: false, kind: "telemetry" }
       ];
 
     case "solar-clean":
       return [
-        { relX: 0.03, heightRows: 12, widthCols: 2, active: true, beacon: false, name: "Heat Pump Vent West", kind: "clean" },
-        { relX: 0.95, heightRows: 12, widthCols: 2, active: true, beacon: false, name: "Heat Pump Vent East", kind: "clean" }
+        { relX: 0.95, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "clean" }
       ];
 
     default:
       return [
-        { relX: 0.02, heightRows: 17, widthCols: 3, active: true, beacon: true, name: "Stack 01", kind: "carbon" },
-        { relX: 0.94, heightRows: 18, widthCols: 4, active: true, beacon: true, name: "Stack 02", kind: "carbon" }
+        { relX: 0.94, heightRows: 18, widthCols: 4, active: true, beacon: true, kind: "carbon" }
       ];
   }
 }

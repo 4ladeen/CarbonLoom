@@ -53,8 +53,8 @@ var CarbonAsciiSkyline = (() => {
     let isVisible = true;
     let mouseX = -1e3;
     let mouseY = -1e3;
-    let windX = 0.18;
-    let targetWindX = 0.18;
+    let windX = 0.16;
+    let targetWindX = 0.16;
     let isRepaired = false;
     const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const charW = 9;
@@ -63,7 +63,7 @@ var CarbonAsciiSkyline = (() => {
     let rows = 0;
     const stacks = getStacksForVariant(variant);
     const particles = [];
-    const maxParticles = reducedMotion ? 0 : variant === "hero" ? 180 : variant === "threat" ? 140 : 120;
+    const maxParticles = reducedMotion ? 0 : variant === "hero" ? 160 : 120;
     const resize = () => {
       const rect = container.getBoundingClientRect();
       w = Math.max(1, Math.round(rect.width));
@@ -81,24 +81,24 @@ var CarbonAsciiSkyline = (() => {
       const spawnX = (stackCol + s.widthCols / 2) * charW + (Math.random() - 0.5) * 4;
       const baseRow = rows - 2;
       const spawnY = (baseRow - s.heightRows) * charH;
-      let vy = -(0.7 + Math.random() * 0.7);
-      let vx = (Math.random() - 0.5) * 0.3;
-      let maxLife = 140 + Math.random() * 100;
+      let vy = -(0.7 + Math.random() * 0.65);
+      let vx = (Math.random() - 0.4) * 0.3;
+      let maxLife = 140 + Math.random() * 90;
       if (s.kind === "soot") {
-        vy = -(0.35 + Math.random() * 0.45);
-        vx = (Math.random() - 0.2) * 0.8;
-        maxLife = 180 + Math.random() * 100;
+        vy = -(0.4 + Math.random() * 0.45);
+        vx = (Math.random() - 0.2) * 0.7;
+        maxLife = 160 + Math.random() * 80;
       } else if (s.kind === "blast") {
-        vy = -(1.2 + Math.random() * 1.4);
-        vx = (Math.random() - 0.3) * 1.5;
-        maxLife = 90 + Math.random() * 60;
+        vy = -(1.1 + Math.random() * 1.3);
+        vx = (Math.random() - 0.2) * 1.2;
+        maxLife = 80 + Math.random() * 50;
       } else if (s.kind === "steam") {
-        vy = -(0.85 + Math.random() * 0.9);
-        maxLife = 110 + Math.random() * 70;
+        vy = -(0.8 + Math.random() * 0.85);
+        maxLife = 100 + Math.random() * 60;
       } else if (s.kind === "shimmer") {
-        vy = -(0.5 + Math.random() * 0.4);
-        vx = (Math.random() - 0.5) * 0.2;
-        maxLife = 100 + Math.random() * 50;
+        vy = -(0.5 + Math.random() * 0.35);
+        vx = (Math.random() - 0.5) * 0.15;
+        maxLife = 90 + Math.random() * 40;
       }
       particles.push({
         x: spawnX,
@@ -114,9 +114,9 @@ var CarbonAsciiSkyline = (() => {
     };
     const preSeedParticles = () => {
       if (reducedMotion) return;
-      for (let step = 0; step < 120; step++) {
+      for (let step = 0; step < 110; step++) {
         for (let i = 0; i < stacks.length; i++) {
-          if (stacks[i].active && Math.random() < 0.34) {
+          if (stacks[i].active && Math.random() < 0.32) {
             spawnSmokeParticle(i);
           }
         }
@@ -128,21 +128,21 @@ var CarbonAsciiSkyline = (() => {
       }
     };
     const glyphsCarbonCore = ["@", "&", "8", "%", "#", "\u2593"];
-    const glyphsCarbonMid = ["#", "%", "S", "O", "*", "\u2592"];
-    const glyphsCarbonDrift = ["o", "*", "~", "\u2248", "\u2591", "\xB0"];
+    const glyphsCarbonMid = ["#", "%", "*", "\u2592", "\u2591"];
+    const glyphsCarbonDrift = ["*", "~", "\u2248", "\u2591", "\xB0"];
     const glyphsSootCore = ["\u2588", "\u2593", "\u2593", "\u2592", "#", "@"];
-    const glyphsSootMid = ["\u2593", "\u2592", "\u2591", "%", "#", "S"];
+    const glyphsSootMid = ["\u2593", "\u2592", "\u2591", "%", "#"];
     const glyphsSootDrift = ["\u2592", "\u2591", "\xB0", "\xB7", "\xB7"];
-    const glyphsSteamCore = ["O", "0", "o", "\xA9", "\u2591", "\u2592"];
+    const glyphsSteamCore = ["o", "\xB0", "\u2591", "\u2592", "\u25CB"];
     const glyphsSteamMid = ["o", "*", "~", "\xB0", "\u2591"];
     const glyphsSteamDrift = ["~", "\u2248", "\xB7", "\xB0", " "];
-    const glyphsBlast = [">", "\xBB", "@", "%", "8", "*", "!", "#"];
+    const glyphsBlast = [">", "\xBB", "@", "%", "8", "*", "#"];
     const glyphsShimmer = ["~", "\u2248", "\u222B", "\u2240", "\xB7", "~"];
     const glyphsTelemetry = ["\u25CF", "\u25A0", "\u25B2", "\u25C6", "*", "+", "\xB7", "\u2591"];
     const drawAsciiPlumes = (ctx2, time) => {
       if (!reducedMotion && particles.length < maxParticles) {
         for (let i = 0; i < stacks.length; i++) {
-          const rate = stacks[i].kind === "blast" && isRepaired ? 0.02 : 0.32;
+          const rate = stacks[i].kind === "blast" && isRepaired ? 0.02 : 0.3;
           if (stacks[i].active && Math.random() < rate) {
             spawnSmokeParticle(i);
           }
@@ -157,81 +157,87 @@ var CarbonAsciiSkyline = (() => {
           particles.splice(i, 1);
           continue;
         }
-        const wobble = Math.sin(time * 3e-3 + p.seed) * 0.35;
+        const wobble = Math.sin(time * 3e-3 + p.seed) * 0.3;
         p.x += p.vx + wobble + windX * (0.8 + progress * 2);
         p.y += p.vy * (1 - progress * 0.3);
         const renderCol = Math.round(p.x / charW);
         const renderRow = Math.round(p.y / charH);
         const renderX = renderCol * charW;
         const renderY = renderRow * charH;
-        let textMaskDim = 1;
-        if (variant === "hero" && renderX > w * 0.08 && renderX < w * 0.5 && renderY < h * 0.7) {
-          textMaskDim = 0.25;
+        const isMobile = cols < 80;
+        if (isMobile) {
+          if (renderY < h * 0.75) {
+            continue;
+          }
+        } else {
+          if (renderX < w * 0.62 && renderY < h * 0.92) {
+            continue;
+          }
         }
         let char = "\xB7";
         let color = "rgba(120, 125, 140, 0.15)";
         if (p.kind === "soot") {
           if (progress < 0.3) {
             char = glyphsSootCore[Math.floor(p.seed * 7) % glyphsSootCore.length];
-            color = `rgba(35, 38, 48, ${0.75 * textMaskDim})`;
+            color = "rgba(35, 38, 48, 0.75)";
           } else if (progress < 0.65) {
             char = glyphsSootMid[Math.floor(p.seed * 11) % glyphsSootMid.length];
-            color = `rgba(50, 55, 68, ${0.45 * (1 - progress) * textMaskDim})`;
+            color = `rgba(50, 55, 68, ${0.45 * (1 - progress)})`;
           } else {
             char = glyphsSootDrift[Math.floor(p.seed * 5) % glyphsSootDrift.length];
-            color = `rgba(70, 75, 90, ${0.2 * (1 - progress) * textMaskDim})`;
+            color = `rgba(70, 75, 90, ${0.18 * (1 - progress)})`;
           }
         } else if (p.kind === "steam") {
           if (progress < 0.35) {
             char = glyphsSteamCore[Math.floor(p.seed * 7) % glyphsSteamCore.length];
-            color = `rgba(215, 230, 245, ${0.55 * textMaskDim})`;
+            color = "rgba(215, 230, 245, 0.52)";
           } else if (progress < 0.7) {
             char = glyphsSteamMid[Math.floor(p.seed * 9) % glyphsSteamMid.length];
-            color = `rgba(180, 200, 220, ${0.3 * textMaskDim})`;
+            color = "rgba(180, 200, 220, 0.28)";
           } else {
             char = glyphsSteamDrift[Math.floor(p.seed * 5) % glyphsSteamDrift.length];
-            color = `rgba(140, 160, 185, ${0.12 * textMaskDim})`;
+            color = "rgba(140, 160, 185, 0.12)";
           }
         } else if (p.kind === "blast") {
           if (isRepaired) {
             char = "\xB7";
-            color = `rgba(140, 170, 200, ${0.1 * (1 - progress)})`;
+            color = `rgba(140, 170, 200, ${0.08 * (1 - progress)})`;
           } else {
             if (progress < 0.25) {
               char = glyphsBlast[Math.floor((p.seed + time * 0.05) * 7) % glyphsBlast.length];
-              color = `rgba(245, 158, 11, ${0.85 * textMaskDim})`;
+              color = "rgba(245, 158, 11, 0.85)";
             } else if (progress < 0.6) {
               char = glyphsSteamCore[Math.floor(p.seed * 7) % glyphsSteamCore.length];
-              color = `rgba(230, 240, 255, ${0.65 * textMaskDim})`;
+              color = "rgba(230, 240, 255, 0.60)";
             } else {
               char = glyphsSteamMid[Math.floor(p.seed * 9) % glyphsSteamMid.length];
-              color = `rgba(160, 180, 205, ${0.25 * textMaskDim})`;
+              color = "rgba(160, 180, 205, 0.22)";
             }
           }
         } else if (p.kind === "shimmer") {
           char = glyphsShimmer[Math.floor((p.seed + time * 0.02) * 5) % glyphsShimmer.length];
-          const alpha = 0.22 * Math.sin(progress * Math.PI) * textMaskDim;
+          const alpha = 0.22 * Math.sin(progress * Math.PI);
           color = `rgba(180, 215, 255, ${alpha})`;
         } else if (p.kind === "telemetry") {
           char = glyphsTelemetry[Math.floor((p.seed + time * 0.08) * 11) % glyphsTelemetry.length];
-          const alpha = 0.65 * (1 - progress) * textMaskDim;
+          const alpha = 0.65 * (1 - progress);
           color = p.seed > 50 ? `rgba(16, 185, 129, ${alpha})` : `rgba(56, 189, 248, ${alpha})`;
         } else if (p.kind === "clean") {
           char = progress < 0.4 ? "\xB0" : "\xB7";
-          color = `rgba(200, 215, 230, ${0.18 * (1 - progress) * textMaskDim})`;
+          color = `rgba(200, 215, 230, ${0.16 * (1 - progress)})`;
         } else {
           if (progress < 0.18) {
             char = glyphsCarbonCore[Math.floor(p.seed * 7) % glyphsCarbonCore.length];
-            color = `rgba(245, 158, 11, ${0.72 * textMaskDim})`;
+            color = "rgba(245, 158, 11, 0.70)";
           } else if (progress < 0.5) {
             char = glyphsCarbonMid[Math.floor(p.seed * 9) % glyphsCarbonMid.length];
-            color = `rgba(195, 200, 215, ${0.42 * textMaskDim})`;
+            color = "rgba(195, 200, 215, 0.40)";
           } else if (progress < 0.82) {
             char = glyphsCarbonDrift[Math.floor(p.seed * 11) % glyphsCarbonDrift.length];
-            color = `rgba(140, 145, 160, ${0.22 * textMaskDim})`;
+            color = "rgba(140, 145, 160, 0.20)";
           } else {
             char = "\xB7";
-            color = `rgba(90, 95, 110, ${0.12 * textMaskDim})`;
+            color = "rgba(90, 95, 110, 0.10)";
           }
         }
         ctx2.fillStyle = color;
@@ -239,8 +245,10 @@ var CarbonAsciiSkyline = (() => {
       }
     };
     const drawChimney = (s, baseRow, time) => {
+      const isMobile = cols < 80;
       const stackCol = Math.round(s.relX * cols);
-      const topRow = baseRow - s.heightRows;
+      const heightRows = isMobile ? Math.min(s.heightRows, 6) : s.heightRows;
+      const topRow = baseRow - heightRows;
       for (let r = topRow; r <= baseRow; r++) {
         const isRim = r === topRow;
         const isBand = (r - topRow) % 4 === 0;
@@ -270,19 +278,12 @@ var CarbonAsciiSkyline = (() => {
       }
     };
     const drawHeroScene = (baseRow, time) => {
-      const baseY = baseRow * charH;
-      ctx.fillStyle = "rgba(35, 42, 58, 0.35)";
-      for (let c = 0; c < cols; c++) {
-        if (c > cols * 0.06 && c < cols * 0.48) continue;
-        for (let r = baseRow - 6; r <= baseRow; r++) {
-          ctx.fillText(r === baseRow - 6 ? "\u2584" : "\u2591", c * charW, r * charH);
-        }
-      }
-      const drumStart = Math.floor(cols * 0.56);
-      const drumEnd = Math.floor(cols * 0.88);
+      const isMobile = cols < 80;
+      const drumStart = Math.floor(cols * (isMobile ? 0.7 : 0.64));
+      const drumEnd = Math.floor(cols * 0.94);
       for (let c = drumStart; c < drumEnd; c++) {
         const isHeader = (c - drumStart) % 8 === 0;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
         ctx.fillText("\u2550", c * charW, (baseRow - 5) * charH);
         if (isHeader) {
           ctx.fillText("\u2564", c * charW, (baseRow - 5) * charH);
@@ -290,282 +291,269 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText("\u2502", c * charW, (baseRow - 3) * charH);
         }
         for (let r = baseRow - 3; r <= baseRow; r++) {
-          ctx.fillStyle = isHeader ? "rgba(255, 255, 255, 0.25)" : "rgba(18, 22, 30, 0.88)";
+          ctx.fillStyle = isHeader ? "rgba(255, 255, 255, 0.22)" : "rgba(18, 22, 30, 0.88)";
           ctx.fillText(isHeader ? "\u2551" : "\u2588", c * charW, r * charH);
         }
       }
-      const portholeStart = Math.floor(cols * 0.62);
+      const portholeStart = Math.floor(cols * (isMobile ? 0.74 : 0.68));
       for (let c = portholeStart; c < Math.min(cols - 2, portholeStart + 16); c += 4) {
-        ctx.fillStyle = "rgba(245, 158, 11, 0.45)";
+        ctx.fillStyle = "rgba(245, 158, 11, 0.40)";
         ctx.fillText("\u25A3", c * charW, (baseRow - 2) * charH);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawThreatScene = (baseRow, time) => {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
-      for (let c = 0; c < cols; c++) ctx.fillText("\u2550", c * charW, (baseRow + 1) * charH);
-      const gensets = [
-        { start: Math.floor(cols * 0.03), width: 14, name: "GEN-01 450kVA" },
-        { start: Math.floor(cols * 0.15), width: 14, name: "GEN-02 600kVA" },
-        { start: Math.floor(cols * 0.27), width: 14, name: "GEN-03 800kVA" }
+      const isMobile = cols < 80;
+      const gensets = isMobile ? [{ start: Math.floor(cols * 0.7), width: Math.floor(cols * 0.26) }] : [
+        { start: Math.floor(cols * 0.6), width: 10 },
+        { start: Math.floor(cols * 0.72), width: 10 },
+        { start: Math.floor(cols * 0.84), width: 10 }
       ];
       gensets.forEach((g) => {
-        const topR = baseRow - 6;
+        const topR = baseRow - (isMobile ? 3 : 6);
         for (let c = g.start; c < g.start + g.width; c++) {
           for (let r = topR; r <= baseRow; r++) {
             if (r === topR) {
-              ctx.fillStyle = "rgba(255, 255, 255, 0.30)";
+              ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
               ctx.fillText("\u2584", c * charW, r * charH);
             } else if (c === g.start || c === g.start + g.width - 1) {
-              ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+              ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
               ctx.fillText("\u2551", c * charW, r * charH);
-            } else if (r === baseRow - 4) {
-              ctx.fillStyle = "rgba(239, 68, 68, 0.55)";
+            } else if (r === baseRow - 4 && !isMobile) {
+              ctx.fillStyle = "rgba(239, 68, 68, 0.50)";
               ctx.fillText("\u2261", c * charW, r * charH);
             } else if (r === baseRow - 2 && (c - g.start) % 3 === 0) {
-              ctx.fillStyle = "rgba(245, 158, 11, 0.70)";
+              ctx.fillStyle = "rgba(245, 158, 11, 0.65)";
               ctx.fillText("\u25A0", c * charW, r * charH);
             } else {
-              ctx.fillStyle = "rgba(22, 26, 36, 0.92)";
+              ctx.fillStyle = "rgba(22, 26, 36, 0.90)";
               ctx.fillText("\u2588", c * charW, r * charH);
             }
           }
         }
-        const exhC = g.start + 2;
-        for (let r = topR - 4; r < topR; r++) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.32)";
-          ctx.fillText("\u2502", exhC * charW, r * charH);
+        if (!isMobile) {
+          const exhC = g.start + 2;
+          for (let r = topR - 4; r < topR; r++) {
+            ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+            ctx.fillText("\u2502", exhC * charW, r * charH);
+          }
         }
       });
-      const flareCol = Math.floor(cols * 0.88);
-      const flareTop = baseRow - 18;
+      const flareCol = Math.floor(cols * 0.96);
+      const flareTop = baseRow - (isMobile ? 7 : 18);
       for (let r = flareTop; r <= baseRow; r++) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
         ctx.fillText(r % 2 === 0 ? "\u2571" : "\u2572", flareCol * charW, r * charH);
         ctx.fillText("\u2502", (flareCol + 1) * charW, r * charH);
       }
       const flameFlicker = (Math.sin(time * 0.02) + Math.cos(time * 0.035)) * 0.5;
       const flameHeight = Math.floor(3 + flameFlicker * 2);
       for (let f = 1; f <= flameHeight; f++) {
-        ctx.fillStyle = f === 1 ? "rgba(255, 240, 150, 0.95)" : f === 2 ? "rgba(249, 115, 22, 0.85)" : "rgba(239, 68, 68, 0.75)";
+        ctx.fillStyle = f === 1 ? "rgba(255, 240, 150, 0.90)" : f === 2 ? "rgba(249, 115, 22, 0.80)" : "rgba(239, 68, 68, 0.70)";
         ctx.fillText(f === 1 ? "\u25B2" : f === 2 ? "*" : "\u2591", (flareCol + 1) * charW, (flareTop - f) * charH);
-        if (f > 1) {
-          ctx.fillText("~", flareCol * charW, (flareTop - f) * charH);
-        }
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawStenterScene = (baseRow, time) => {
-      const toothCount = 5;
-      const toothWidth = Math.floor(cols * 0.4);
+      const isMobile = cols < 80;
+      const toothCount = isMobile ? 2 : 4;
+      const toothWidth = Math.floor(cols * (isMobile ? 0.25 : 0.35));
       const step = Math.floor(toothWidth / toothCount);
+      const startBase = Math.floor(cols * (isMobile ? 0.7 : 0.58));
       for (let t = 0; t < toothCount; t++) {
-        const startC = Math.floor(cols * 0.04) + t * step;
-        const peakRow = baseRow - 7;
-        for (let r = 0; r < 7; r++) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+        const startC = startBase + t * step;
+        const peakRow = baseRow - (isMobile ? 4 : 7);
+        for (let r = 0; r < (isMobile ? 4 : 7); r++) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
           ctx.fillText("\u2571", (startC + r) * charW, (baseRow - r) * charH);
         }
-        ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
-        ctx.fillText("\u2502", (startC + 7) * charW, peakRow * charH);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.fillText("\u2502", (startC + (isMobile ? 4 : 7)) * charW, peakRow * charH);
         const fanPhase = Math.floor((time * 0.015 + t) % 4);
         const fanGlyphs = ["\u2723", "\u2715", "+", "\xD7"];
-        ctx.fillStyle = "rgba(56, 189, 248, 0.75)";
-        ctx.fillText(fanGlyphs[fanPhase], (startC + 4) * charW, (peakRow - 1) * charH);
+        ctx.fillStyle = "rgba(56, 189, 248, 0.70)";
+        ctx.fillText(fanGlyphs[fanPhase], (startC + (isMobile ? 2 : 4)) * charW, (peakRow - 1) * charH);
       }
-      for (let c = Math.floor(cols * 0.08); c < Math.floor(cols * 0.4); c++) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
-        ctx.fillText(c % 4 === 0 ? "o" : "\u2550", c * charW, (baseRow - 1) * charH);
-      }
-      const scrubCol = Math.floor(cols * 0.92);
-      const scrubH = 16;
+      const scrubCol = Math.floor(cols * 0.94);
+      const scrubH = isMobile ? 8 : 16;
       for (let dy = 0; dy < scrubH; dy++) {
         const r = baseRow - dy;
         const coneW = dy < 4 ? 3 : dy > 12 ? 2 : 4;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
         ctx.fillText("[", (scrubCol - coneW) * charW, r * charH);
         ctx.fillText("]", (scrubCol + coneW) * charW, r * charH);
         for (let fillC = scrubCol - coneW + 1; fillC < scrubCol + coneW; fillC++) {
-          ctx.fillStyle = "rgba(14, 24, 38, 0.92)";
+          ctx.fillStyle = "rgba(14, 24, 38, 0.90)";
           ctx.fillText(dy % 3 === 0 ? "\u2592" : "\u2588", fillC * charW, r * charH);
         }
       }
-      ctx.fillStyle = "rgba(56, 189, 248, 0.50)";
+      ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
       ctx.fillText("\u25A0\u25A0", (scrubCol - 3) * charW, (baseRow - 2) * charH);
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawSteamLeakScene = (baseRow, time) => {
-      const pipeRow = baseRow - 8;
+      const isMobile = cols < 80;
+      const pipeRow = baseRow - (isMobile ? 3 : 5);
       const pipeY = pipeRow * charH;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
-      for (let c = Math.floor(cols * 0.1); c < Math.floor(cols * 0.9); c++) {
+      const pipeStart = Math.floor(cols * (isMobile ? 0.65 : 0.58));
+      const pipeEnd = Math.floor(cols * 0.94);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      for (let c = pipeStart; c < pipeEnd; c++) {
         ctx.fillText("\u2550", c * charW, pipeY);
         ctx.fillText("\u2550", c * charW, pipeY + charH * 2);
       }
-      const flangedCols = [
-        Math.floor(cols * 0.22),
-        Math.floor(cols * 0.4),
-        Math.floor(cols * 0.58),
-        Math.floor(cols * 0.76)
-      ];
+      const flangedCols = isMobile ? [Math.floor(cols * 0.72), Math.floor(cols * 0.88)] : [Math.floor(cols * 0.65), Math.floor(cols * 0.78), Math.floor(cols * 0.88)];
       flangedCols.forEach((fc) => {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.40)";
         ctx.fillText("\u2551", fc * charW, pipeY);
         ctx.fillText("\u2551", fc * charW, pipeY + charH);
         ctx.fillText("\u2551", fc * charW, pipeY + charH * 2);
       });
-      const gaugeCol = Math.floor(cols * 0.32);
+      const gaugeCol = Math.floor(cols * (isMobile ? 0.72 : 0.65));
       ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(239, 68, 68, 0.85)";
       ctx.fillText(isRepaired ? "(\u25CB\u2500)" : "(\u25CF\u2197)", gaugeCol * charW, pipeY - charH);
-      const trapCol = Math.floor(cols * 0.58);
-      const trapRow = pipeRow + 3;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
-      ctx.fillText("\u2502", trapCol * charW, pipeY + charH * 3);
-      ctx.fillText("\u2502", trapCol * charW, pipeY + charH * 4);
-      ctx.fillText("\u29D6", trapCol * charW, pipeY + charH * 5);
-      ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(245, 158, 11, 0.90)";
-      ctx.fillText(isRepaired ? "[\u25A0]" : "[\u2591]", trapCol * charW, (trapRow + 4) * charH);
+      const trapCol = Math.floor(cols * (isMobile ? 0.82 : 0.78));
+      ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.80)" : "rgba(245, 158, 11, 0.85)";
+      ctx.fillText(isRepaired ? "[\u25A0]" : "[\u2591]", trapCol * charW, pipeY + charH);
       if (!isRepaired) {
-        ctx.fillStyle = "rgba(245, 158, 11, 0.90)";
-        ctx.fillText("\xBB\xBB\xBB\xBB\xBB\xBB\xBB\xBB", (trapCol + 2) * charW, pipeY + charH * 3);
+        ctx.fillStyle = "rgba(245, 158, 11, 0.85)";
+        ctx.fillText(isMobile ? "\xBB\xBB\xBB\xBB" : "\xBB\xBB\xBB\xBB\xBB\xBB\xBB\xBB", (trapCol + 2) * charW, pipeY + charH);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawCogenScene = (baseRow, time) => {
-      ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
-      for (let c = 0; c < cols; c++) ctx.fillText("\u2550", c * charW, (baseRow + 1) * charH);
-      const turbStart = Math.floor(cols * 0.12);
-      const turbWidth = Math.floor(cols * 0.35);
-      const turbHeight = 9;
+      const isMobile = cols < 80;
+      const turbHeight = isMobile ? 3 : 9;
+      const turbStart = Math.floor(cols * (isMobile ? 0.7 : 0.6));
+      const turbWidth = Math.floor(cols * (isMobile ? 0.26 : 0.32));
       for (let c = turbStart; c < turbStart + turbWidth; c++) {
         for (let r = baseRow - turbHeight; r <= baseRow; r++) {
           if (r === baseRow - turbHeight) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.30)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
             ctx.fillText("\u2580", c * charW, r * charH);
           } else if (c === turbStart || c === turbStart + turbWidth - 1) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
             ctx.fillText("\u2551", c * charW, r * charH);
-          } else if (r === baseRow - 6 && (c - turbStart) % 4 === 0) {
-            ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
+          } else if (r === baseRow - 6 && !isMobile && (c - turbStart) % 3 === 0) {
+            ctx.fillStyle = "rgba(56, 189, 248, 0.55)";
             ctx.fillText("\u2261", c * charW, r * charH);
-          } else if (r === baseRow - 3 && (c - turbStart) % 5 === 0) {
-            ctx.fillStyle = "rgba(16, 185, 129, 0.85)";
+          } else if (r === baseRow - 2 && (c - turbStart) % 4 === 0) {
+            ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
             ctx.fillText("\u25CF", c * charW, r * charH);
           } else {
-            ctx.fillStyle = "rgba(18, 22, 32, 0.94)";
+            ctx.fillStyle = "rgba(18, 22, 32, 0.92)";
             ctx.fillText("\u2588", c * charW, r * charH);
           }
         }
       }
-      for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 2) {
-        ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
-        ctx.fillText("\u2261", c * charW, (baseRow - 4) * charH);
-      }
-      for (let c = turbStart + 4; c < turbStart + turbWidth - 4; c += 3) {
-        ctx.fillStyle = "rgba(16, 185, 129, 0.70)";
-        ctx.fillText("\u25CF", c * charW, (baseRow - 2) * charH);
-      }
-      const hrsgStart = turbStart + turbWidth;
-      const hrsgEnd = Math.floor(cols * 0.7);
-      for (let c = hrsgStart; c < hrsgEnd; c++) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
-        ctx.fillText("\u2550", c * charW, (baseRow - 5) * charH);
-        ctx.fillText("\u2550", c * charW, (baseRow - 1) * charH);
-        if (c % 4 === 0) {
-          ctx.fillStyle = "rgba(245, 158, 11, 0.45)";
-          ctx.fillText("\u2592", c * charW, (baseRow - 3) * charH);
+      if (!isMobile) {
+        for (let c = turbStart + 3; c < turbStart + turbWidth - 3; c += 2) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.30)";
+          ctx.fillText("\u2261", c * charW, (baseRow - 4) * charH);
         }
+      }
+      for (let c = turbStart + 3; c < turbStart + turbWidth - 3; c += 3) {
+        ctx.fillStyle = "rgba(16, 185, 129, 0.65)";
+        ctx.fillText("\u25CF", c * charW, (baseRow - 1) * charH);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawClusterScene = (baseRow, time) => {
-      ctx.fillStyle = "rgba(32, 38, 52, 0.40)";
-      for (let c = 0; c < cols; c++) {
-        const hillH = 4 + Math.round(Math.sin(c * 0.12) * 3);
+      const isMobile = cols < 80;
+      const millStart = Math.floor(cols * (isMobile ? 0.68 : 0.58));
+      ctx.fillStyle = "rgba(32, 38, 52, 0.35)";
+      for (let c = millStart; c < cols; c++) {
+        const hillH = (isMobile ? 2 : 4) + Math.round(Math.sin(c * 0.14) * (isMobile ? 1 : 3));
         for (let r = baseRow - hillH; r <= baseRow; r++) {
           ctx.fillText(r === baseRow - hillH ? "\u2584" : "\u2591", c * charW, r * charH);
         }
       }
-      ctx.fillStyle = "rgba(22, 26, 36, 0.85)";
-      for (let c = Math.floor(cols * 0.1); c < Math.floor(cols * 0.9); c++) {
-        if (c % 6 === 0) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
+      ctx.fillStyle = "rgba(22, 26, 36, 0.80)";
+      for (let c = millStart + 2; c < cols; c++) {
+        if (c % 6 === 0 && !isMobile) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
           ctx.fillText("\u2571", c * charW, (baseRow - 5) * charH);
         }
-        for (let r = baseRow - 4; r <= baseRow; r++) {
+        for (let r = baseRow - (isMobile ? 2 : 4); r <= baseRow; r++) {
           const isWin = r === baseRow - 2 && c % 4 === 0;
-          ctx.fillStyle = isWin ? "rgba(245, 158, 11, 0.65)" : "rgba(16, 20, 28, 0.92)";
+          ctx.fillStyle = isWin ? "rgba(245, 158, 11, 0.60)" : "rgba(16, 20, 28, 0.90)";
           ctx.fillText(isWin ? "\u25A0" : "\u2588", c * charW, r * charH);
         }
       }
-      const pylonCols = [Math.floor(cols * 0.36), Math.floor(cols * 0.65)];
+      const pylonCols = isMobile ? [Math.floor(cols * 0.88)] : [Math.floor(cols * 0.72), Math.floor(cols * 0.88)];
       pylonCols.forEach((pc) => {
-        const pTop = baseRow - 12;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+        const pTop = baseRow - (isMobile ? 6 : 12);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
         ctx.fillText("/\u25B2\\", (pc - 1) * charW, pTop * charH);
         for (let r = pTop + 1; r <= baseRow; r++) {
           ctx.fillText(r % 2 === 0 ? "/\u2502\\" : "|\u2551|", (pc - 1) * charW, r * charH);
-        }
-        for (let c = 0; c < cols; c++) {
-          if (c % 3 === 0) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.10)";
-            ctx.fillText("\xB7", c * charW, (pTop + 2) * charH);
-          }
         }
       });
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawScadaScene = (baseRow, time) => {
-      const racks = [
-        { col: Math.floor(cols * 0.08), name: "MODBUS-RTU GW" },
-        { col: Math.floor(cols * 0.48), name: "ESP32 CT CLAMP" },
-        { col: Math.floor(cols * 0.82), name: "GROTH16 PROVER" }
+      const isMobile = cols < 80;
+      const racks = isMobile ? [{ col: Math.floor(cols * 0.72) }] : [
+        { col: Math.floor(cols * 0.6) },
+        { col: Math.floor(cols * 0.74) },
+        { col: Math.floor(cols * 0.88) }
       ];
       racks.forEach((rk) => {
-        const topR = baseRow - 9;
-        for (let c = rk.col; c < rk.col + 14; c++) {
+        const topR = baseRow - (isMobile ? 4 : 9);
+        const rackWidth = isMobile ? 8 : 12;
+        for (let c = rk.col; c < rk.col + rackWidth; c++) {
           for (let r = topR; r <= baseRow; r++) {
             if (r === topR || r === baseRow) {
-              ctx.fillStyle = "rgba(255, 255, 255, 0.30)";
+              ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
               ctx.fillText("\u2550", c * charW, r * charH);
-            } else if (c === rk.col || c === rk.col + 13) {
-              ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+            } else if (c === rk.col || c === rk.col + rackWidth - 1) {
+              ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
               ctx.fillText("\u2551", c * charW, r * charH);
-            } else if (r === baseRow - 7) {
-              ctx.fillStyle = "rgba(16, 185, 129, 0.85)";
+            } else if (r === baseRow - (isMobile ? 2 : 7)) {
+              ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
               ctx.fillText("\u25CF", c * charW, r * charH);
             } else {
-              ctx.fillStyle = "rgba(14, 18, 26, 0.94)";
+              ctx.fillStyle = "rgba(14, 18, 26, 0.92)";
               ctx.fillText("\u2591", c * charW, r * charH);
             }
           }
         }
-        for (let c = rk.col + 2; c < rk.col + 12; c += 2) {
-          ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
-          ctx.fillText("\u25A0", c * charW, (baseRow - 4) * charH);
+        if (!isMobile) {
+          for (let c = rk.col + 2; c < rk.col + 10; c += 2) {
+            ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
+            ctx.fillText("\u25A0", c * charW, (baseRow - 4) * charH);
+          }
         }
       });
-      const busY = (baseRow - 3) * charH;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
-      for (let c = 0; c < cols; c++) {
-        ctx.fillText(c % 6 === 0 ? "\u2564" : "\u2550", c * charW, busY);
-      }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawSolarCleanScene = (baseRow, time) => {
-      const shedStart = Math.floor(cols * 0.1);
-      const shedEnd = Math.floor(cols * 0.9);
-      for (let c = shedStart; c < shedEnd; c++) {
-        if (c % 8 < 6) {
-          ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
+      const isMobile = cols < 80;
+      if (!isMobile) {
+        for (let c = Math.floor(cols * 0.02); c < Math.floor(cols * 0.18); c++) {
+          if (c % 7 < 5) {
+            ctx.fillStyle = "rgba(56, 189, 248, 0.60)";
+            ctx.fillText("[====]", c * charW, (baseRow - 7) * charH);
+            ctx.fillStyle = "rgba(16, 185, 129, 0.50)";
+            ctx.fillText("\u2571", c * charW, (baseRow - 6) * charH);
+          }
+          for (let r = baseRow - 5; r <= baseRow; r++) {
+            ctx.fillStyle = "rgba(18, 24, 34, 0.90)";
+            ctx.fillText("\u2588", c * charW, r * charH);
+          }
+        }
+      }
+      const rightStart = Math.floor(cols * (isMobile ? 0.7 : 0.8));
+      for (let c = rightStart; c < Math.floor(cols * 0.98); c++) {
+        if (c % 7 < 5 && !isMobile) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.60)";
           ctx.fillText("[====]", c * charW, (baseRow - 7) * charH);
-          ctx.fillStyle = "rgba(16, 185, 129, 0.55)";
+          ctx.fillStyle = "rgba(16, 185, 129, 0.50)";
           ctx.fillText("\u2571", c * charW, (baseRow - 6) * charH);
         }
-        for (let r = baseRow - 5; r <= baseRow; r++) {
-          const isWin = r === baseRow - 3 && c % 5 === 0;
-          ctx.fillStyle = isWin ? "rgba(220, 240, 255, 0.85)" : "rgba(18, 24, 34, 0.92)";
-          ctx.fillText(isWin ? "\u25A3" : "\u2588", c * charW, r * charH);
+        for (let r = baseRow - (isMobile ? 3 : 5); r <= baseRow; r++) {
+          ctx.fillStyle = "rgba(18, 24, 34, 0.90)";
+          ctx.fillText("\u2588", c * charW, r * charH);
         }
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
@@ -618,14 +606,6 @@ var CarbonAsciiSkyline = (() => {
       bg.addColorStop(1, "rgba(7, 7, 9, 0.98)");
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, w, h);
-      if (variant === "hero") {
-        const textVignette = ctx.createRadialGradient(w * 0.25, h * 0.4, 20, w * 0.25, h * 0.4, w * 0.45);
-        textVignette.addColorStop(0, "rgba(7, 7, 9, 0.82)");
-        textVignette.addColorStop(0.7, "rgba(7, 7, 9, 0.45)");
-        textVignette.addColorStop(1, "rgba(7, 7, 9, 0)");
-        ctx.fillStyle = textVignette;
-        ctx.fillRect(0, 0, w * 0.65, h);
-      }
       ctx.font = `11px "Geist Mono", ui-monospace, Menlo, monospace`;
       ctx.textBaseline = "middle";
       drawAsciiPlumes(ctx, time);
@@ -674,61 +654,54 @@ var CarbonAsciiSkyline = (() => {
     switch (variant) {
       case "hero":
         return [
-          { relX: 0.02, heightRows: 17, widthCols: 3, active: true, beacon: true, name: "Boiler 01 Primary (Left Flank)", kind: "carbon" },
-          { relX: 0.52, heightRows: 16, widthCols: 3, active: true, beacon: true, name: "Inter-Column Gap Riser", kind: "carbon" },
-          { relX: 0.94, heightRows: 19, widthCols: 4, active: true, beacon: true, name: "Right Flank Header", kind: "carbon" },
-          { relX: 0.98, heightRows: 14, widthCols: 2, active: true, beacon: false, name: "Far Right Stack", kind: "carbon" }
+          { relX: 0.72, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.83, heightRows: 19, widthCols: 3, active: true, beacon: false, kind: "carbon" },
+          { relX: 0.93, heightRows: 21, widthCols: 4, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.98, heightRows: 15, widthCols: 2, active: true, beacon: false, kind: "carbon" }
         ];
       case "threat":
         return [
-          { relX: 0.05, heightRows: 11, widthCols: 2, active: true, beacon: false, name: "Diesel Genset 01 Exhaust", kind: "soot" },
-          { relX: 0.17, heightRows: 11, widthCols: 2, active: true, beacon: false, name: "Diesel Genset 02 Exhaust", kind: "soot" },
-          { relX: 0.88, heightRows: 19, widthCols: 3, active: true, beacon: true, name: "Refinery Flare Stack", kind: "soot" }
+          { relX: 0.68, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "soot" },
+          { relX: 0.82, heightRows: 14, widthCols: 2, active: true, beacon: false, kind: "soot" },
+          { relX: 0.96, heightRows: 19, widthCols: 3, active: true, beacon: true, kind: "soot" }
         ];
       case "stenter":
       case "dyeing":
         return [
-          { relX: 0.03, heightRows: 13, widthCols: 2, active: true, beacon: false, name: "Stenter Chamber #01", kind: "steam" },
-          { relX: 0.52, heightRows: 14, widthCols: 3, active: true, beacon: false, name: "Stenter Chamber #04", kind: "steam" },
-          { relX: 0.92, heightRows: 20, widthCols: 4, active: true, beacon: true, name: "Venturi Wet Scrubber", kind: "steam" }
+          { relX: 0.68, heightRows: 13, widthCols: 2, active: true, beacon: false, kind: "steam" },
+          { relX: 0.82, heightRows: 14, widthCols: 3, active: true, beacon: false, kind: "steam" },
+          { relX: 0.94, heightRows: 20, widthCols: 4, active: true, beacon: true, kind: "steam" }
         ];
       case "steam-leak":
       case "boiler":
         return [
-          { relX: 0.58, heightRows: 12, widthCols: 2, active: true, beacon: false, name: "Line 04 Steam Trap Blowout", kind: "blast" },
-          { relX: 0.03, heightRows: 16, widthCols: 3, active: true, beacon: true, name: "Header Relief Exhaust", kind: "steam" },
-          { relX: 0.94, heightRows: 17, widthCols: 3, active: true, beacon: true, name: "Condensate Vent", kind: "steam" }
+          { relX: 0.8, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "blast" },
+          { relX: 0.94, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "steam" }
         ];
       case "cogen":
       case "power":
       case "spinning":
         return [
-          { relX: 0.04, heightRows: 14, widthCols: 3, active: true, beacon: false, name: "Air Intake Header", kind: "shimmer" },
-          { relX: 0.88, heightRows: 22, widthCols: 5, active: true, beacon: true, name: "HRSG Acoustic Silencer", kind: "shimmer" }
+          { relX: 0.92, heightRows: 22, widthCols: 5, active: true, beacon: true, kind: "shimmer" }
         ];
       case "cluster":
         return [
-          { relX: 0.04, heightRows: 18, widthCols: 3, active: true, beacon: true, name: "Apex Spinning Stack", kind: "carbon" },
-          { relX: 0.22, heightRows: 14, widthCols: 3, active: true, beacon: false, name: "DBL Boiler Flue", kind: "steam" },
-          { relX: 0.52, heightRows: 20, widthCols: 4, active: true, beacon: true, name: "Gazipur Central Cogeneration", kind: "carbon" },
-          { relX: 0.76, heightRows: 15, widthCols: 3, active: true, beacon: false, name: "Viyellatex Dyehouse Riser", kind: "steam" },
-          { relX: 0.94, heightRows: 22, widthCols: 4, active: true, beacon: true, name: "Regional Power Hub", kind: "carbon" }
+          { relX: 0.68, heightRows: 16, widthCols: 3, active: true, beacon: false, kind: "steam" },
+          { relX: 0.82, heightRows: 18, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.95, heightRows: 22, widthCols: 4, active: true, beacon: true, kind: "carbon" }
         ];
       case "scada":
       case "terminal":
         return [
-          { relX: 0.03, heightRows: 15, widthCols: 2, active: true, beacon: false, name: "Telemetry Pylon West", kind: "telemetry" },
-          { relX: 0.95, heightRows: 16, widthCols: 2, active: true, beacon: false, name: "Telemetry Pylon East", kind: "telemetry" }
+          { relX: 0.94, heightRows: 16, widthCols: 2, active: true, beacon: false, kind: "telemetry" }
         ];
       case "solar-clean":
         return [
-          { relX: 0.03, heightRows: 12, widthCols: 2, active: true, beacon: false, name: "Heat Pump Vent West", kind: "clean" },
-          { relX: 0.95, heightRows: 12, widthCols: 2, active: true, beacon: false, name: "Heat Pump Vent East", kind: "clean" }
+          { relX: 0.95, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "clean" }
         ];
       default:
         return [
-          { relX: 0.02, heightRows: 17, widthCols: 3, active: true, beacon: true, name: "Stack 01", kind: "carbon" },
-          { relX: 0.94, heightRows: 18, widthCols: 4, active: true, beacon: true, name: "Stack 02", kind: "carbon" }
+          { relX: 0.94, heightRows: 18, widthCols: 4, active: true, beacon: true, kind: "carbon" }
         ];
     }
   }

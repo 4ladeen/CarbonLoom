@@ -279,11 +279,19 @@ if (typeof window !== "undefined") {
   (window as any).createHalftoneEngine = createHalftoneEngine;
 
   document.addEventListener("DOMContentLoaded", () => {
-    const stage = document.querySelector(".footer-wordmark-stage") as HTMLElement;
-    const targetContainer = stage || (document.querySelector(".site-footer, .hwf-root, footer") as HTMLElement);
-    if (!targetContainer) return;
+    let stage = document.querySelector(".footer-wordmark-stage") as HTMLElement;
+    if (!stage) {
+      const footer = document.querySelector(".site-footer, .hwf-root, footer") as HTMLElement;
+      if (footer) {
+        stage = document.createElement("div");
+        stage.className = "footer-wordmark-stage";
+        stage.setAttribute("aria-label", "CarbonLoom Halftone Wordmark");
+        footer.appendChild(stage);
+      }
+    }
+    if (!stage) return;
 
-    let canvas = targetContainer.querySelector("canvas.hwf-canvas") as HTMLCanvasElement;
+    let canvas = stage.querySelector("canvas.hwf-canvas") as HTMLCanvasElement;
     if (!canvas) {
       canvas = document.createElement("canvas");
       canvas.className = "hwf-canvas";
@@ -293,12 +301,10 @@ if (typeof window !== "undefined") {
       canvas.style.width = "100%";
       canvas.style.height = "100%";
       canvas.style.display = "block";
-      targetContainer.style.position = "relative";
-      targetContainer.style.overflow = "hidden";
-      targetContainer.appendChild(canvas);
+      stage.appendChild(canvas);
     }
 
-    createHalftoneEngine(targetContainer, canvas, {
+    createHalftoneEngine(stage, canvas, {
       wordmark: "carbonloom",
       dotGap: 6,
       radius: 90,

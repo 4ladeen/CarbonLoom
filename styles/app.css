@@ -545,6 +545,8 @@ footer {
 }
 
 .footer-bottom {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -554,6 +556,7 @@ footer {
   color: var(--color-text-muted);
   flex-wrap: wrap;
   gap: var(--space-4);
+  background-color: var(--color-surface-deep);
 }
 
 .footer-standards-row {
