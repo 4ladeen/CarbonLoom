@@ -2,7 +2,7 @@
 CarbonLoom 9-Agent LangGraph Multi-Agent State Machine Orchestrator (§5.2)
 Orchestrates the 9 specialized agents with deterministic tools and HITL interrupt gates.
 """
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import uuid
 
 from services.agents.state import AgentState

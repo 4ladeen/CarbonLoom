@@ -3,7 +3,7 @@ CarbonLoom Compliance & Multi-Format Exporter (FR-E5)
 Exports ISO 14064-1:2018 compliant report dictionaries, EU CBAM Declaration XML,
 and ESPR EN 18216-18223 DPP-ready JSON-LD with GS1 Digital Links.
 """
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 import xml.etree.ElementTree as ET
 import json
