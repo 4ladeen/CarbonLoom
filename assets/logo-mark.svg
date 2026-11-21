@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" aria-label="CarbonLoom Logo Mark">
+  <defs>
+    <linearGradient id="cl-emerald" x1="12" y1="12" x2="108" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="cl-graphite" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <radialGradient id="cl-glow" cx="60" cy="60" r="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background Soft Aura -->
+  <circle cx="60" cy="60" r="48" fill="url(#cl-glow)"/>
+
+  <!-- Outer Carbon Molecular Hexagon (SP2 Lattice Geometry) -->
+  <polygon points="60,14 100,37 100,83 60,106 20,83 20,37" 
+           stroke="url(#cl-emerald)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Textile Warp Threads (Vertical Looms) -->
+  <line x1="44" y1="28" x2="44" y2="92" stroke="#475569" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8 4"/>
+  <line x1="60" y1="20" x2="60" y2="100" stroke="url(#cl-graphite)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="76" y1="28" x2="76" y2="92" stroke="#475569" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8 4"/>
+
+  <!-- Textile Weft Threads (Horizontal Interlocking Weave) -->
+  <path d="M30 46 H90" stroke="url(#cl-emerald)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 60 H94" stroke="url(#cl-graphite)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M30 74 H90" stroke="url(#cl-emerald)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Inner Cryptographic Verified Node (Carbon Anchor) -->
+  <circle cx="60" cy="60" r="7" fill="#090d16" stroke="url(#cl-emerald)" stroke-width="3"/>
+  <circle cx="60" cy="60" r="2.5" fill="#34d399"/>
+
+  <!-- Hexagonal Lattice Vertex Atoms -->
+  <circle cx="60" cy="14" r="3.5" fill="#34d399"/>
+  <circle cx="100" cy="37" r="3.5" fill="#10b981"/>
+  <circle cx="100" cy="83" r="3.5" fill="#10b981"/>
+  <circle cx="60" cy="106" r="3.5" fill="#059669"/>
+  <circle cx="20" cy="83" r="3.5" fill="#10b981"/>
+  <circle cx="20" cy="37" r="3.5" fill="#34d399"/>
+</svg>

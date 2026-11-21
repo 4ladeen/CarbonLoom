@@ -24,10 +24,10 @@ SCENE_DURATIONS = [
     (3, 30),
     (4, 25),
     (5, 45),
-    (6, 27),
+    (6, 29),
 ]
 
-TOTAL_DURATION = sum(d for _, d in SCENE_DURATIONS)  # 172s
+TOTAL_DURATION = sum(d for _, d in SCENE_DURATIONS)  # 174s
 
 KNOWN_FFMPEG = r"C:\Users\maftu\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-9.1-full_build\bin\ffmpeg.exe"
 
@@ -69,7 +69,7 @@ def compile_video():
         "-r", "30",
         "-c:a", "aac",
         "-b:a", "192k",
-        "-shortest",
+        "-t", "174.0",
         str(output_mp4)
     ]
     

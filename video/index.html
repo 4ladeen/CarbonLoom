@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="CarbonLoom 180-second production video presentation: Decarbonizing Bangladesh RMG from vibe to production.">
@@ -406,7 +407,17 @@
 
   <header>
     <div>
-      <h1 class="brand-title">CarbonLoom: 180s Production Video</h1>
+      <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-1);"><div style="width: 28px; height: 28px; border-radius: var(--radius-inner); background: var(--color-surface-raised); border: 1px solid var(--color-surface-border); display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+              <polygon points="60,14 100,37 100,83 60,106 20,83 20,37" stroke="var(--color-accent)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+              <line x1="44" y1="28" x2="44" y2="92" stroke="var(--color-text-muted)" stroke-width="4" stroke-linecap="round"/>
+              <line x1="60" y1="20" x2="60" y2="100" stroke="var(--color-text-primary)" stroke-width="4" stroke-linecap="round"/>
+              <line x1="76" y1="28" x2="76" y2="92" stroke="var(--color-text-muted)" stroke-width="4" stroke-linecap="round"/>
+              <path d="M30 46 H90" stroke="var(--color-accent)" stroke-width="4" stroke-linecap="round"/>
+              <path d="M26 60 H94" stroke="var(--color-text-primary)" stroke-width="5" stroke-linecap="round"/>
+              <path d="M30 74 H90" stroke="var(--color-accent)" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="60" cy="60" r="9" fill="var(--color-surface-deep)" stroke="var(--color-accent)" stroke-width="4"/>
+              <circle cx="60" cy="60" r="4" fill="var(--color-accent)"/>
+            </svg></div><h1 class="brand-title" style="margin: 0;">CarbonLoom: 180s Production Video</h1></div>
       <p class="brand-sub">Decarbonizing Bangladesh RMG from vibe to production</p>
     </div>
     <div class="badges">
@@ -438,8 +449,8 @@
     <!-- Scrubber and Navigation Controls -->
     <div class="controls-bar">
       <div class="scrubber-wrap">
-        <input type="range" min="0" max="172" value="0" class="scrubber" id="timeScrubber" aria-label="Video timeline scrubber">
-        <div class="time-readout" id="timeReadout">0:00 / 2:52</div>
+        <input type="range" min="0" max="174" value="0" class="scrubber" id="timeScrubber" aria-label="Video timeline scrubber">
+        <div class="time-readout" id="timeReadout">0:00 / 2:54</div>
       </div>
 
       <div class="button-group">
@@ -491,7 +502,7 @@
           <span class="chapter-name">5. ZK Tamper</span>
         </button>
         <button class="chapter-pill" data-start="145">
-          <span class="chapter-num">2:25 to 2:52</span>
+          <span class="chapter-num">2:25 to 2:54</span>
           <span class="chapter-name">6. Roadmap</span>
         </button>
       </div>
@@ -711,7 +722,7 @@
       {
         num: 6,
         start: 145,
-        end: 172,
+        end: 174,
         title: "Business Model & Roadmap",
         frame: "frames/scene_06.png",
         speech: "With enterprise subscription tiers for factories and buyers, certified provenance traces, and zero prompt math, CarbonLoom delivers Bangladesh RMG decarbonization from vibe to production."
@@ -766,7 +777,7 @@
 
     function updateUI() {
       timeScrubber.value = currentTime;
-      timeReadout.textContent = `${formatTime(currentTime)} / 2:52`;
+      timeReadout.textContent = `${formatTime(currentTime)} / 2:54`;
 
       const scene = getCurrentScene(currentTime);
       if (scene) {
@@ -843,7 +854,7 @@
       if (isPlaying) {
         pauseVideo();
       } else {
-        if (currentTime >= 172) currentTime = 0;
+        if (currentTime >= 174) currentTime = 0;
         mainVideo.currentTime = currentTime;
         playVideo();
       }
