@@ -6,7 +6,7 @@
   <meta name="description" content="CarbonLoom: Autonomous carbon accounting, TreeSHAP forensic waste discovery, and zero-knowledge compliance verification operating system for export garment factories.">
   <title>CarbonLoom — Decarbonization OS for Export Manufacturing</title>
   
-  <link rel="stylesheet" href="styles/app.css">
+  <link rel="stylesheet" href="styles/app.css?v=2.5.0">
   <style>
     /* Hero Typography & Layout & Carbon Skyline Canvas */
     .hero-section {
@@ -74,7 +74,7 @@
 
     .hero-editorial {
       position: relative;
-      z-index: 2;
+      z-index: 5;
     }
 
     .hero-metrics {
@@ -84,23 +84,30 @@
       padding-top: var(--space-6);
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       position: relative;
-      z-index: 2;
+      z-index: 5;
     }
 
     .hero-metric-card {
-      background: rgba(11, 14, 20, 0.90);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(10, 12, 18, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: var(--radius-card);
       padding: 14px 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65);
       transition: border-color var(--duration-quick) var(--ease-standard), background var(--duration-quick) var(--ease-standard);
     }
 
     .hero-metric-card:hover {
-      border-color: rgba(255, 255, 255, 0.16);
-      background: rgba(15, 19, 27, 0.96);
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(14, 17, 25, 0.98);
+    }
+
+    @media (max-width: 640px) {
+      .hero-metrics {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+      }
     }
 
     .metric-value {
@@ -596,6 +603,114 @@
         </p>
       </div>
 
+      <!-- Interactive Industrial Energy Flow & Mass-Balance Sankey Pipeline -->
+      <div class="energy-flow-visualizer spotlight-card">
+        <div class="energy-flow-header">
+          <div class="energy-flow-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <span>Live Industrial Mass-Balance Pipeline &middot; Line 04</span>
+          </div>
+          <div class="energy-flow-controls">
+            <button type="button" class="energy-flow-chip active" id="flow-btn-all" onclick="setEnergyFlowMode('all')">All Feeds</button>
+            <button type="button" class="energy-flow-chip" id="flow-btn-crew" onclick="setEnergyFlowMode('crewneck')">Crewneck Stream (4.25 SMV)</button>
+            <button type="button" class="energy-flow-chip" id="flow-btn-hoodie" onclick="setEnergyFlowMode('hoodie')">Hoodie Stream (11.50 SMV)</button>
+            <button type="button" class="energy-flow-chip" id="flow-btn-leak" onclick="setEnergyFlowMode('leak')">Leak Blow-By</button>
+          </div>
+        </div>
+
+        <svg class="flow-svg-canvas" viewBox="0 0 1000 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Flow Pipes (Background Grids & Hairlines) -->
+          <!-- Inflow 1: DESCO Grid (Y: 45) -->
+          <path d="M 180 45 L 380 45 L 430 115" stroke="rgba(56, 189, 248, 0.25)" stroke-width="3" fill="none" />
+          <path id="pipe-desco" class="pipe-stream" d="M 180 45 L 380 45 L 430 115" stroke="#38bdf8" stroke-width="3" fill="none" />
+
+          <!-- Inflow 2: Natural Gas (Y: 120) -->
+          <path d="M 180 120 L 430 120" stroke="rgba(245, 158, 11, 0.25)" stroke-width="4" fill="none" />
+          <path id="pipe-gas" class="pipe-stream" d="M 180 120 L 430 120" stroke="#f59e0b" stroke-width="4" fill="none" />
+
+          <!-- Inflow 3: Steam Boiler 01 (Y: 195) -->
+          <path d="M 180 195 L 380 195 L 430 125" stroke="rgba(16, 185, 129, 0.25)" stroke-width="3" fill="none" />
+          <path id="pipe-boiler" class="pipe-stream" d="M 180 195 L 380 195 L 430 125" stroke="#10b981" stroke-width="3" fill="none" />
+
+          <!-- Central Convergence Hub to Outflows -->
+          <!-- Outflow 1: Crewneck T-Shirt (Y: 45) -->
+          <path d="M 570 115 L 620 45 L 820 45" stroke="rgba(16, 185, 129, 0.25)" stroke-width="4" fill="none" />
+          <path id="pipe-crew" class="pipe-stream-fast" d="M 570 115 L 620 45 L 820 45" stroke="#10b981" stroke-width="4" fill="none" />
+
+          <!-- Outflow 2: Fleece Hoodie (Y: 120) -->
+          <path d="M 570 120 L 820 120" stroke="rgba(139, 92, 246, 0.25)" stroke-width="4" fill="none" />
+          <path id="pipe-hoodie" class="pipe-stream" d="M 570 120 L 820 120" stroke="#8b5cf6" stroke-width="4" fill="none" />
+
+          <!-- Outflow 3: Steam Trap Blow-By Waste (Y: 195) -->
+          <path d="M 570 125 L 620 195 L 820 195" stroke="rgba(239, 68, 68, 0.25)" stroke-width="3" fill="none" />
+          <path id="pipe-leak" class="pipe-stream" d="M 570 125 L 620 195 L 820 195" stroke="#ef4444" stroke-width="3" fill="none" />
+
+          <!-- Input Nodes (Left) -->
+          <!-- Node 1: DESCO Grid -->
+          <g class="flow-node-box" onclick="setEnergyFlowMode('all')">
+            <rect x="20" y="25" width="160" height="40" rx="6" fill="#0d111a" stroke="rgba(56, 189, 248, 0.50)" stroke-width="1"/>
+            <circle cx="36" cy="45" r="4" fill="#38bdf8"/>
+            <text x="48" y="42" fill="#e2e8f0" font-family="monospace" font-size="11" font-weight="600">DESCO Grid Feed</text>
+            <text x="48" y="55" fill="#38bdf8" font-family="monospace" font-size="10">42,550 kWh · 33kV</text>
+          </g>
+
+          <!-- Node 2: Natural Gas -->
+          <g class="flow-node-box" onclick="setEnergyFlowMode('all')">
+            <rect x="20" y="100" width="160" height="40" rx="6" fill="#0d111a" stroke="rgba(245, 158, 11, 0.50)" stroke-width="1"/>
+            <circle cx="36" cy="120" r="4" fill="#f59e0b"/>
+            <text x="48" y="117" fill="#e2e8f0" font-family="monospace" font-size="11" font-weight="600">Titas Gas Feed</text>
+            <text x="48" y="130" fill="#f59e0b" font-family="monospace" font-size="10">14,200 m³ (30 BDT)</text>
+          </g>
+
+          <!-- Node 3: Steam Boiler -->
+          <g class="flow-node-box" onclick="setEnergyFlowMode('all')">
+            <rect x="20" y="175" width="160" height="40" rx="6" fill="#0d111a" stroke="rgba(16, 185, 129, 0.50)" stroke-width="1"/>
+            <circle cx="36" cy="195" r="4" fill="#10b981"/>
+            <text x="48" y="192" fill="#e2e8f0" font-family="monospace" font-size="11" font-weight="600">Steam Boiler #01</text>
+            <text x="48" y="205" fill="#10b981" font-family="monospace" font-size="10">8.4 bar · Header</text>
+          </g>
+
+          <!-- Central Hub: Deterministic Allocation Core -->
+          <g transform="translate(430, 85)">
+            <rect x="0" y="0" width="140" height="70" rx="8" fill="#0a0c12" stroke="#10b981" stroke-width="1.5"/>
+            <rect x="3" y="3" width="134" height="64" rx="6" fill="rgba(16, 185, 129, 0.08)"/>
+            <text x="70" y="28" text-anchor="middle" fill="#10b981" font-family="monospace" font-size="11" font-weight="700">SMV PHYSICS CORE</text>
+            <text x="70" y="44" text-anchor="middle" fill="#e2e8f0" font-family="monospace" font-size="10">Deterministic Python</text>
+            <text x="70" y="58" text-anchor="middle" fill="rgba(16, 185, 129, 0.85)" font-family="monospace" font-size="9">0.00% Tolerance</text>
+          </g>
+
+          <!-- Output Nodes (Right) -->
+          <!-- Node 4: Crewneck T-Shirt -->
+          <g class="flow-node-box" onclick="setEnergyFlowMode('crewneck')">
+            <rect x="820" y="25" width="160" height="40" rx="6" fill="#0d111a" stroke="rgba(16, 185, 129, 0.50)" stroke-width="1"/>
+            <circle cx="836" cy="45" r="4" fill="#10b981"/>
+            <text x="848" y="42" fill="#e2e8f0" font-family="monospace" font-size="11" font-weight="600">Crewneck (4.25 SMV)</text>
+            <text x="848" y="55" fill="#10b981" font-family="monospace" font-size="10">0.239 kgCO2e · PASS</text>
+          </g>
+
+          <!-- Node 5: Fleece Hoodie -->
+          <g class="flow-node-box" onclick="setEnergyFlowMode('hoodie')">
+            <rect x="820" y="100" width="160" height="40" rx="6" fill="#0d111a" stroke="rgba(139, 92, 246, 0.50)" stroke-width="1"/>
+            <circle cx="836" cy="120" r="4" fill="#8b5cf6"/>
+            <text x="848" y="117" fill="#e2e8f0" font-family="monospace" font-size="11" font-weight="600">Hoodie (11.50 SMV)</text>
+            <text x="848" y="130" fill="#8b5cf6" font-family="monospace" font-size="10">1.412 kgCO2e · PASS</text>
+          </g>
+
+          <!-- Node 6: Steam Trap Leak -->
+          <g class="flow-node-box" onclick="setEnergyFlowMode('leak')">
+            <rect x="820" y="175" width="160" height="40" rx="6" fill="#0d111a" stroke="rgba(239, 68, 68, 0.50)" stroke-width="1"/>
+            <circle cx="836" cy="195" r="4" fill="#ef4444"/>
+            <text x="848" y="192" fill="#e2e8f0" font-family="monospace" font-size="11" font-weight="600">Line 04 Trap Leak</text>
+            <text x="848" y="205" fill="#ef4444" font-family="monospace" font-size="10">+0.420 kg · ISOLATED</text>
+          </g>
+        </svg>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: var(--space-3); border-top: 1px solid var(--color-border-subtle); font-size: 11px; font-family: var(--font-mono); color: var(--color-text-muted); flex-wrap: wrap; gap: 8px;">
+          <span id="flow-status-text">Active Routing: Combined Industrial Mass-Balance (DESCO + Gas + Steam)</span>
+          <span>Allocated Output: <strong id="flow-metric-alloc" style="color: var(--color-accent);">Balanced (0.00% err)</strong></span>
+        </div>
+      </div>
+
       <div class="flow-diagram-grid">
         <!-- Stage 1 -->
         <div class="flow-step-card spotlight-card">
@@ -784,6 +899,94 @@
         </p>
       </div>
 
+      <!-- Interactive Zero-Knowledge Cryptographic Shield & Circuit DAG Chamber -->
+      <div class="zk-chamber-hub spotlight-card">
+        <div class="zk-chamber-header">
+          <div class="zk-chamber-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Circom 2 Groth16 Zero-Knowledge Cryptographic Chamber</span>
+          </div>
+          <span id="zk-proof-badge" style="font-family: var(--font-mono); font-size: 11px; color: var(--color-accent); display: flex; align-items: center; gap: 6px;">
+            <span class="status-dot live-pulse"></span>
+            CIRCUIT ONLINE (BN254)
+          </span>
+        </div>
+
+        <div class="zk-dag-grid">
+          <!-- Left: 14 Private Witness Inputs (Redacted) -->
+          <div class="zk-dag-col">
+            <div class="zk-dag-col-title">
+              <span>Private Witness Signals (14)</span>
+              <span style="color: var(--color-warning);">HSM ISOLATED</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">unit_fob_price_usd</span>
+              <span style="color: var(--color-danger);">$2.45 / pc [SECRET]</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">factory_profit_margin</span>
+              <span style="color: var(--color-danger);">$0.38 / pc (15.5%)</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">tier2_spinning_mill</span>
+              <span style="color: var(--color-danger);">Apex Yarn Mills #4</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">dye_bath_recipe_code</span>
+              <span style="color: var(--color-danger);">RECIPE-IND-BLUE-19</span>
+            </div>
+          </div>
+
+          <!-- Center: The Zero-Knowledge Core & Blinding Shield -->
+          <div class="zk-center-chamber">
+            <div class="zk-shield-core" id="zk-shield-core">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.8">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 4px;">
+              2,148 R1CS GATES
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--color-text-muted); margin-bottom: var(--space-3);">
+              Bilinear Pairing on BN254
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-run-zk-sim" onclick="simulateWasmZkProof()" style="height: 32px; font-size: 11px; padding: 0 12px; margin: 0 auto;">
+              ⚡ Run Live In-Browser ZK Proof (WASM)
+            </button>
+          </div>
+
+          <!-- Right: Verifier Public Proof Output -->
+          <div class="zk-dag-col">
+            <div class="zk-dag-col-title">
+              <span>Public Verification Inputs</span>
+              <span style="color: var(--color-accent);">WASM &middot; 142ms</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">batch_intensity_check</span>
+              <span style="color: var(--color-accent);">1.412 &le; 2.50 kg [PASS]</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">proof_pi_a_b_c</span>
+              <span style="color: #60a5fa;">G1/G2 Elliptic Points</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">fabric_ledger_block</span>
+              <span style="color: #cbd5e1;">Block #1,048,291</span>
+            </div>
+            <div class="zk-signal-pill">
+              <span style="color: var(--color-text-secondary);">commercial_leakage</span>
+              <span style="color: var(--color-accent);">0 BYTES (CONCEALED)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="zk-prover-status-bar">
+          <span id="zk-sim-status" style="color: var(--color-text-secondary);">Ready to execute client-side Groth16 prover in WebAssembly.</span>
+          <span>Proof Latency: <strong id="zk-sim-timer" style="color: var(--color-accent);">142 ms</strong></span>
+        </div>
+      </div>
+
       <div class="secrecy-grid">
         <!-- Terminal Left: Factory Internal Witness -->
         <div class="terminal-box spotlight-card">
@@ -807,8 +1010,9 @@
             &nbsp;&nbsp;<span style="color: #93c5fd;">"gas_subsidized_rate"</span>: <span style="color: #f87171;">"30.00 BDT / m3"</span>,<br>
             &nbsp;&nbsp;<span style="color: #93c5fd;">"dye_bath_recipe_code"</span>: <span style="color: #f87171;">"RECIPE-IND-BLUE-19-V2"</span><br>
             <span style="color: #60a5fa;">}</span>
-            <div style="margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed var(--color-border); font-size: 11px; color: var(--color-text-muted);">
-              &lock; Hardware-isolated cryptographic witness. Never shared with customs or brand buyers.
+            <div style="margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed var(--color-border); font-size: 11px; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent); flex-shrink: 0;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Hardware-isolated cryptographic witness. Never shared with customs or brand buyers.</span>
             </div>
           </div>
         </div>
@@ -858,6 +1062,104 @@
         <p class="section-sub">
           Deployed and benchmarked across live manufacturing lines in Bangladesh's premier garment export clusters (Apex Padma Knitwear, DBL Group Gazipur).
         </p>
+      </div>
+
+      <!-- Interactive Bangladesh RMG Industrial Cluster Telemetry Topology Map -->
+      <div class="cluster-map-container spotlight-card">
+        <div class="cluster-map-header">
+          <div class="energy-flow-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span>Live Bangladesh RMG Manufacturing Corridor &middot; Telemetry Grid</span>
+          </div>
+          <div class="cluster-facility-select">
+            <button type="button" class="cluster-btn active" id="btn-cl-apex" onclick="selectClusterFacility('apex')">Apex Padma (Gazipur)</button>
+            <button type="button" class="cluster-btn" id="btn-cl-dbl" onclick="selectClusterFacility('dbl')">DBL Group (Sreepur)</button>
+            <button type="button" class="cluster-btn" id="btn-cl-square" onclick="selectClusterFacility('square')">Square Fashions (Narayanganj)</button>
+          </div>
+        </div>
+
+        <div class="cluster-map-grid">
+          <!-- Vector Cluster Radar Map -->
+          <svg class="cluster-svg-map" viewBox="0 0 520 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Grid Lines & Coordinate Radar Marks -->
+            <line x1="20" y1="70" x2="500" y2="70" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+            <line x1="20" y1="140" x2="500" y2="140" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+            <line x1="20" y1="210" x2="500" y2="210" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+            <line x1="130" y1="20" x2="130" y2="260" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+            <line x1="260" y1="20" x2="260" y2="260" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+            <line x1="390" y1="20" x2="390" y2="260" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 4"/>
+
+            <!-- Industrial Transit Corridors (Dhaka-Mymensingh N3 & N1 Highways) -->
+            <path d="M 120 260 L 210 170 L 260 110 L 290 40" stroke="rgba(56, 189, 248, 0.25)" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+            <path d="M 210 170 L 380 220" stroke="rgba(56, 189, 248, 0.18)" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>
+
+            <text x="295" y="45" fill="rgba(255,255,255,0.30)" font-family="monospace" font-size="9">N3 HIGHWAY (Sreepur Corridor)</text>
+            <text x="385" y="225" fill="rgba(255,255,255,0.30)" font-family="monospace" font-size="9">N1 (Narayanganj Export Belt)</text>
+
+            <!-- Node 2: Sreepur (DBL Group) -->
+            <g id="pin-dbl" style="cursor: pointer;" onclick="selectClusterFacility('dbl')">
+              <circle cx="280" cy="65" r="14" class="radar-ping" stroke="#10b981" stroke-width="1" fill="none"/>
+              <circle cx="280" cy="65" r="5" fill="#10b981"/>
+              <rect x="295" y="55" width="130" height="24" rx="4" fill="#0d111a" stroke="rgba(16, 185, 129, 0.45)"/>
+              <text x="303" y="70" fill="#e2e8f0" font-family="monospace" font-size="10" font-weight="600">DBL Group (Sreepur)</text>
+            </g>
+
+            <!-- Node 1: Gazipur (Apex Padma Knitwear) -->
+            <g id="pin-apex" style="cursor: pointer;" onclick="selectClusterFacility('apex')">
+              <circle cx="210" cy="140" r="18" class="radar-ping" stroke="#38bdf8" stroke-width="1" fill="none"/>
+              <circle cx="210" cy="140" r="6" fill="#38bdf8"/>
+              <rect x="225" y="128" width="165" height="24" rx="4" fill="#0d111a" stroke="rgba(56, 189, 248, 0.55)"/>
+              <text x="233" y="143" fill="#e2e8f0" font-family="monospace" font-size="10" font-weight="600">Apex Padma (Gazipur Pilot)</text>
+            </g>
+
+            <!-- Node 3: Narayanganj (Square Fashions) -->
+            <g id="pin-square" style="cursor: pointer;" onclick="selectClusterFacility('square')">
+              <circle cx="370" cy="210" r="14" class="radar-ping" stroke="#8b5cf6" stroke-width="1" fill="none"/>
+              <circle cx="370" cy="210" r="5" fill="#8b5cf6"/>
+              <rect x="230" y="200" width="130" height="24" rx="4" fill="#0d111a" stroke="rgba(139, 92, 246, 0.45)"/>
+              <text x="238" y="215" fill="#e2e8f0" font-family="monospace" font-size="10" font-weight="600">Square Fashions Ltd</text>
+            </g>
+
+            <text x="30" y="250" fill="rgba(255,255,255,0.35)" font-family="monospace" font-size="9">DHAKA INDUSTRIAL DIVISION · 23.8103° N, 90.4125° E</text>
+          </svg>
+
+          <!-- Telemetry Live Detail Card -->
+          <div class="cluster-info-card">
+            <div style="font-size: 13px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 2px;" id="cl-fac-name">
+              Apex Padma Knitwear Ltd.
+            </div>
+            <div style="font-size: 11px; color: var(--color-accent); margin-bottom: var(--space-4);" id="cl-fac-cluster">
+              Gazipur Industrial Zone
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--color-text-muted);">Line Config:</span>
+                <span style="color: var(--color-text-primary);" id="cl-fac-lines">18 Active Lines (4.25 SMV Crewneck)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--color-text-muted);">Boiler Steam:</span>
+                <span style="color: var(--color-text-primary);" id="cl-fac-boiler">8.4 bar (Boiler #01 High Pressure)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--color-text-muted);">Stenter Power:</span>
+                <span style="color: var(--color-text-primary);" id="cl-fac-stenter">142.0 kW (Gas Fired Ovens)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--color-text-muted);">Verified Throughput:</span>
+                <span style="color: var(--color-accent); font-weight: 600;" id="cl-fac-output">48,500 pcs/day</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-top: 1px dashed var(--color-border-subtle); padding-top: 6px;">
+                <span style="color: var(--color-text-muted);">EU CBAM Status:</span>
+                <span style="color: var(--color-accent);" id="cl-fac-cbam">PASS (0.239 kgCO2e &le; 2.50 kg)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--color-text-muted);">Audit Lineage:</span>
+                <span style="color: #60a5fa;" id="cl-fac-lineage">LIN-992014F (Hyperledger #1.04M)</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="impact-matrix-grid">
@@ -1037,9 +1339,9 @@
   </footer>
 
   <script src="js/liquid-metal.js"></script>
-  <script src="js/halftone-footer.js?v=2.3.0"></script>
-  <script src="js/carbon-skyline.js?v=2.3.0"></script>
-  <script src="js/interactions.js"></script>
+  <script src="js/halftone-footer.js?v=2.5.0"></script>
+  <script src="js/carbon-skyline.js?v=2.5.0"></script>
+  <script src="js/interactions.js?v=2.5.0"></script>
   <script>
     // 1. Hero HUD Garment Style Switcher with Animated Countdown/Countup
     function setGarmentStyle(style) {

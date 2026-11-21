@@ -164,15 +164,12 @@ var CarbonAsciiSkyline = (() => {
         const renderRow = Math.round(p.y / charH);
         const renderX = renderCol * charW;
         const renderY = renderRow * charH;
+        if (renderX < w * 0.72) {
+          continue;
+        }
         const isMobile = cols < 80;
-        if (isMobile) {
-          if (renderY < h * 0.75) {
-            continue;
-          }
-        } else {
-          if (renderX < w * 0.62 && renderY < h * 0.92) {
-            continue;
-          }
+        if (cols < 90 && renderY < h * 0.8) {
+          continue;
         }
         let char = "\xB7";
         let color = "rgba(120, 125, 140, 0.15)";
@@ -279,11 +276,11 @@ var CarbonAsciiSkyline = (() => {
     };
     const drawHeroScene = (baseRow, time) => {
       const isMobile = cols < 80;
-      const drumStart = Math.floor(cols * (isMobile ? 0.7 : 0.64));
-      const drumEnd = Math.floor(cols * 0.94);
+      const drumStart = Math.floor(cols * (isMobile ? 0.82 : 0.76));
+      const drumEnd = Math.floor(cols * 0.98);
       for (let c = drumStart; c < drumEnd; c++) {
         const isHeader = (c - drumStart) % 8 === 0;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.16)";
         ctx.fillText("\u2550", c * charW, (baseRow - 5) * charH);
         if (isHeader) {
           ctx.fillText("\u2564", c * charW, (baseRow - 5) * charH);
@@ -291,23 +288,23 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText("\u2502", c * charW, (baseRow - 3) * charH);
         }
         for (let r = baseRow - 3; r <= baseRow; r++) {
-          ctx.fillStyle = isHeader ? "rgba(255, 255, 255, 0.22)" : "rgba(18, 22, 30, 0.88)";
+          ctx.fillStyle = isHeader ? "rgba(255, 255, 255, 0.18)" : "rgba(18, 22, 30, 0.88)";
           ctx.fillText(isHeader ? "\u2551" : "\u2588", c * charW, r * charH);
         }
       }
-      const portholeStart = Math.floor(cols * (isMobile ? 0.74 : 0.68));
-      for (let c = portholeStart; c < Math.min(cols - 2, portholeStart + 16); c += 4) {
-        ctx.fillStyle = "rgba(245, 158, 11, 0.40)";
+      const portholeStart = Math.floor(cols * (isMobile ? 0.84 : 0.8));
+      for (let c = portholeStart; c < Math.min(cols - 2, portholeStart + 12); c += 4) {
+        ctx.fillStyle = "rgba(245, 158, 11, 0.35)";
         ctx.fillText("\u25A3", c * charW, (baseRow - 2) * charH);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawThreatScene = (baseRow, time) => {
       const isMobile = cols < 80;
-      const gensets = isMobile ? [{ start: Math.floor(cols * 0.7), width: Math.floor(cols * 0.26) }] : [
-        { start: Math.floor(cols * 0.6), width: 10 },
-        { start: Math.floor(cols * 0.72), width: 10 },
-        { start: Math.floor(cols * 0.84), width: 10 }
+      const gensets = isMobile ? [{ start: Math.floor(cols * 0.82), width: Math.floor(cols * 0.16) }] : [
+        { start: Math.floor(cols * 0.76), width: 7 },
+        { start: Math.floor(cols * 0.85), width: 7 },
+        { start: Math.floor(cols * 0.94), width: 5 }
       ];
       gensets.forEach((g) => {
         const topR = baseRow - (isMobile ? 3 : 6);
@@ -356,30 +353,30 @@ var CarbonAsciiSkyline = (() => {
     };
     const drawStenterScene = (baseRow, time) => {
       const isMobile = cols < 80;
-      const toothCount = isMobile ? 2 : 4;
-      const toothWidth = Math.floor(cols * (isMobile ? 0.25 : 0.35));
+      const toothCount = isMobile ? 2 : 3;
+      const toothWidth = Math.floor(cols * (isMobile ? 0.16 : 0.2));
       const step = Math.floor(toothWidth / toothCount);
-      const startBase = Math.floor(cols * (isMobile ? 0.7 : 0.58));
+      const startBase = Math.floor(cols * (isMobile ? 0.82 : 0.76));
       for (let t = 0; t < toothCount; t++) {
         const startC = startBase + t * step;
-        const peakRow = baseRow - (isMobile ? 4 : 7);
-        for (let r = 0; r < (isMobile ? 4 : 7); r++) {
-          ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
+        const peakRow = baseRow - (isMobile ? 3 : 6);
+        for (let r = 0; r < (isMobile ? 3 : 6); r++) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
           ctx.fillText("\u2571", (startC + r) * charW, (baseRow - r) * charH);
         }
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.fillText("\u2502", (startC + (isMobile ? 4 : 7)) * charW, peakRow * charH);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+        ctx.fillText("\u2502", (startC + (isMobile ? 3 : 6)) * charW, peakRow * charH);
         const fanPhase = Math.floor((time * 0.015 + t) % 4);
         const fanGlyphs = ["\u2723", "\u2715", "+", "\xD7"];
-        ctx.fillStyle = "rgba(56, 189, 248, 0.70)";
-        ctx.fillText(fanGlyphs[fanPhase], (startC + (isMobile ? 2 : 4)) * charW, (peakRow - 1) * charH);
+        ctx.fillStyle = "rgba(56, 189, 248, 0.65)";
+        ctx.fillText(fanGlyphs[fanPhase], (startC + (isMobile ? 2 : 3)) * charW, (peakRow - 1) * charH);
       }
-      const scrubCol = Math.floor(cols * 0.94);
-      const scrubH = isMobile ? 8 : 16;
+      const scrubCol = Math.floor(cols * 0.97);
+      const scrubH = isMobile ? 6 : 12;
       for (let dy = 0; dy < scrubH; dy++) {
         const r = baseRow - dy;
-        const coneW = dy < 4 ? 3 : dy > 12 ? 2 : 4;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+        const coneW = dy < 3 ? 2 : dy > 9 ? 1 : 3;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.20)";
         ctx.fillText("[", (scrubCol - coneW) * charW, r * charH);
         ctx.fillText("]", (scrubCol + coneW) * charW, r * charH);
         for (let fillC = scrubCol - coneW + 1; fillC < scrubCol + coneW; fillC++) {
@@ -387,58 +384,58 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText(dy % 3 === 0 ? "\u2592" : "\u2588", fillC * charW, r * charH);
         }
       }
-      ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
-      ctx.fillText("\u25A0\u25A0", (scrubCol - 3) * charW, (baseRow - 2) * charH);
+      ctx.fillStyle = "rgba(56, 189, 248, 0.40)";
+      ctx.fillText("\u25A0\u25A0", (scrubCol - 2) * charW, (baseRow - 2) * charH);
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawSteamLeakScene = (baseRow, time) => {
       const isMobile = cols < 80;
       const pipeRow = baseRow - (isMobile ? 3 : 5);
       const pipeY = pipeRow * charH;
-      const pipeStart = Math.floor(cols * (isMobile ? 0.65 : 0.58));
-      const pipeEnd = Math.floor(cols * 0.94);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+      const pipeStart = Math.floor(cols * (isMobile ? 0.82 : 0.76));
+      const pipeEnd = Math.floor(cols * 0.96);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
       for (let c = pipeStart; c < pipeEnd; c++) {
         ctx.fillText("\u2550", c * charW, pipeY);
         ctx.fillText("\u2550", c * charW, pipeY + charH * 2);
       }
-      const flangedCols = isMobile ? [Math.floor(cols * 0.72), Math.floor(cols * 0.88)] : [Math.floor(cols * 0.65), Math.floor(cols * 0.78), Math.floor(cols * 0.88)];
+      const flangedCols = isMobile ? [Math.floor(cols * 0.84), Math.floor(cols * 0.92)] : [Math.floor(cols * 0.78), Math.floor(cols * 0.86), Math.floor(cols * 0.94)];
       flangedCols.forEach((fc) => {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.40)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
         ctx.fillText("\u2551", fc * charW, pipeY);
         ctx.fillText("\u2551", fc * charW, pipeY + charH);
         ctx.fillText("\u2551", fc * charW, pipeY + charH * 2);
       });
-      const gaugeCol = Math.floor(cols * (isMobile ? 0.72 : 0.65));
+      const gaugeCol = Math.floor(cols * (isMobile ? 0.84 : 0.79));
       ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.85)" : "rgba(239, 68, 68, 0.85)";
       ctx.fillText(isRepaired ? "(\u25CB\u2500)" : "(\u25CF\u2197)", gaugeCol * charW, pipeY - charH);
-      const trapCol = Math.floor(cols * (isMobile ? 0.82 : 0.78));
+      const trapCol = Math.floor(cols * (isMobile ? 0.9 : 0.87));
       ctx.fillStyle = isRepaired ? "rgba(16, 185, 129, 0.80)" : "rgba(245, 158, 11, 0.85)";
       ctx.fillText(isRepaired ? "[\u25A0]" : "[\u2591]", trapCol * charW, pipeY + charH);
       if (!isRepaired) {
         ctx.fillStyle = "rgba(245, 158, 11, 0.85)";
-        ctx.fillText(isMobile ? "\xBB\xBB\xBB\xBB" : "\xBB\xBB\xBB\xBB\xBB\xBB\xBB\xBB", (trapCol + 2) * charW, pipeY + charH);
+        ctx.fillText(isMobile ? "\xBB\xBB\xBB\xBB" : "\xBB\xBB\xBB\xBB\xBB\xBB", (trapCol + 2) * charW, pipeY + charH);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawCogenScene = (baseRow, time) => {
       const isMobile = cols < 80;
-      const turbHeight = isMobile ? 3 : 9;
-      const turbStart = Math.floor(cols * (isMobile ? 0.7 : 0.6));
-      const turbWidth = Math.floor(cols * (isMobile ? 0.26 : 0.32));
+      const turbHeight = isMobile ? 3 : 5;
+      const turbStart = Math.floor(cols * (isMobile ? 0.82 : 0.76));
+      const turbWidth = Math.floor(cols * (isMobile ? 0.16 : 0.2));
       for (let c = turbStart; c < turbStart + turbWidth; c++) {
         for (let r = baseRow - turbHeight; r <= baseRow; r++) {
           if (r === baseRow - turbHeight) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.24)";
             ctx.fillText("\u2580", c * charW, r * charH);
           } else if (c === turbStart || c === turbStart + turbWidth - 1) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
             ctx.fillText("\u2551", c * charW, r * charH);
-          } else if (r === baseRow - 6 && !isMobile && (c - turbStart) % 3 === 0) {
-            ctx.fillStyle = "rgba(56, 189, 248, 0.55)";
+          } else if (r === baseRow - 4 && !isMobile && (c - turbStart) % 3 === 0) {
+            ctx.fillStyle = "rgba(56, 189, 248, 0.50)";
             ctx.fillText("\u2261", c * charW, r * charH);
           } else if (r === baseRow - 2 && (c - turbStart) % 4 === 0) {
-            ctx.fillStyle = "rgba(16, 185, 129, 0.80)";
+            ctx.fillStyle = "rgba(16, 185, 129, 0.75)";
             ctx.fillText("\u25CF", c * charW, r * charH);
           } else {
             ctx.fillStyle = "rgba(18, 22, 32, 0.92)";
@@ -447,20 +444,20 @@ var CarbonAsciiSkyline = (() => {
         }
       }
       if (!isMobile) {
-        for (let c = turbStart + 3; c < turbStart + turbWidth - 3; c += 2) {
-          ctx.fillStyle = "rgba(56, 189, 248, 0.30)";
-          ctx.fillText("\u2261", c * charW, (baseRow - 4) * charH);
+        for (let c = turbStart + 2; c < turbStart + turbWidth - 2; c += 2) {
+          ctx.fillStyle = "rgba(56, 189, 248, 0.28)";
+          ctx.fillText("\u2261", c * charW, (baseRow - 3) * charH);
         }
       }
-      for (let c = turbStart + 3; c < turbStart + turbWidth - 3; c += 3) {
-        ctx.fillStyle = "rgba(16, 185, 129, 0.65)";
+      for (let c = turbStart + 2; c < turbStart + turbWidth - 2; c += 3) {
+        ctx.fillStyle = "rgba(16, 185, 129, 0.60)";
         ctx.fillText("\u25CF", c * charW, (baseRow - 1) * charH);
       }
       stacks.forEach((s) => drawChimney(s, baseRow, time));
     };
     const drawClusterScene = (baseRow, time) => {
       const isMobile = cols < 80;
-      const millStart = Math.floor(cols * (isMobile ? 0.68 : 0.58));
+      const millStart = Math.floor(cols * (isMobile ? 0.8 : 0.76));
       ctx.fillStyle = "rgba(32, 38, 52, 0.35)";
       for (let c = millStart; c < cols; c++) {
         const hillH = (isMobile ? 2 : 4) + Math.round(Math.sin(c * 0.14) * (isMobile ? 1 : 3));
@@ -480,9 +477,9 @@ var CarbonAsciiSkyline = (() => {
           ctx.fillText(isWin ? "\u25A0" : "\u2588", c * charW, r * charH);
         }
       }
-      const pylonCols = isMobile ? [Math.floor(cols * 0.88)] : [Math.floor(cols * 0.72), Math.floor(cols * 0.88)];
+      const pylonCols = isMobile ? [Math.floor(cols * 0.92)] : [Math.floor(cols * 0.84), Math.floor(cols * 0.94)];
       pylonCols.forEach((pc) => {
-        const pTop = baseRow - (isMobile ? 6 : 12);
+        const pTop = baseRow - (isMobile ? 5 : 10);
         ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
         ctx.fillText("/\u25B2\\", (pc - 1) * charW, pTop * charH);
         for (let r = pTop + 1; r <= baseRow; r++) {
@@ -493,9 +490,8 @@ var CarbonAsciiSkyline = (() => {
     };
     const drawScadaScene = (baseRow, time) => {
       const isMobile = cols < 80;
-      const racks = isMobile ? [{ col: Math.floor(cols * 0.72) }] : [
-        { col: Math.floor(cols * 0.6) },
-        { col: Math.floor(cols * 0.74) },
+      const racks = isMobile ? [{ col: Math.floor(cols * 0.84) }] : [
+        { col: Math.floor(cols * 0.78) },
         { col: Math.floor(cols * 0.88) }
       ];
       racks.forEach((rk) => {
@@ -615,7 +611,8 @@ var CarbonAsciiSkyline = (() => {
     const onPointerMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      targetWindX = (mouseX / window.innerWidth - 0.45) * 1;
+      const normalizedX = mouseX / window.innerWidth - 0.5;
+      targetWindX = Math.max(0.14, 0.22 + normalizedX * 0.22);
     };
     resize();
     preSeedParticles();
@@ -654,46 +651,47 @@ var CarbonAsciiSkyline = (() => {
     switch (variant) {
       case "hero":
         return [
-          { relX: 0.72, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "carbon" },
-          { relX: 0.83, heightRows: 19, widthCols: 3, active: true, beacon: false, kind: "carbon" },
-          { relX: 0.93, heightRows: 21, widthCols: 4, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.82, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.88, heightRows: 19, widthCols: 3, active: true, beacon: false, kind: "carbon" },
+          { relX: 0.94, heightRows: 21, widthCols: 4, active: true, beacon: true, kind: "carbon" },
           { relX: 0.98, heightRows: 15, widthCols: 2, active: true, beacon: false, kind: "carbon" }
         ];
       case "threat":
         return [
-          { relX: 0.68, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "soot" },
-          { relX: 0.82, heightRows: 14, widthCols: 2, active: true, beacon: false, kind: "soot" },
-          { relX: 0.96, heightRows: 19, widthCols: 3, active: true, beacon: true, kind: "soot" }
+          { relX: 0.78, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "soot" },
+          { relX: 0.88, heightRows: 14, widthCols: 2, active: true, beacon: false, kind: "soot" },
+          { relX: 0.96, heightRows: 18, widthCols: 3, active: true, beacon: true, kind: "soot" }
         ];
       case "stenter":
       case "dyeing":
         return [
-          { relX: 0.68, heightRows: 13, widthCols: 2, active: true, beacon: false, kind: "steam" },
-          { relX: 0.82, heightRows: 14, widthCols: 3, active: true, beacon: false, kind: "steam" },
-          { relX: 0.94, heightRows: 20, widthCols: 4, active: true, beacon: true, kind: "steam" }
+          { relX: 0.78, heightRows: 13, widthCols: 2, active: true, beacon: false, kind: "steam" },
+          { relX: 0.88, heightRows: 14, widthCols: 3, active: true, beacon: false, kind: "steam" },
+          { relX: 0.96, heightRows: 18, widthCols: 3, active: true, beacon: true, kind: "steam" }
         ];
       case "steam-leak":
       case "boiler":
         return [
-          { relX: 0.8, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "blast" },
-          { relX: 0.94, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "steam" }
+          { relX: 0.84, heightRows: 12, widthCols: 2, active: true, beacon: false, kind: "blast" },
+          { relX: 0.96, heightRows: 16, widthCols: 3, active: true, beacon: true, kind: "steam" }
         ];
       case "cogen":
       case "power":
       case "spinning":
         return [
-          { relX: 0.92, heightRows: 22, widthCols: 5, active: true, beacon: true, kind: "shimmer" }
+          { relX: 0.94, heightRows: 14, widthCols: 4, active: true, beacon: true, kind: "shimmer" }
         ];
       case "cluster":
         return [
-          { relX: 0.68, heightRows: 16, widthCols: 3, active: true, beacon: false, kind: "steam" },
-          { relX: 0.82, heightRows: 18, widthCols: 3, active: true, beacon: true, kind: "carbon" },
-          { relX: 0.95, heightRows: 22, widthCols: 4, active: true, beacon: true, kind: "carbon" }
+          { relX: 0.78, heightRows: 15, widthCols: 3, active: true, beacon: false, kind: "steam" },
+          { relX: 0.88, heightRows: 17, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.96, heightRows: 20, widthCols: 4, active: true, beacon: true, kind: "carbon" }
         ];
       case "scada":
       case "terminal":
         return [
-          { relX: 0.94, heightRows: 16, widthCols: 2, active: true, beacon: false, kind: "telemetry" }
+          { relX: 0.94, heightRows: 15, widthCols: 2, active: true, beacon: false, kind: "telemetry" },
+          { relX: 0.98, heightRows: 16, widthCols: 2, active: true, beacon: false, kind: "telemetry" }
         ];
       case "solar-clean":
         return [
@@ -701,7 +699,8 @@ var CarbonAsciiSkyline = (() => {
         ];
       default:
         return [
-          { relX: 0.94, heightRows: 18, widthCols: 4, active: true, beacon: true, kind: "carbon" }
+          { relX: 0.88, heightRows: 16, widthCols: 3, active: true, beacon: true, kind: "carbon" },
+          { relX: 0.96, heightRows: 18, widthCols: 4, active: true, beacon: true, kind: "carbon" }
         ];
     }
   }

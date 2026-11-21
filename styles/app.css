@@ -1148,6 +1148,312 @@ footer {
   border-color: var(--color-border);
 }
 
+/* ==========================================================================
+   Rich Interactive Graphical Artifacts
+   ========================================================================== */
+
+/* 1. Industrial Energy Flow & Mass-Balance Sankey Pipeline */
+.energy-flow-visualizer {
+  background-color: #08090d;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-flow-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.energy-flow-title {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.energy-flow-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.energy-flow-chip {
+  padding: 4px 10px;
+  border-radius: var(--radius-control);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-quick) var(--ease-standard);
+}
+
+.energy-flow-chip.active {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.flow-svg-canvas {
+  width: 100%;
+  height: 260px;
+  display: block;
+}
+
+.pipe-stream {
+  stroke-dasharray: 6 4;
+  animation: pipeFlow 1.6s linear infinite;
+}
+
+@keyframes pipeFlow {
+  to { stroke-dashoffset: -20; }
+}
+
+.pipe-stream-fast {
+  stroke-dasharray: 4 3;
+  animation: pipeFlow 0.8s linear infinite;
+}
+
+.flow-node-box {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.flow-node-box:hover {
+  transform: translateY(-2px);
+}
+
+/* 2. Zero-Knowledge Cryptographic Shield & Circuit DAG Chamber */
+.zk-chamber-hub {
+  background: linear-gradient(180deg, #090a0f 0%, #06070a 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+  position: relative;
+  overflow: hidden;
+}
+
+.zk-chamber-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.zk-chamber-title {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zk-dag-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr 1.1fr;
+  gap: var(--space-6);
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.zk-dag-col {
+  background: rgba(15, 18, 26, 0.65);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  backdrop-filter: blur(8px);
+}
+
+.zk-dag-col-title {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zk-signal-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.40);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.zk-signal-pill:last-child {
+  margin-bottom: 0;
+}
+
+.zk-center-chamber {
+  text-align: center;
+  padding: var(--space-4);
+  position: relative;
+}
+
+.zk-shield-core {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  margin: 0 auto var(--space-4);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(9, 11, 16, 0.95) 70%);
+  border: 1px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.15);
+  position: relative;
+}
+
+.zk-shield-core::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px dashed rgba(16, 185, 129, 0.35);
+  animation: zkSpin 18s linear infinite;
+}
+
+@keyframes zkSpin {
+  to { transform: rotate(360deg); }
+}
+
+.zk-prover-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #040507;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 3. Bangladesh RMG Industrial Cluster Telemetry Topology Map */
+.cluster-map-container {
+  background-color: #08090d;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+  position: relative;
+  overflow: hidden;
+}
+
+.cluster-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.cluster-map-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+.cluster-svg-map {
+  width: 100%;
+  height: 280px;
+  display: block;
+  background: radial-gradient(circle at 60% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-card);
+}
+
+.radar-ping {
+  animation: radarPulse 2.4s ease-out infinite;
+}
+
+@keyframes radarPulse {
+  0% { r: 5; opacity: 0.9; }
+  100% { r: 24; opacity: 0; }
+}
+
+.cluster-info-card {
+  background: rgba(14, 17, 24, 0.75);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  font-family: var(--font-mono);
+}
+
+.cluster-facility-select {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.cluster-btn {
+  padding: 4px 10px;
+  border-radius: var(--radius-control);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-quick) var(--ease-standard);
+}
+
+.cluster-btn.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+@media (max-width: 992px) {
+  .zk-dag-grid {
+    grid-template-columns: 1fr;
+  }
+  .cluster-map-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 992px) {
   .comparison-grid, .waterfall-chart-grid, .secrecy-grid {
     grid-template-columns: 1fr;

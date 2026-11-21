@@ -6,7 +6,7 @@
   <meta name="description" content="CarbonLoom Architecture: Zero-LLM math law, Circom 2 Groth16 zero-knowledge circuits, TreeSHAP forensic waste attribution, and Go MCP gateway.">
   <title>Architecture &amp; Cryptography — CarbonLoom</title>
   
-  <link rel="stylesheet" href="styles/app.css">
+  <link rel="stylesheet" href="styles/app.css?v=2.5.0">
   <style>
     .bento-grid {
       display: grid;
@@ -120,6 +120,12 @@
       margin: 0;
     }
 
+    .section-header {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+    }
+
     @media (max-width: 992px) {
       .bento-7, .bento-5, .bento-6 {
         grid-column: span 12;
@@ -164,7 +170,7 @@
   </header>
 
   <!-- Page Header -->
-  <section class="section carbon-skyline-bg" data-skyline="power" style="padding-top: var(--space-20); padding-bottom: var(--space-12);">
+  <section class="section carbon-skyline-bg" data-skyline="power" style="padding-top: var(--space-20); padding-bottom: var(--space-12); position: relative; overflow: hidden; min-height: 280px;">
     <div class="container">
       <div class="section-header reveal">
         <span class="section-eyebrow">System Invariants</span>
@@ -388,8 +394,8 @@
     </div>
   </footer>
   <script src="js/liquid-metal.js"></script>
-  <script src="js/halftone-footer.js?v=2.3.0"></script>
-  <script src="js/carbon-skyline.js?v=2.3.0"></script>
-  <script src="js/interactions.js"></script>
+  <script src="js/halftone-footer.js?v=2.5.0"></script>
+  <script src="js/carbon-skyline.js?v=2.5.0"></script>
+  <script src="js/interactions.js?v=2.5.0"></script>
 </body>
 </html>
